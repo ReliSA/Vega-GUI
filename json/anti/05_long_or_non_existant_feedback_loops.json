@@ -1,0 +1,250 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v6.json",
+  "width": 600,
+  "height": 150,
+  "padding": 5,
+  "signals": [
+    {"name":"LON1","value":4},{"name":"LON2","value":28},{"name":"retroCount","value":7},
+
+    { "name": "iterationHeight", "value": 15},
+    { "name": "intervalHeight", "value": 30},
+    { "name": "iterationY", "update": "0.1 * height"},
+    { "name": "intervalY", "update": "0.2 * height"},
+    { "name": "textPadding", "value": 10}
+  ],
+  "data": [
+    {"name":"iterations","values":[{"name":"Iterace 1","startDate":"2025-04-20","endDate":"2025-05-11","duration":21},{"name":"Iterace 2","startDate":"2025-05-11","endDate":"2025-05-25","duration":14},{"name":"Iterace 3","startDate":"2025-05-25","endDate":"2025-06-22","duration":28},{"name":"Iterace 4","startDate":"2025-06-22","endDate":"2025-07-27","duration":35},{"name":"Iterace 5","startDate":"2025-07-27","endDate":"2025-08-10","duration":14}]},
+
+    {"name":"retrospectives","values":[{"name":"first","date":"2025-04-20","boundary":true},{"name":"R1","date":"2025-05-04","boundary":false},{"name":"R2","date":"2025-05-18","boundary":false},{"name":"R3","date":"2025-05-25","boundary":false},{"name":"R4","date":"2025-06-08","boundary":false},{"name":"R5","date":"2025-06-15","boundary":false},{"name":"R6","date":"2025-08-03","boundary":false},{"name":"R7","date":"2025-08-08","boundary":false},{"name":"last","date":"2025-08-10","boundary":true}]},
+    {
+      "name": "processed-iterations",
+      "source": "iterations",
+      "transform": [
+        {
+          "type": "formula",
+          "expr": "timeParse(datum.startDate, '%Y-%m-%d')",
+          "as": "start"
+        },
+        {
+          "type": "formula",
+          "expr": "timeParse(datum.endDate, '%Y-%m-%d')",
+          "as": "end"
+        }
+      ]
+    },
+    {
+      "name": "processed-retrospectives",
+      "source": "retrospectives",
+      "transform": [
+        {
+          "type": "formula",
+          "expr": "timeParse(datum.date, '%Y-%m-%d')",
+          "as": "dateTime"
+        }
+      ]
+    },
+    {
+      "name": "intervals",
+      "source": "processed-retrospectives",
+      "transform": [
+        {
+          "type": "window",
+          "sort": {"field": "dateTime", "order": "ascending"},
+          "fields": ["dateTime"],
+          "ops": ["lead"],
+          "as": ["nextRetro"]
+        },
+        {
+          "type": "formula",
+          "expr": "datum.name",
+          "as": "retroName"
+        },
+        {
+          "type": "filter",
+          "expr": "datum.nextRetro != null"
+        },
+        {
+          "type": "formula",
+          "as": "name",
+          "expr": "'Interval ' + datum.retroName"
+        },
+        {
+          "type": "formula",
+          "as": "length",
+          "expr": "round((time(datum.nextRetro) - time(datum.dateTime)) / 86400000)"
+        },
+        {
+          "type": "formula",
+          "as": "color",
+          "expr": "retroCount < LON1 ? 2 : (datum.length > LON2 ? 4 : 3)"
+        }
+      ]
+    },
+    {
+      "name": "domain",
+      "source": "processed-iterations",
+      "transform": [
+        {
+          "type": "aggregate",
+          "fields": ["start", "end"],
+          "ops": ["min", "max"],
+          "as": ["minDate", "maxDate"]
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "xscale",
+      "type": "time",
+      "domain": {"data": "domain", "fields": ["minDate", "maxDate"]},
+      "range": "width"
+    },
+    {
+      "name": "legend",
+      "type": "ordinal",
+      "domain": ["Within Limit", "Limit Exceeded"],
+      "range": ["#3ca951", "#e31a1c"]
+    },
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": [0, 1, 2, 3, 4, 5],
+      "range": ["#4c78a8", "#3ca951", "#e31a1c", "#3ca951", "#e31a1c", "#efb118"]
+    }
+  ],
+  "axes": [
+    {
+      "orient": "bottom",
+      "scale": "xscale",
+      "title": "Date",
+      "format": "%d.%m.%Y",
+      "labelAngle": -45,
+      "labelAlign": "right",
+      "titlePadding": 10,
+      "offset": -90
+    }
+  ],
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "processed-iterations"},
+      "encode": {
+        "enter": {
+          "x": {"scale": "xscale", "field": "start"},
+          "x2": {"scale": "xscale", "field": "end"},
+          "y": {"signal": "iterationY"},
+          "height": {"signal": "iterationHeight"},
+          "fill": {"scale": "color", "value": 0}
+        },
+        "update": {
+          "tooltip": {
+            "signal": "{'Iteration:': datum.name, 'From': timeFormat(datum.start, '%d.%m.%Y'), 'To': timeFormat(datum.end, '%d.%m.%Y'), 'Length (days)': datum.duration}"
+          }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "from": {"data": "intervals"},
+      "encode": {
+        "enter": {
+          "x": {"scale": "xscale", "field": "dateTime"},
+          "x2": {"scale": "xscale", "field": "nextRetro"},
+          "y": {"signal": "intervalY"},
+          "height": {"signal": "intervalHeight"},
+          "fill": {
+            "scale": "color",
+            "field": "color"
+          }
+        },
+        "update": {
+          "tooltip": {
+            "signal": "{'Interval': datum.name, 'From': timeFormat(datum.dateTime, '%d.%m.%Y'), 'To': timeFormat(datum.nextRetro, '%d.%m.%Y'), 'Length (days)': datum.length}"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "processed-iterations"},
+      "encode": {
+        "enter": {
+          "x": {"scale": "xscale", "signal": "(time(datum.start) + time(datum.end)) / 2"},
+          "y": {"signal": "iterationY - textPadding"},
+          "fill": {"value": "black"},
+          "align": {"value": "center"},
+          "baseline": {"value": "middle"},
+          "text": {"field": "name"}
+        }
+      }
+    },
+    {
+      "type": "rule",
+      "from": {"data": "processed-iterations"},
+      "encode": {
+        "enter": {
+          "x": {"scale": "xscale", "field": "start"},
+          "x2": {"scale": "xscale", "field": "start"},
+          "y": {"signal": "intervalY"},
+          "y2": {"signal": "iterationY  - 5"},
+          "stroke": {"value": "black"},
+          "strokeWidth": {"value": 1}
+        }
+      }
+    },
+    {
+      "type": "rule",
+      "from": {"data": "processed-iterations"},
+      "encode": {
+        "enter": {
+          "x": {"scale": "xscale", "field": "end"},
+          "x2": {"scale": "xscale", "field": "end"},
+          "y": {"signal": "intervalY"},
+          "y2": {"signal": "iterationY - 5"},
+          "stroke": {"value": "gray"},
+          "strokeWidth": {"value": 1}
+        }
+      }
+    },
+    {
+      "type": "rule",
+      "from": {"data": "processed-retrospectives"},
+      "encode": {
+        "enter": {
+          "x": {"scale": "xscale", "field": "dateTime"},
+          "x2": {"scale": "xscale", "field": "dateTime"},
+          "y": {"signal": "intervalY"},
+          "y2": {"signal": "intervalY + intervalHeight"},
+          "stroke": {"value": "black"},
+          "strokeWidth": {"value": 1}
+        }
+      }
+    }
+  ],
+  "legends": [
+    {
+      "fill": "legend",
+      "title": "Interval categories",
+      "orient": "top",
+      "direction": "vertical",
+      "symbolType": "square",
+      "symbolSize": 100,
+      "encode": {
+        "symbols": {
+          "enter": {
+            "fillOpacity": {"value": 1},
+            "stroke": {"value": "black"},
+            "strokeWidth": {"value": 0.5}
+          }
+        },
+        "labels": {
+          "update": {
+            "fontSize": {"value": 11},
+            "fill": {"value": "black"}
+          }
+        }
+      }
+    }
+  ]
+}

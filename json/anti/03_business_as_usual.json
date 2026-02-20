@@ -1,0 +1,327 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v6.json",
+  "description": "An example of a space-fulling radial layout for hierarchical data.",
+  "width": 500,
+  "height": 500,
+  "padding": {
+    "top": 50,
+    "left": 5,
+    "right": 5,
+    "bottom": 5
+  },
+  "autosize": "none",
+  "signals": [
+    {"name":"numberOfIterations","value":19},{"name":"withRetroPercentage","value":74},{"name":"withoutRetroPercentage","value":26},{"name":"minRetroPercentage","value":66},
+
+    {
+      "name": "labelColor",
+      "update": "withRetroPercentage < minRetroPercentage ? 'red' : 'green'"
+    },
+    {
+      "name": "hovered",
+      "value": null,
+      "on": [
+        {
+          "events": "arc:mouseover",
+          "update": "datum"
+        },
+        {
+          "events": "arc:mouseout",
+          "update": "null"
+        }
+      ]
+    },
+    {
+      "name": "nameLabel",
+      "update": "hovered && hovered.sum ? hovered.name : 'Retrospective'"
+    },
+    {
+      "name": "percentageLabel",
+      "update": "hovered && hovered.sum ? round(hovered.sum / numberOfIterations * 100)  + '%' : withRetroPercentage + '%'"
+    }
+  ],
+  "data": [
+    {"name":"raw","values":[{"id":0,"name":"All iterations"},{"id":1,"name":"Retrospective","sum":14,"parent":0},{"id":2,"name":"No Retrospective","sum":5,"parent":0,"size":5},{"id":3,"name":"Wikipages","sum":3,"parent":1,"size":3},{"id":4,"name":"Both","sum":1,"parent":1,"size":1},{"id":5,"name":"Tasks","sum":10,"parent":1,"size":10}]},
+
+    {
+      "name": "processed",
+      "source": "raw",
+      "transform": [
+        {
+          "type": "stratify",
+          "key": "id",
+          "parentKey": "parent"
+        },
+        {
+          "type": "partition",
+          "field": "size",
+          "sort": {
+            "field": "id",
+            "order": "ascending"
+          },
+          "size": [
+            {
+              "signal": "2 * PI"
+            },
+            240
+          ],
+          "as": [
+            "a0",
+            "r0",
+            "a1",
+            "r1",
+            "depth",
+            "children"
+          ]
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "range": [
+        "#4acf6e",
+        "#FF6961",
+        "#77DD77",
+        "#4acf7e",
+        "#77DD77"
+      ]
+    },
+    {
+      "name": "legend",
+      "type": "ordinal",
+      "domain": [
+        "With retrospective",
+        "Without retrospective"
+      ],
+      "range": [
+        "#4acf6e",
+        "#FF6961"
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "type": "arc",
+      "from": {
+        "data": "processed"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "signal": "width / 2"
+          },
+          "y": {
+            "signal": "height / 2"
+          },
+          "fill": {
+            "scale": "color",
+            "field": "id"
+          },
+          "tooltip": {
+            "content": "data",
+            "signal": "{'Category': datum.name, 'Iterations': datum.sum, 'Percentage': round(datum.sum / numberOfIterations * 100) + '%'}"
+          }
+        },
+        "update": {
+          "startAngle": {
+            "field": "a0"
+          },
+          "endAngle": {
+            "field": "a1"
+          },
+          "innerRadius": {
+            "field": "r0"
+          },
+          "outerRadius": {
+            "field": "r1"
+          },
+          "stroke": {
+            "value": "white"
+          },
+          "strokeWidth": {
+            "value": 0.5
+          },
+          "zindex": {
+            "value": 0
+          }
+        },
+        "hover": {
+          "stroke": {
+            "value": "black"
+          },
+          "strokeWidth": {
+            "value": 1
+          },
+          "zindex": {
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "processed"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "signal": "width / 2"
+          },
+          "y": {
+            "signal": "height / 2"
+          },
+          "radius": {
+            "signal": "(datum.r0 + datum.r1) / 2"
+          },
+          "theta": {
+            "signal": "(datum.a0 + datum.a1) / 2"
+          },
+          "text": {
+            "signal": "datum.sum > 0 ? datum.name: ''"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "fill": {
+            "value": "black"
+          },
+          "fontSize": {
+            "value": 9
+          }
+        },
+        "update": {
+          "opacity": {
+            "value": 1
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "enter": {
+          "x": {
+            "signal": "width / 2"
+          },
+          "y": {
+            "signal": "height / 2 - 25"
+          },
+          "fill": {
+            "value": "black"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "fontSize": {
+            "value": 9
+          },
+          "fontWeight": {
+            "value": "bold"
+          },
+          "text": {
+            "value": "Iterations with"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "enter": {
+          "x": {
+            "signal": "width / 2"
+          },
+          "y": {
+            "signal": "height / 2 - 10"
+          },
+          "fill": {
+            "value": "black"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "fontSize": {
+            "value": 10
+          },
+          "fontWeight": {
+            "value": "bold"
+          }
+        },
+        "update": {
+          "text": {
+            "signal": "hovered ? (hovered.depth > 1 ? nameLabel + ' retroes' : nameLabel) : nameLabel"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "enter": {
+          "x": {
+            "signal": "width / 2"
+          },
+          "y": {
+            "signal": "height / 2 + 20"
+          },
+          "fill": {
+            "value": "black"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "fontSize": {
+            "value": 25
+          },
+          "fontWeight": {
+            "value": "bold"
+          }
+        },
+        "update": {
+          "text": {
+            "signal": "percentageLabel"
+          },
+          "fill": {
+            "signal": "labelColor"
+          }
+        }
+      }
+    }
+  ],
+  "legends": [
+    {
+      "fill": "legend",
+      "title": "Iteration categories",
+      "orient": "top",
+      "symbolType": "square",
+      "direction": "horizontal",
+      "titlePadding": 5,
+      "padding": 10,
+      "offset": 0
+    }
+  ],
+  "config": {}
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v6.json",
+  "width": 500,
+  "height": 300,
+ 
+   "signals": [{
+      "name": "threshold",
+      "value": 50,
+      "bind": {"input": "range", "min": 0, "max": 100, "step": 1}
+    }
+  ],
+
+  "data": [
+    {
+      "name": "table",
+      "values": [
+        {"index": 1, "value": 51}, 
+        {"index": 2, "value": 92},
+        {"index": 3, "value": 14}, 
+        {"index": 4, "value": 71},
+        {"index": 5, "value": 60}, 
+        {"index": 6, "value": 20},
+        {"index": 7, "value": 82}, 
+        {"index": 8, "value": 86},
+        {"index": 9, "value": 74}, 
+        {"index": 10, "value": 74}
+      ]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "xscale",
+      "type": "band",
+      "domain": {"data": "table", "field": "index"},
+      "range": "width",
+      "padding": 0.1
+    },
+    {
+      "name": "yscale",
+      "type": "linear",
+      "domain": [0, 100],
+      "range": "height",
+      "nice": true
+    }
+  ],
+
+  "axes": [
+    {"orient": "bottom", "scale": "xscale", "title": "Index"},
+    {"orient": "left", "scale": "yscale", "title": "Value"}
+  ],
+
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "table"},
+      "encode": {
+        "enter": {
+          "x": {"scale": "xscale", "field": "index"},
+          "width": {"scale": "xscale", "band": 1}
+        },
+        "update": {
+          "y": {"scale": "yscale", "field": "value"},
+          "y2": {"scale": "yscale", "value": 0},
+          "fill": [
+            {"test": "datum.value < threshold", "value": "#be1f1f"},
+            {"value": "#7bbe1f"}
+          ]
+        }
+      }
+    },
+    {
+      "type": "rule",
+      "encode": {
+        "update": {
+          "y": {"scale": "yscale", "signal": "threshold"},
+          "x": {"value": 0},
+          "x2": {"field": {"group": "width"}},
+          "stroke": {"value": "black"},
+          "strokeDash": {"value": [4, 2]}
+        }
+      }
+    }
+  ]
+}

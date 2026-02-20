@@ -1,0 +1,326 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v6.json",
+  "description": "Stacked bar chart with optional increment highlighting.",
+  "width": {
+    "signal": "initialWidth"
+  },
+  "height": 300,
+  "padding": 5,
+  "signals": [
+    {"name":"maxNumberOfNewContributors","value":5},{"name":"numberOfFirstMonthsWithoutDetection","value":2},
+
+    {
+      "name": "showIncrement",
+      "value": true,
+      "bind": {
+        "input": "checkbox",
+        "name": "Show increment"
+      }
+    },
+    {
+      "name": "initialWidth",
+      "update": "max(length(data('raw')) * 17, 500)"
+    }
+  ],
+  "data": [
+    {"name":"raw","values":[{"month":1,"newContributors":49,"cumulative":49},{"month":2,"newContributors":3,"cumulative":52},{"month":3,"newContributors":0,"cumulative":52},{"month":4,"newContributors":0,"cumulative":52},{"month":5,"newContributors":2,"cumulative":54},{"month":6,"newContributors":1,"cumulative":55},{"month":7,"newContributors":5,"cumulative":60},{"month":8,"newContributors":0,"cumulative":60},{"month":9,"newContributors":1,"cumulative":61},{"month":10,"newContributors":3,"cumulative":64}]},
+
+    {
+      "name": "processed",
+      "source": "raw",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "!showIncrement"
+        }
+      ]
+    },
+    {
+      "name": "processed-increment",
+      "source": "raw",
+      "transform": [
+        {
+          "type": "window",
+          "sort": {
+            "field": "month"
+          },
+          "ops": [
+            "lag"
+          ],
+          "fields": [
+            "cumulative"
+          ],
+          "as": [
+            "previousCumulative"
+          ]
+        },
+        {
+          "type": "formula",
+          "as": "baseStart",
+          "expr": "datum.previousCumulative || 0"
+        },
+        {
+          "type": "formula",
+          "as": "incrementStart",
+          "expr": "datum.baseStart"
+        },
+        {
+          "type": "formula",
+          "as": "incrementEnd",
+          "expr": "datum.cumulative"
+        },
+        {
+          "type": "formula",
+          "as": "y0",
+          "expr": "datum.segment === 'base' ? datum.baseStart : datum.incrementStart"
+        },
+        {
+          "type": "formula",
+          "as": "y1",
+          "expr": "datum.segment === 'base' ? datum.baseStart : datum.incrementEnd"
+        },
+        {
+          "type": "formula",
+          "as": "exceeded",
+          "expr": "datum.month <= numberOfFirstMonthsWithoutDetection ? 3 : (datum.newContributors <= maxNumberOfNewContributors ? 1 : 2)"
+        },
+        {
+          "type": "filter",
+          "expr": "showIncrement"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "xscale",
+      "type": "band",
+      "range": "width",
+      "domain": {
+        "data": "raw",
+        "field": "month"
+      },
+      "padding": 0.1
+    },
+    {
+      "name": "yscale",
+      "type": "linear",
+      "range": "height",
+      "nice": true,
+      "zero": true,
+      "domain": {
+        "data": "raw",
+        "field": "cumulative"
+      }
+    },
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "range": [
+        "#4c78a8",
+        "#3ca951",
+        "#e31a1c",
+        "#cccccc",
+        "#ffffff"
+      ]
+    },
+    {
+      "name": "legend",
+      "type": "ordinal",
+      "domain": [
+        "Within Limit",
+        "Limit Exceeded",
+        "Not Counted"
+      ],
+      "range": [
+        "#3ca951",
+        "#e31a1c",
+        "#cccccc"
+      ]
+    }
+  ],
+  "axes": [
+    {
+      "orient": "bottom",
+      "scale": "xscale",
+      "title": "Months",
+      "titlePadding": 10,
+      "labelAngle": -45,
+      "labelAlign": "right"
+    },
+    {
+      "orient": "left",
+      "scale": "yscale",
+      "title": "Amount of contributors",
+      "titlePadding": 10
+    }
+  ],
+  "legends": [
+    {
+      "fill": "legend",
+      "title": "States of month increment",
+      "orient": "top",
+      "symbolType": "square",
+      "direction": "horizontal"
+    }
+  ],
+  "marks": [
+    {
+      "type": "rect",
+      "from": {
+        "data": "processed-increment"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "scale": "xscale",
+            "field": "month"
+          },
+          "width": {
+            "scale": "xscale",
+            "band": 1
+          },
+          "y": {
+            "scale": "yscale",
+            "field": "y0"
+          },
+          "y2": {
+            "scale": "yscale",
+            "value": 0
+          },
+          "fill": {
+            "scale": "color",
+            "value": 4
+          },
+          "stroke": {
+            "value": "black"
+          },
+          "strokeWidth": {
+            "value": 1
+          }
+        },
+        "update": {
+          "strokeWidth": {
+            "value": 1
+          },
+          "tooltip": {
+            "content": "data",
+            "signal": "{'Type': 'Base', 'Contributors': datum.previousCumulative}"
+          }
+        },
+        "hover": {
+          "strokeWidth": {
+            "value": 2
+          }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "from": {
+        "data": "processed-increment"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "scale": "xscale",
+            "field": "month"
+          },
+          "width": {
+            "scale": "xscale",
+            "band": 1
+          },
+          "y": {
+            "scale": "yscale",
+            "field": "y1"
+          },
+          "y2": {
+            "scale": "yscale",
+            "field": "y0"
+          },
+          "fill": {
+            "scale": "color",
+            "field": "exceeded"
+          },
+          "stroke": {
+            "value": "black"
+          },
+          "strokeWidth": {
+            "value": 1
+          }
+        },
+        "update": {
+          "strokeWidth": {
+            "value": 1
+          },
+          "tooltip": {
+            "content": "data",
+            "signal": "{'Type': 'Increment', 'New Contributors': datum.newContributors}"
+          }
+        },
+        "hover": {
+          "strokeWidth": {
+            "value": 2
+          }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "from": {
+        "data": "processed"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "scale": "xscale",
+            "field": "month"
+          },
+          "width": {
+            "scale": "xscale",
+            "band": 1
+          },
+          "y": {
+            "scale": "yscale",
+            "field": "cumulative"
+          },
+          "y2": {
+            "scale": "yscale",
+            "value": 0
+          },
+          "fill": {
+            "scale": "color",
+            "value": 0
+          },
+          "stroke": {
+            "value": "black"
+          },
+          "strokeWidth": {
+            "value": 1
+          }
+        },
+        "update": {
+          "strokeWidth": {
+            "value": 1
+          },
+          "tooltip": {
+            "content": "data",
+            "signal": "{'Month': datum.month, 'Contributors': datum.cumulative}"
+          }
+        },
+        "hover": {
+          "strokeWidth": {
+            "value": 2
+          }
+        }
+      }
+    }
+  ]
+}

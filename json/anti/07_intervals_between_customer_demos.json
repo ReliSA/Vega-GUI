@@ -1,0 +1,194 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v6.json",
+  "width": 600,
+  "height": 300,
+  "padding": 5,
+
+  "signals": [
+    {"name":"LON1","value":2.5},{"name":"retroCount","value":6},{"name":"wikisInIteration","value":"false"},{"name":"LON2","value":42},
+
+    {
+      "name": "showTLS1",
+      "value": true,
+      "bind": {"input": "checkbox", "name": "Show LON2 limit"}
+    },
+    {
+      "name": "maxDomainValue",
+      "update": "max(extremesAll[1], LON2)"
+    }
+  ],
+
+  "data": [
+    {"name":"retrospectives","values":[{"name":"1","date":"2025-04-20","boundary":true},{"name":"2","date":"2025-05-04","boundary":false},{"name":"3","date":"2025-05-18","boundary":false},{"name":"4","date":"2025-05-25","boundary":false},{"name":"5","date":"2025-06-08","boundary":false},{"name":"6","date":"2025-06-15","boundary":false},{"name":"7","date":"2025-08-03","boundary":false},{"name":"8","date":"2025-08-08","boundary":false},{"name":"9","date":"2025-08-10","boundary":true}]},
+
+    {
+      "name": "processed-retrospectives",
+      "source": "retrospectives",
+      "transform": [
+        {
+          "type": "formula",
+          "expr": "timeParse(datum.date, '%Y-%m-%d')",
+          "as": "dateTime"
+        }
+      ]
+    },
+    {
+      "name": "intervals",
+      "source": "processed-retrospectives",
+      "transform": [
+        {
+          "type": "window",
+          "sort": {"field": "dateTime", "order": "ascending"},
+          "fields": ["dateTime"],
+          "ops": ["lead"],
+          "as": ["nextRetro"]
+        },
+        {
+          "type": "formula",
+          "expr": "datum.name",
+          "as": "retroName"
+        },
+        {
+          "type": "filter",
+          "expr": "datum.nextRetro != null"
+        },
+        {
+          "type": "formula",
+          "as": "name",
+          "expr": "datum.retroName"
+        },
+        {
+          "type": "formula",
+          "as": "length",
+          "expr": "round((time(datum.nextRetro) - time(datum.dateTime)) / 86400000)"
+        },
+        {
+          "type": "formula",
+          "as": "status",
+          "expr": "((datum.length <= LON2 && retroCount >= LON1) || wikisInIteration == 'true') ? 'Within Limit' : 'Limit Exceeded (AP Detected)'"
+        },
+        {
+          "type": "formula",
+          "as": "test",
+          "expr": "retroCount >= LON1"
+        },
+        {"type": "extent", "field": "length", "signal": "extremesAll"}
+      ]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "xscale",
+      "type": "band",
+      "domain": {"data": "intervals", "field": "name"},
+      "range": "width",
+      "padding": 0.05
+    },
+    {
+      "name": "yscale",
+      "domain": [0, {"signal": "maxDomainValue"}],
+      "nice": true,
+      "range": "height"
+    },
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": ["Within Limit", "Limit Exceeded (AP Detected)"],
+      "range": ["#3ca951", "#e31a1c"]
+    }
+  ],
+
+  "axes": [
+    {
+      "orient": "bottom",
+      "scale": "xscale",
+      "title": "Intervals between customer demos",
+      "titlePadding": 10
+    },
+    {
+      "orient": "left",
+      "scale": "yscale",
+      "title": "Intervals (days)",
+      "titlePadding": 5,
+      "grid": true
+    }
+  ],
+
+  "legends": [
+    {
+      "fill": "color",
+      "title": "Interval states",
+      "orient": "top",
+      "symbolType": "square",
+      "direction": "horizontal",
+      "encode": {
+        "legend": {
+          "update": {
+            "x": {"value": 0},
+            "y": {"signal": "height + 40"}
+          }
+        }
+      }
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "intervals"},
+      "encode": {
+        "enter": {
+          "x": {"scale": "xscale", "field": "name"},
+          "width": {"scale": "xscale", "band": 1},
+          "y2": {"scale": "yscale", "value": 0},
+          "y": {"scale": "yscale", "field": "length"},
+          "fill": {"scale": "color", "field": "status"}
+        },
+        "update": {
+          "stroke": {"value": null},
+          "strokeWidth": {"value": 0},
+          "tooltip": {
+            "content": "data",
+            "signal": "{'Name': datum.name, 'Length': datum.length, 'State': datum.status}"
+          }
+        },
+        "hover":{
+          "stroke": {"value": "black"},
+          "strokeWidth": {"value": 2}
+        }
+      }
+    },
+    {
+      "type": "rule",
+      "encode": {
+        "update": {
+          "y": {"scale": "yscale", "signal": "LON2"},
+          "stroke": [
+            { "test": "showTLS1", "value": "black" },
+            { "value": null }
+          ],
+          "strokeWidth": {"value": 2},
+          "x": {"value": 0},
+          "x2": {"signal": "width + 55"}
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "update": {
+          "x": {"signal": "width + 5"},
+          "y": {"scale": "yscale", "signal": "LON2", "offset": -5},
+          "text": [
+            {"test": "showTLS1", "signal": "'LON2 = ' + LON2"},
+            {"value": ""}
+          ],
+          "fill": {"value": "black"},
+          "fontSize": {"value": 12},
+          "fontWeight": {"value": "bold"}
+        }
+      }
+    }
+  ]
+}

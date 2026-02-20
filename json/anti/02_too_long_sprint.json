@@ -1,0 +1,216 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v6.json",
+  "width": 600,
+  "height": 300,
+  "padding": 5,
+
+  "signals": [
+    {"name":"TLS1","value":9},{"name":"TLS2","value":3},{"name":"totalExceeded","value":2},
+
+    {
+      "name": "showTLS1",
+      "value": true,
+      "bind": {"input": "checkbox", "name": "Show TLS1 limit"}
+    },
+    {
+      "name": "showUncounted",
+      "value": false,
+      "bind": {"input": "checkbox", "name": "Show uncounted"}
+    },
+    {
+      "name": "maxDomainValue",
+      "update": "!showUncounted ? max(extremesCounted[1], TLS1) : max(extremesAll[1], TLS1) "
+    }
+  ],
+
+  "data": [
+    {"name":"raw","values":[{"iteration":0,"name":"0. iterace","length":3,"counted":false},{"iteration":1,"name":"1. iterace","length":12,"counted":true},{"iteration":2,"name":"2. iterace","length":8,"counted":true},{"iteration":3,"name":"3. iterace","length":15,"counted":true},{"iteration":4,"name":"4. iterace","length":11,"counted":true},{"iteration":5,"name":"5. iterace","length":9,"counted":true},{"iteration":6,"name":"6. iterace","length":20,"counted":false}]},
+
+    {
+      "name": "processed",
+      "source": "raw",
+      "transform": [
+        {"type": "collect", "sort": {"field": "iteration", "order": "ascending"}},
+        {
+          "type": "formula",
+          "as": "status",
+          "expr": "!datum.counted ? 'Uncounted' : datum.length <= TLS1 ? 'Within Limit' : totalExceeded <= TLS2 ? 'Limit Exceeded (Acceptable)' : 'Limit Exceeded (AP Detected)'"
+        }
+      ]
+    },
+    {
+      "name": "processed-all",
+      "source": "processed",
+      "transform": [
+        {"type": "filter", "expr": "showUncounted"},
+        {"type": "extent", "field": "length", "signal": "extremesAll"}
+      ]
+    },
+    {
+      "name": "processed-counted",
+      "source": "processed",
+      "transform": [
+        {"type": "filter", "expr": "!showUncounted"},
+        {"type": "filter", "expr": "datum.counted == true"},
+        {"type": "extent", "field": "length", "signal": "extremesCounted"}
+      ]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "xscaleAll",
+      "type": "band",
+      "domain": {"data": "processed-all", "field": "name"},
+      "range": "width",
+      "padding": 0.05
+    },
+    {
+      "name": "xscaleCounted",
+      "type": "band",
+      "domain": {"data": "processed-counted", "field": "name"},
+      "range": "width",
+      "padding": 0.05
+    },
+    {
+      "name": "yscale",
+      "domain": [0, {"signal": "maxDomainValue"}],
+      "nice": true,
+      "range": "height"
+    },
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": ["Within Limit", "Limit Exceeded (Acceptable)", "Limit Exceeded (AP Detected)", "Uncounted"],
+      "range": ["#3ca951", "#efb118", "#e31a1c", "#cccccc"]
+    }
+  ],
+
+  "axes": [
+    {
+      "orient": "bottom",
+      "scale": "xscaleAll",
+      "title": {
+        "signal": "showUncounted ? 'Iterations' : ''"
+      },
+      "titlePadding": 10
+    },
+    {
+      "orient": "bottom",
+      "scale": "xscaleCounted",
+      "title": {
+        "signal": "!showUncounted ? 'Iterations' : ''"
+      },
+      "titlePadding": 10
+    },
+    {
+      "orient": "left",
+      "scale": "yscale",
+      "title": "Length (days)",
+      "titlePadding": 5,
+      "grid": true
+    }
+  ],
+
+  "legends": [
+    {
+      "fill": "color",
+      "title": "Iteration states",
+      "orient": "top",
+      "symbolType": "square",
+      "direction": "horizontal",
+      "encode": {
+        "legend": {
+          "update": {
+            "x": {"value": 0},
+            "y": {"signal": "height + 40"}
+          }
+        }
+      }
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "processed-counted"},
+      "encode": {
+        "enter": {
+          "x": {"scale": "xscaleCounted", "field": "name"},
+          "width": {"scale": "xscaleCounted", "band": 1},
+          "y2": {"scale": "yscale", "value": 0},
+          "y": {"scale": "yscale", "field": "length"},
+          "fill": {"scale": "color", "field": "status"}
+        },
+        "update": {
+          "stroke": {"value": null},
+          "strokeWidth": {"value": 0},
+          "tooltip": {
+            "content": "data",
+            "signal": "{'Name': datum.name, 'Length': datum.length, 'State': datum.status}"
+          }
+        },
+        "hover":{
+          "stroke": {"value": "black"},
+          "strokeWidth": {"value": 2}
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "from": {"data": "processed-all"},
+      "encode": {
+        "enter": {
+          "x": {"scale": "xscaleAll", "field": "name"},
+          "width": {"scale": "xscaleAll", "band": 1},
+          "y2": {"scale": "yscale", "value": 0},
+          "y": {"scale": "yscale", "field": "length"},
+          "fill": {"scale": "color", "field": "status"}
+        },
+        "update": {
+          "stroke": {"value": null},
+          "strokeWidth": {"value": 0},
+          "tooltip": {
+            "content": "data",
+            "signal": "{'Name': datum.name, 'Length': datum.length, 'State': datum.status}"
+          }
+        },
+        "hover":{
+          "stroke": {"value": "black"},
+          "strokeWidth": {"value": 2}
+        }
+      }
+    },
+    {
+      "type": "rule",
+      "encode": {
+        "update": {
+          "y": {"scale": "yscale", "signal": "TLS1"},
+          "stroke": [
+            { "test": "showTLS1", "value": "black" },
+            { "value": null }
+          ],
+          "strokeWidth": {"value": 2},
+          "x": {"value": 0},
+          "x2": {"signal": "width + 55"}
+        }
+      }
+    },
+    {
+      "type": "text",
+      "encode": {
+        "update": {
+          "x": {"signal": "width + 5"},
+          "y": {"scale": "yscale", "signal": "TLS1", "offset": -5},
+          "text": [
+            {"test": "showTLS1", "signal": "'TLS1 = ' + TLS1"},
+            {"value": ""}
+          ],
+          "fill": {"value": "black"},
+          "fontSize": {"value": 12},
+          "fontWeight": {"value": "bold"}
+        }
+      }
+    }
+  ]
+}

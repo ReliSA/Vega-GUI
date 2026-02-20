@@ -1,0 +1,93 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v6.json",
+  "width": 250,
+  "height": 200,
+
+  "data": [
+    {
+      "name": "table",
+      "values": [
+        {"category": "A", "value": 32},
+        {"category": "B", "value": 21},
+        {"category": "C", "value": 28},
+        {"category": "D", "value": 46},
+        {"category": "E", "value": 75},
+        {"category": "F", "value": 60}
+      ]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "x",
+      "type": "linear",
+      "domain": [0, 80],
+      "range": "width"
+    },
+    {
+      "name": "y",
+      "type": "band",
+      "domain": {"data": "table", "field": "category"},
+      "range": "height",
+      "padding": 0.1
+    },
+    {
+      "name": "colorscale",
+      "type": "linear",
+      "domain": [0, 80],
+      "range": [
+        "#cddafb",
+        "#113fdb"
+      ]
+    }
+  ],
+
+  "axes": [
+    {"orient": "bottom", "scale": "x", "title": "Category"},
+    {"orient": "left", "scale": "y", "title": "Value"}
+  ],
+
+  "legends": [
+    {
+      "fill": "colorscale",
+      "orient": "right",
+      "title": "Value",
+      "gradientLength": 150,
+      "gradientThickness": 10
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "table"},
+      "encode": {
+        "enter": {
+          "y": {"scale": "y", "field": "category"},
+          "height": {"scale": "y", "band": 1},
+          "x": {"value": 0},
+          "x2": {"scale": "x", "field": "value"},
+          "fill": {"scale": "colorscale", "field": "value"}
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "table"},
+      "encode": {
+        "enter": {
+          "y": {
+            "scale": "y",
+            "field": "category",
+            "offset": {"scale": "y", "band": 0.5}
+          },
+          "x": {"scale": "x", "field": "value", "offset": 5},
+          "text": {"field": "value"},
+          "align": {"value": "left"},
+          "baseline": {"value": "middle"},
+          "fill": {"value": "#000"}
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,325 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v6.json",
+  "description": "An example of treemap layout for hierarchical data with color legend.",
+  "width": 600,
+  "height": 300,
+  "padding": 5,
+  "autosize": "pad",
+  "signals": [
+    {"name":"maxSize","value":19},{"name":"totalCount","value":62},
+
+    {
+      "name": "layout",
+      "value": "squarify",
+      "bind": {
+        "input": "select",
+        "options": [
+          "squarify",
+          "binary",
+          "slicedice"
+        ]
+      }
+    },
+    {
+      "name": "aspectRatio",
+      "value": 1.6,
+      "bind": {
+        "input": "range",
+        "min": 1,
+        "max": 5,
+        "step": 0.1
+      }
+    },
+    {
+      "name": "hovered",
+      "value": null,
+      "on": [
+        {
+          "events": "rect:mouseover",
+          "update": "datum"
+        },
+        {
+          "events": "rect:mouseout",
+          "update": "null"
+        }
+      ]
+    }
+  ],
+  "data": [
+    {"name":"tree","values":[{"id":1,"name":"priorities"},{"id":2,"name":"unassigned","parent":1,"size":10},{"id":3,"name":"lowest","parent":1,"size":11},{"id":4,"name":"low","parent":1,"size":10},{"id":5,"name":"normal","parent":1,"size":20},{"id":6,"name":"high","parent":1,"size":3},{"id":7,"name":"highest","parent":1,"size":8}]},
+
+    {
+      "name": "processed",
+      "source": "tree",
+      "transform": [
+        {
+          "type": "stratify",
+          "key": "id",
+          "parentKey": "parent"
+        },
+        {
+          "type": "treemap",
+          "field": "size",
+          "sort": {
+            "field": "value"
+          },
+          "round": true,
+          "method": {
+            "signal": "layout"
+          },
+          "ratio": {
+            "signal": "aspectRatio"
+          },
+          "size": [
+            {
+              "signal": "width"
+            },
+            {
+              "signal": "height"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "nodes",
+      "source": "processed",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.children"
+        }
+      ]
+    },
+    {
+      "name": "leaves",
+      "source": "processed",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "!datum.children"
+        },
+        {
+          "type": "formula",
+          "as": "percentage",
+          "expr": "datum.size / totalCount * 100"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "color",
+      "type": "linear",
+      "domain": [
+        0,
+        {
+          "signal": "maxSize * 0.95"
+        },
+        {
+          "signal": "maxSize"
+        },
+        {
+          "signal": "maxSize * 1.05"
+        },
+        {
+          "signal": "maxSize * 1.5"
+        }
+      ],
+      "range": [
+        "#deebf7",
+        "#9ecae1",
+        "#ffcccc",
+        "#ff4c4c",
+        "#e60000"
+      ],
+      "interpolate": "hcl",
+      "zero": false,
+      "clamp": true
+    },
+    {
+      "name": "size",
+      "type": "ordinal",
+      "domain": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "range": [
+        256,
+        28,
+        20,
+        14
+      ]
+    },
+    {
+      "name": "opacity",
+      "type": "ordinal",
+      "domain": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "range": [
+        0.15,
+        0.5,
+        0.8,
+        1
+      ]
+    }
+  ],
+  "legends": [
+    {
+      "fill": "color",
+      "orient": "right",
+      "title": "Frequency",
+      "type": "gradient"
+    }
+  ],
+  "marks": [
+    {
+      "type": "rect",
+      "from": {
+        "data": "nodes"
+      },
+      "interactive": false,
+      "encode": {
+        "enter": {
+          "fill": {
+            "value": "#ccc"
+          }
+        },
+        "update": {
+          "x": {
+            "field": "x0"
+          },
+          "y": {
+            "field": "y0"
+          },
+          "x2": {
+            "field": "x1"
+          },
+          "y2": {
+            "field": "y1"
+          }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "enter": {
+          "stroke": {
+            "value": "#fff"
+          }
+        },
+        "update": {
+          "x": {
+            "field": "x0"
+          },
+          "y": {
+            "field": "y0"
+          },
+          "x2": {
+            "field": "x1"
+          },
+          "y2": {
+            "field": "y1"
+          },
+          "fill": [
+            {
+              "test": "hovered && hovered.name === datum.name",
+              "value": "#d9d9d9"
+            },
+            {
+              "scale": "color",
+              "field": "size"
+            }
+          ],
+          "tooltip": {
+            "signal": "{'Priority': datum.name, 'Size': datum.size, 'Percentage': format(datum.percentage, '.1f') + '%'}"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "enter": {
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "fill": {
+            "value": "#000"
+          },
+          "text": {
+            "field": "name"
+          }
+        },
+        "update": {
+          "x": {
+            "signal": "0.5 * (datum.x0 + datum.x1)"
+          },
+          "fontSize": {
+            "signal": "clamp(min(datum.x1 - datum.x0, datum.y1 - datum.y0) / 5, 8, 20)"
+          },
+          "y": {
+            "signal": "0.5 * (datum.y0 + datum.y1) - 0.6 * clamp(min(datum.x1 - datum.x0, datum.y1 - datum.y0) / 5, 8, 20)"
+          },
+          "fillOpacity": {
+            "scale": "opacity",
+            "field": "depth"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "enter": {
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "fill": {
+            "value": "#000"
+          },
+          "text": {
+            "field": "size"
+          }
+        },
+        "update": {
+          "x": {
+            "signal": "0.5 * (datum.x0 + datum.x1)"
+          },
+          "fontSize": {
+            "signal": "clamp(min(datum.x1 - datum.x0, datum.y1 - datum.y0) / 5, 8, 20)"
+          },
+          "y": {
+            "signal": "0.5 * (datum.y0 + datum.y1) + 0.6 * clamp(min(datum.x1 - datum.x0, datum.y1 - datum.y0) / 5, 8, 20)"
+          },
+          "fillOpacity": {
+            "scale": "opacity",
+            "field": "depth"
+          }
+        }
+      }
+    }
+  ]
+}
