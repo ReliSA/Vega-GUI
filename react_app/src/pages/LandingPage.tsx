@@ -1,23 +1,24 @@
 import { useNavigate } from 'react-router-dom'
-import './LandingPage.css'
+import { Button, Typography, Flex } from 'antd'
+
+const { Title, Paragraph } = Typography
 
 export default function LandingPage() {
   const navigate = useNavigate()
 
   return (
-    <main className="landing">
-      <div className="landing__content">
-        <h1 className="landing__title">Vega GUI</h1>
-        <p className="landing__description">
+    <Flex align="center" justify="center" style={{ minHeight: '100vh', padding: '2rem' }}>
+      <Flex vertical gap="large" style={{ maxWidth: 560 }}>
+        <Title level={1} style={{ margin: 0 }}>Vega GUI</Title>
+        <Paragraph style={{ fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
           A modular, importable graphical interface for building and editing
           Vega grammar specifications. Compose visualizations through a
           structured, component-driven editor without writing JSON by hand.
-        </p>
-        <button className="landing__btn" onClick={() => navigate('/editor')}>
+        </Paragraph>
+        <Button type="primary" size="large" style={{ alignSelf: 'flex-start' }} onClick={() => navigate('/editor')}>
           Open Editor
-        </button>
-      </div>
-    </main>
+        </Button>
+      </Flex>
+    </Flex>
   )
 }
-
