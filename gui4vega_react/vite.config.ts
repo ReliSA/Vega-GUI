@@ -20,14 +20,14 @@ export default defineConfig({
             formats: ['es', 'cjs']
         },
         rollupOptions: {
-            external: ['react', 'react-dom', 'react/jsx-runtime'],
+            external: ['react', 'react-dom'],
             output: {
                 globals: {
                     react: 'React',
-                    'react-dom': 'ReactDOM',
-                    'react/jsx-runtime': 'jsxRuntime'
+                    'react-dom': 'ReactDOM'
                 }
             }
-        }
+        },
+        watch: {}
     }
 })
