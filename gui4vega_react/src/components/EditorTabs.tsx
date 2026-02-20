@@ -3,6 +3,7 @@ import { Tabs } from 'antd';
 import CodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
 import DataView from './DataView';
+import PropertiesView from './PropertiesView';
 
 interface EditorTabsProps {
     code: string;
@@ -27,6 +28,11 @@ const EditorTabs: React.FC<EditorTabsProps> = ({ code, onChange }) => {
             key: 'data',
             label: 'Data',
             children: <DataView code={code} onCodeChange={onChange} />,
+        },
+        {
+            key: 'properties',
+            label: 'Properties',
+            children: <PropertiesView code={code} onCodeChange={onChange} />,
         },
     ];
 

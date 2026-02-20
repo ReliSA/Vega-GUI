@@ -1,5 +1,3 @@
-export type Tab = 'spec' | 'data';
-
 export interface VegaDataset {
     name: string;
     values: Record<string, unknown>[];
