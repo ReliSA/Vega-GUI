@@ -1,5 +1,4 @@
 import type { ColumnsType } from 'antd/es/table';
-import React from 'react';
 import EditableCell from './EditableCell';
 
 export function buildColumns(
