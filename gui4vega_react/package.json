@@ -1,8 +1,11 @@
 {
-  "name": "gui4vega_react",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@Teemo6/gui4vega_react",
+  "version": "0.1.0",
   "type": "module",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@Teemo6",
+    "access": "restricted"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
