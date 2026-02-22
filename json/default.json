@@ -3,7 +3,6 @@
   "description": "A basic bar chart example, with value labels shown upon pointer hover.",
   "width": 400,
   "height": 200,
-  "padding": 5,
 
   "data": [
     {
