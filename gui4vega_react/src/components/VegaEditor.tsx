@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, Splitter, Layout, theme } from 'antd';
 import defaultSpec from '../json/default.json';
 import EditorTabs from './editor/EditorTabs';
 import SpecLoader from './loader/SpecLoader';
@@ -7,6 +7,8 @@ import VegaView from './viewer/VegaView';
 import type { VegaEditorProps } from '../types';
 
 const VegaEditor: React.FC<VegaEditorProps> = ({ initialSchema, height, width = '100%' }) => {
+    const { token: antdToken } = theme.useToken();
+
     useEffect(() => {
         if (!height) {
             throw new Error('gui4vega - VegaEditor: prop "height" is required and must be a string (e.g. "600px" or "100vh").');
@@ -21,19 +23,27 @@ const VegaEditor: React.FC<VegaEditorProps> = ({ initialSchema, height, width = 
 
     return (
         <ConfigProvider>
-            <div style={{ width }}>
-                <div>
+            <Layout style={{ width, height, background: antdToken.colorBgContainer }}>
+                <Layout.Header style={{
+                    padding: antdToken.padding,
+                    background: antdToken.colorBgContainer,
+                    height: 'auto',
+                    lineHeight: 'normal',
+                    borderBottom: `1px solid ${antdToken.colorBorderSecondary}`
+                }}>
                     <SpecLoader onLoad={handleSpecLoad} />
-                </div>
-                <div style={{ height, display: 'flex', overflow: 'hidden', backgroundColor: '#fff' }}>
-                    <div style={{ width: '50%' }}>
-                        <EditorTabs code={code} onChange={setCode} />
-                    </div>
-                    <div style={{ width: '50%' }}>
-                        <VegaView code={code} />
-                    </div>
-                </div>
-            </div>
+                </Layout.Header>
+                <Layout.Content style={{ overflow: 'hidden' }}>
+                    <Splitter style={{ height: '100%', boxShadow: antdToken.boxShadowTertiary }}>
+                        <Splitter.Panel defaultSize="50%" min="20%" max="80%">
+                            <EditorTabs code={code} onChange={setCode} />
+                        </Splitter.Panel>
+                        <Splitter.Panel defaultSize="50%" min="20%" max="80%">
+                            <VegaView code={code} />
+                        </Splitter.Panel>
+                    </Splitter>
+                </Layout.Content>
+            </Layout>
         </ConfigProvider>
     );
 };
