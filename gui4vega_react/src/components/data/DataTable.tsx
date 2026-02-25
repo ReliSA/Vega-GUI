@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, Typography } from 'antd';
-import type { VegaDataset } from '../types/vega';
+import type { VegaDataset } from '../../types/vega';
 import { buildColumns } from './DataTableColumns';
 
 interface DataTableProps {

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Typography } from 'antd';
-import { parseDatasets, updateDatasetValue } from '../types/vega';
+import { parseDatasets, updateDatasetValue } from '../../types/vega';
 import DataTable from './DataTable';
 
 interface DataViewProps {

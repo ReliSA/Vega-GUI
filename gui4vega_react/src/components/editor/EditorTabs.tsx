@@ -2,8 +2,8 @@ import React from 'react';
 import { Tabs } from 'antd';
 import CodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
-import DataView from './DataView';
-import PropertiesView from './PropertiesView';
+import DataView from '../data/DataView';
+import PropertiesView from '../properties/PropertiesView';
 
 interface EditorTabsProps {
     code: string;

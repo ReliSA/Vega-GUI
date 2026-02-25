@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ConfigProvider } from 'antd';
 import defaultSpec from '../json/default.json';
-import EditorTabs from './EditorTabs';
-import SpecLoader from './SpecLoader';
-import VegaView from './VegaView';
+import EditorTabs from './editor/EditorTabs';
+import SpecLoader from './loader/SpecLoader';
+import VegaView from './viewer/VegaView';
 import type { VegaEditorProps } from '../types';
 
 const VegaEditor: React.FC<VegaEditorProps> = ({ initialSchema, height, width = '100%' }) => {
