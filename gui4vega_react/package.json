@@ -26,6 +26,7 @@
     "release:major": "npm version major && git push --follow-tags"
   },
   "dependencies": {
+    "@ant-design/icons": "^6.1.0",
     "@codemirror/lang-json": "^6.0.2",
     "@uiw/codemirror-theme-vscode": "^4.25.5",
     "@uiw/react-codemirror": "^4.25.4",

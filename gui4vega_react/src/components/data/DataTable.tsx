@@ -2,6 +2,7 @@ import React from 'react';
 import { Table, Typography, Button, Checkbox, Modal } from 'antd';
 import type { VegaDataset } from '../../types/vega';
 import { buildColumns } from './DataTableColumns';
+import { DeleteOutlined } from '@ant-design/icons';
 
 interface DataTableProps {
     dataset: VegaDataset;
@@ -74,7 +75,7 @@ const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, 
     const columnsWithDelete = [
         ...columns,
         {
-            title: 'Delete',
+            title: '',
             key: 'delete',
             render: (_: unknown, _row: Record<string, unknown>, rowIndex: number) => (
                 <Button danger size="small" onClick={() => {
@@ -91,7 +92,7 @@ const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, 
                         });
                     }
                 }}>
-                    Delete
+                    <DeleteOutlined />
                 </Button>
             ),
         },

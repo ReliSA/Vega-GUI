@@ -40,7 +40,7 @@ const DataViewPanel: React.FC<DataViewProps> = ({ code, onCodeChange }) => {
                         }
                         deleteLock={deleteLock[ds.name]}
                         onLockChange={locked => handleLockChange(ds.name, locked)}
-                        onColumnRename={(oldCol, newCol, updatedRows) => {
+                        onColumnRename={(_oldCol, _newCol, updatedRows) => {
                             // Update the dataset in the spec
                             try {
                                 const spec = JSON.parse(code);
@@ -49,9 +49,11 @@ const DataViewPanel: React.FC<DataViewProps> = ({ code, onCodeChange }) => {
                                     dataset.values = updatedRows;
                                 }
                                 onCodeChange(JSON.stringify(spec, null, 2));
-                            } catch {}
+                            } catch {
+                                // If parsing fails, do nothing
+                            }
                         }}
-                        onColumnDelete={(col, updatedRows) => {
+                        onColumnDelete={(_col, updatedRows) => {
                             try {
                                 const spec = JSON.parse(code);
                                 const dataset = spec.data.find((d: any) => d.name === ds.name);
@@ -59,9 +61,11 @@ const DataViewPanel: React.FC<DataViewProps> = ({ code, onCodeChange }) => {
                                     dataset.values = updatedRows;
                                 }
                                 onCodeChange(JSON.stringify(spec, null, 2));
-                            } catch {}
+                            } catch {
+                                // If parsing fails, do nothing
+                            }
                         }}
-                        onColumnAdd={(col, updatedRows) => {
+                        onColumnAdd={(_col, updatedRows) => {
                             try {
                                 const spec = JSON.parse(code);
                                 const dataset = spec.data.find((d: any) => d.name === ds.name);
@@ -69,7 +73,9 @@ const DataViewPanel: React.FC<DataViewProps> = ({ code, onCodeChange }) => {
                                     dataset.values = updatedRows;
                                 }
                                 onCodeChange(JSON.stringify(spec, null, 2));
-                            } catch {}
+                            } catch {
+                                // If parsing fails, do nothing
+                            }
                         }}
                     />
                 ))
