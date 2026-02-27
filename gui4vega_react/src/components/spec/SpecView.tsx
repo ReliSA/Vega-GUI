@@ -9,7 +9,7 @@ interface SpecViewProps {
     onChange: (value: string) => void;
 }
 
-const SpecView: React.FC<SpecViewProps> = ({ code, onChange }: SpecViewProps) => {
+const SpecView: React.FC<SpecViewProps> = (props) => {
     // Access Ant Design theme token
     const { token } = theme.useToken();
 
@@ -20,9 +20,9 @@ const SpecView: React.FC<SpecViewProps> = ({ code, onChange }: SpecViewProps) =>
 
     return (
         <CodeMirror
-            value={code}
+            value={props.code}
             extensions={[json()]}
-            onChange={onChange}
+            onChange={props.onChange}
             theme={isDarkMode ? vscodeDark : vscodeLight}
         />
     );

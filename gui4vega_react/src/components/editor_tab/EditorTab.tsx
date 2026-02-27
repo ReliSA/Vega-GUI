@@ -10,7 +10,7 @@ interface EditorTabsProps {
     onChange: (value: string) => void;
 }
 
-const EditorTab: React.FC<EditorTabsProps> = ({ height, code, onChange }: EditorTabsProps) => {
+const EditorTab: React.FC<EditorTabsProps> = (props) => {
     // Access Ant Design theme token
     const { token: antdToken } = theme.useToken();
 
@@ -18,14 +18,14 @@ const EditorTab: React.FC<EditorTabsProps> = ({ height, code, onChange }: Editor
     const [activeTab, setActiveTab] = useState<EditorTabKey>('spec');
 
     return (
-        <Layout style={{ height }}>
+        <Layout style={{ height: props.height }}>
             <Layout.Header style={{ background: antdToken.colorBgContainer }}>
                 <EditorTabSelector activeTab={activeTab} onChange={setActiveTab} />
             </Layout.Header>
 
             { /* Overflow needs to be 'auto', otherwise whole layout with the tabs part will scroll with the content */ }
             <Layout.Content style={{ background: antdToken.colorBgContainer, overflow: 'auto' }}>
-                <EditorTabContent activeTab={activeTab} code={code} onChange={onChange} />
+                <EditorTabContent activeTab={activeTab} code={props.code} onChange={props.onChange} />
             </Layout.Content>
         </Layout>
     );

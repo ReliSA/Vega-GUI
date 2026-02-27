@@ -8,7 +8,7 @@ interface EditorTabSelectorProps {
     onChange: (tabKey: EditorTabKey) => void;
 }
 
-const EditorTabSelector: React.FC<EditorTabSelectorProps> = ({ activeTab, onChange }: EditorTabSelectorProps) => {
+const EditorTabSelector: React.FC<EditorTabSelectorProps> = (props) => {
     const tabItems = [
         {
             key: 'spec',
@@ -26,9 +26,9 @@ const EditorTabSelector: React.FC<EditorTabSelectorProps> = ({ activeTab, onChan
 
     return (
         <Tabs
-            activeKey={activeTab}
+            activeKey={props.activeTab}
             items={tabItems}
-            onChange={(key) => onChange(key as EditorTabKey)}
+            onChange={(key) => props.onChange(key as EditorTabKey)}
         />
     );
 };

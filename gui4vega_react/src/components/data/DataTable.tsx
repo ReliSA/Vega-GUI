@@ -18,39 +18,39 @@ interface DataTableProps {
     onColumnAdd?: (col: string, updatedRows: Record<string, unknown>[]) => void;
 }
 
-const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, onDeleteRow, confirmDelete, onConfirmDeleteChange, onColumnRename, onColumnDelete, onColumnAdd }: DataTableProps) => {
+const DataTable: React.FC<DataTableProps> = (props) => {
     const [tableVisible, setTableVisible] = useState(true);
 
     // Update all rows: rename key oldCol to newCol
     const handleColumnRename = (oldCol: string, newCol: string) => {
-        const updatedRows = renameColumn(dataset.values, oldCol, newCol);
-        if (onColumnRename) onColumnRename(oldCol, newCol, updatedRows);
+        const updatedRows = renameColumn(props.dataset.values, oldCol, newCol);
+        if (props.onColumnRename) props.onColumnRename(oldCol, newCol, updatedRows);
     };
 
     // Only perform the delete, confirmation is handled by DeleteDataButton
     const handleColumnDelete = (col: string) => {
-        const updatedRows = deleteColumn(dataset.values, col);
-        if (onColumnDelete) onColumnDelete(col, updatedRows);
+        const updatedRows = deleteColumn(props.dataset.values, col);
+        if (props.onColumnDelete) props.onColumnDelete(col, updatedRows);
     };
 
     const handleColumnAdd = () => {
         const col = prompt('Enter new column name:');
         if (!col) return;
-        if (Object.keys(dataset.values[0] ?? {}).includes(col)) {
+        if (Object.keys(props.dataset.values[0] ?? {}).includes(col)) {
             alert('Column already exists!');
             return;
         }
-        const updatedRows = addColumn(dataset.values, col);
-        if (onColumnAdd) onColumnAdd(col, updatedRows);
+        const updatedRows = addColumn(props.dataset.values, col);
+        if (props.onColumnAdd) props.onColumnAdd(col, updatedRows);
     };
 
     // Define each column
     const columns = buildColumns(
-        dataset.values[0] ?? {},
-        onCellChange,
+        props.dataset.values[0] ?? {},
+        props.onCellChange,
         handleColumnRename,
         handleColumnDelete,
-        confirmDelete
+        props.confirmDelete
     );
 
     // Add delete column at the end
@@ -63,23 +63,23 @@ const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, 
                 <DeleteDataButton
                     index={rowIndex}
                     type='record'
-                    confirmDelete={confirmDelete}
-                    onDelete={onDeleteRow}
+                    confirmDelete={props.confirmDelete}
+                    onDelete={props.onDeleteRow}
                 />
             ),
         },
     ];
-    const dataSource = dataset.values.map((row, i) => ({ ...row, _rowKey: i }));
+    const dataSource = props.dataset.values.map((row, i) => ({ ...row, _rowKey: i }));
 
     return (
         <Space orientation="vertical" size="middle">
             <EditableDatasetHeader
-                datasetName={dataset.name}
-                rowCount={dataset.values.length}
-                confirmDelete={confirmDelete}
-                onAddRow={onAddRow}
+                datasetName={props.dataset.name}
+                rowCount={props.dataset.values.length}
+                confirmDelete={props.confirmDelete}
+                onAddRow={props.onAddRow}
                 onAddColumn={handleColumnAdd}
-                onConfirmDeleteChange={onConfirmDeleteChange}
+                onConfirmDeleteChange={props.onConfirmDeleteChange}
                 tableVisible={tableVisible}
                 onToggleTable={() => setTableVisible(v => !v)}
             />

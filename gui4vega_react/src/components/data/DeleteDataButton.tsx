@@ -9,25 +9,25 @@ interface DeleteDataButtonProps {
     onDelete: (rowIndex: number) => void;
 }
 
-const DeleteDataButton: React.FC<DeleteDataButtonProps> = ({ index, type, confirmDelete, onDelete }: DeleteDataButtonProps) => {
+const DeleteDataButton: React.FC<DeleteDataButtonProps> = (props) => {
     // Logic to handle delete with confirmation
     const handleClick = () => {
-        if (confirmDelete) {
+        if (props.confirmDelete) {
             Modal.confirm({
                 title: 'Are you sure?',
-                content: `Do you really want to delete this ${type}?`,
+                content: `Do you really want to delete this ${props.type}?`,
                 okText: 'Delete',
                 okButtonProps: { danger: true, type: 'default' },
                 cancelText: 'Cancel',
-                onOk: () => onDelete(index),
+                onOk: () => props.onDelete(props.index),
             });
         } else {
-            onDelete(index);
+            props.onDelete(props.index);
         }
     };
 
     return (
-        <Button danger size="small" onClick={handleClick} title={"Delete " + type}>
+        <Button danger size="small" onClick={handleClick} title={"Delete " + props.type}>
             <DeleteOutlined />
         </Button>
     );

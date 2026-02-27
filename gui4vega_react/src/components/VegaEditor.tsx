@@ -6,19 +6,19 @@ import SpecLoader from './loader/SpecLoader';
 import VegaView from './viewer/VegaView';
 import type { VegaEditorProps } from '../types';
 
-const VegaEditor: React.FC<VegaEditorProps> = ({ initialSchema, height, width = '100%' }: VegaEditorProps) => {
+const VegaEditor: React.FC<VegaEditorProps> = (props: VegaEditorProps) => {
     // Access Ant Design theme token
     const { token: antdToken } = theme.useToken();
 
     // State to hold the current Vega specification code
-    const [code, setCode] = useState<string>(() => JSON.stringify(initialSchema ?? defaultSpec, null, 2));
+    const [code, setCode] = useState<string>(() => JSON.stringify(props.initialSchema ?? defaultSpec, null, 2));
 
     // Validate that the height prop is provided and is a string
     useEffect(() => {
-        if (!height) {
+        if (!props.height) {
             throw new Error('gui4vega - VegaEditor: prop "height" is required and must be a string (e.g. "600px" or "100vh").');
         }
-    }, [height]);
+    }, [props.height]);
 
     // Handler for when a new spec is loaded from the SpecLoader component
     const handleSpecLoad = (spec: unknown) => {
@@ -27,7 +27,7 @@ const VegaEditor: React.FC<VegaEditorProps> = ({ initialSchema, height, width = 
 
     return (
         <ConfigProvider>
-            <Layout style={{ width, height, background: antdToken.colorBgContainer }}>
+            <Layout style={{ width: props.width, height: props.height, background: antdToken.colorBgContainer }}>
                 <Layout.Header style={{
                     padding: antdToken.padding,
                     background: antdToken.colorBgContainer,

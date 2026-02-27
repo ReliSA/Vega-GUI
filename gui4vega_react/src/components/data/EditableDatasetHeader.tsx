@@ -13,40 +13,31 @@ interface EditableDatasetHeaderProps {
     onToggleTable: () => void;
 }
 
-const EditableDatasetHeader: React.FC<EditableDatasetHeaderProps> = ({
-    datasetName,
-    rowCount,
-    confirmDelete,
-    onAddRow,
-    onAddColumn,
-    onConfirmDeleteChange,
-    tableVisible,
-    onToggleTable,
-}) => (
+const EditableDatasetHeader: React.FC<EditableDatasetHeaderProps> = (props) => (
     <Space align="center" style={{ width: '100%' }}>
         <Button
-            icon={tableVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-            onClick={onToggleTable}
+            icon={props.tableVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+            onClick={props.onToggleTable}
             size="small"
-            title={tableVisible ? 'Hide Table' : 'Show Table'}
+            title={props.tableVisible ? 'Hide Table' : 'Show Table'}
         />
         <Typography.Title level={5} style={{ marginBottom: 0 }}>
-            {datasetName}
+            {props.datasetName}
             <Typography.Text type="secondary" style={{ fontWeight: 400, marginLeft: 8, fontSize: 13 }}>
-                ({rowCount} rows)
+                ({props.rowCount} rows)
             </Typography.Text>
         </Typography.Title>
-        {tableVisible && (
+        {props.tableVisible && (
             <>
-                <Button size="small" type="primary" onClick={onAddRow}>
+                <Button size="small" type="primary" onClick={props.onAddRow}>
                     Add Record
                 </Button>
-                <Button size="small" onClick={onAddColumn}>
+                <Button size="small" onClick={props.onAddColumn}>
                     Add Column
                 </Button>
                 <Checkbox
-                    checked={confirmDelete}
-                    onChange={e => onConfirmDeleteChange(e.target.checked)}
+                    checked={props.confirmDelete}
+                    onChange={e => props.onConfirmDeleteChange(e.target.checked)}
                 >
                     Confirm Delete
                 </Checkbox>

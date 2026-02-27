@@ -33,4 +33,3 @@ export function deleteColumn(rows: Record<string, unknown>[], col: string): Reco
 export function addColumn(rows: Record<string, unknown>[], col: string): Record<string, unknown>[] {
     return rows.map(row => ({ ...row, [col]: '' }));
 }
-

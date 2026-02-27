@@ -6,7 +6,7 @@ interface VegaViewProps {
     code: string;
 }
 
-const VegaView: React.FC<VegaViewProps> = ({ code }) => {
+const VegaView: React.FC<VegaViewProps> = (props) => {
     // Error state of the Vega spec parsing/rendering
     const [error, setError] = useState<string | null>(null);
 
@@ -31,7 +31,7 @@ const VegaView: React.FC<VegaViewProps> = ({ code }) => {
                     vegaViewRef.current = null;
                 }
 
-                const spec = JSON.parse(code);
+                const spec = JSON.parse(props.code);
                 vegaViewRef.current = await vegaEmbed(vegaContainerRef.current, spec, { actions: false }) as unknown as { view?: { finalize?: () => void } };
                 setError(null);
             } catch (err) {
@@ -39,7 +39,7 @@ const VegaView: React.FC<VegaViewProps> = ({ code }) => {
             }
         };
         renderVega();
-    }, [code]);
+    }, [props.code]);
 
     return (
         <Layout style={{ height: '100%' }}>

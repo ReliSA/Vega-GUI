@@ -11,13 +11,20 @@ interface EditableColumnHeaderProps {
     confirmDelete: boolean;
 }
 
-const EditableColumnHeader: React.FC<EditableColumnHeaderProps> = ({ col, colIndex, onRename, onDelete, confirmDelete }: EditableColumnHeaderProps) => {
+const EditableColumnHeader: React.FC<EditableColumnHeaderProps> = (props) => {
+    // State to track if user is in edit mode
     const [editing, setEditing] = useState(false);
-    const [inputVal, setInputVal] = useState(col);
+
+    // Initialize input value with the current column name
+    const [inputVal, setInputVal] = useState(props.col);
+
+    // Function to save the new column name
     const save = () => {
         setEditing(false);
-        if (inputVal && inputVal !== col) onRename(inputVal);
+        if (inputVal && inputVal !== props.col) props.onRename(inputVal);
     };
+
+    // If in edit mode, show an input field and a delete button
     if (editing) {
         return (
             <Space align="center">
@@ -31,14 +38,15 @@ const EditableColumnHeader: React.FC<EditableColumnHeaderProps> = ({ col, colInd
                     style={{ minWidth: 80 }}
                 />
                 <DeleteDataButton
-                    index={colIndex}
+                    index={props.colIndex}
                     type='column'
-                    confirmDelete={confirmDelete}
-                    onDelete={onDelete}
+                    confirmDelete={props.confirmDelete}
+                    onDelete={props.onDelete}
                 />
             </Space>
         );
     }
+
     return (
         <Space align="center">
             <Typography.Text
@@ -47,13 +55,13 @@ const EditableColumnHeader: React.FC<EditableColumnHeaderProps> = ({ col, colInd
                 title="Click to rename"
                 ellipsis
             >
-                {toDisplay(col)}
+                {toDisplay(props.col)}
             </Typography.Text>
             <DeleteDataButton
-                index={colIndex}
+                index={props.colIndex}
                 type="column"
-                confirmDelete={confirmDelete}
-                onDelete={onDelete}
+                confirmDelete={props.confirmDelete}
+                onDelete={props.onDelete}
             />
         </Space>
     );

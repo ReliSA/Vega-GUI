@@ -10,14 +10,14 @@ interface EditorContentProps {
     onChange: (value: string) => void;
 }
 
-const EditorTabContent: React.FC<EditorContentProps> = ({ activeTab, code, onChange }: EditorContentProps) => {
-    switch (activeTab) {
+const EditorTabContent: React.FC<EditorContentProps> = (props) => {
+    switch (props.activeTab) {
         case 'spec':
-            return <SpecView code={code} onChange={onChange} />;
+            return <SpecView code={props.code} onChange={props.onChange} />;
         case 'data':
-            return <DataView code={code} onCodeChange={onChange} />;
+            return <DataView code={props.code} onCodeChange={props.onChange} />;
         case 'properties':
-            return <PropertiesView code={code} onCodeChange={onChange} />;
+            return <PropertiesView code={props.code} onCodeChange={props.onChange} />;
         default:
             return null;
     }

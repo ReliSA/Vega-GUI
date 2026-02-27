@@ -7,14 +7,14 @@ interface EditableCellProps {
     onSave: (val: unknown) => void;
 }
 
-const EditableCell: React.FC<EditableCellProps> = ({ value, onSave }: EditableCellProps) => {
-    const display = toDisplay(value);
+const EditableCell: React.FC<EditableCellProps> = (props) => {
+    const display = toDisplay(props.value);
     const [editing, setEditing] = useState(false);
     const [inputVal, setInputVal] = useState(display);
 
     const save = () => {
         setEditing(false);
-        onSave(coerce(inputVal));
+        props.onSave(coerce(inputVal));
     };
 
     if (editing) {

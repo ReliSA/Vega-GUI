@@ -6,14 +6,14 @@ interface SpecLoaderProps {
     onLoad: (spec: unknown) => void;
 }
 
-const SpecLoader: React.FC<SpecLoaderProps> = ({ onLoad }) => {
+const SpecLoader: React.FC<SpecLoaderProps> = (props) => {
     const handleFileUpload = (file: File) => {
         const reader = new FileReader();
         reader.onload = (e) => {
             try {
                 const content = e.target?.result as string;
                 const jsonContent = JSON.parse(content);
-                onLoad(jsonContent);
+                props.onLoad(jsonContent);
                 message.success('JSON specification loaded successfully');
             } catch (err) {
                 message.error('Failed to parse JSON file');
