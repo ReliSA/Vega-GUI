@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Input, Typography, Tooltip } from 'antd';
+import React from 'react';
+import { Typography } from 'antd';
 import { toDisplay, coerce } from './utils';
 
 // Maximum number of characters to display in the cell
@@ -14,56 +14,27 @@ const EditableCell: React.FC<EditableCellProps> = (props) => {
     // Convert the value to a display string
     const display = toDisplay(props.value);
 
-    // State to track if user is in edit mode
-    const [editing, setEditing] = useState(false);
-
-    // Initialize input value with the current display string
-    const [inputVal, setInputVal] = useState(display);
-
-    // Function to save the new value, converting it back to original type
-    const save = () => {
-        setEditing(false);
-        props.onSave(coerce(inputVal));
+    // Function to handle the save event of editable field
+    const handleSave = (val: string) => {
+        props.onSave(coerce(val));
     };
 
-    // If in edit mode, show an input field
-    if (editing) {
-        return (
-            <Input
-                autoFocus
-                size="small"
-                value={inputVal}
-                onChange={e => setInputVal(e.target.value)}
-                onBlur={save}
-                onPressEnter={save}
-                style={{ minWidth: 80 }}
-            />
-        );
-    }
-
-    // Truncate long values and show ellipsis, with tooltip for full value
-    const truncated = display.length > MAX_DISPLAY_LENGTH
-        ? display.slice(0, MAX_DISPLAY_LENGTH) + '...'
-        : display;
-
     return (
-        <span
-            onClick={() => { setInputVal(display); setEditing(true); }}
-            style={{ cursor: 'pointer', display: 'block', minWidth: 80, color: display === '' ? '#aaa' : undefined }}
-            title="Click to edit"
+        <Typography.Text
+            style={{ cursor: 'pointer', maxWidth: 100 }}
+            ellipsis={display.length > MAX_DISPLAY_LENGTH ? { tooltip: display } : false}
+            editable={{
+                onChange: handleSave,
+                triggerType: ['text'],
+            }}
         >
-            {display === '' ? (
-                <em>Click to edit</em>
-            ) : (
-                display.length > MAX_DISPLAY_LENGTH ? (
-                    <Tooltip title={display} placement="topLeft">
-                        <Typography.Text ellipsis style={{ maxWidth: 200 }}>{truncated}</Typography.Text>
-                    </Tooltip>
-                ) : (
-                    <Typography.Text>{display}</Typography.Text>
-                )
+            {/* Show either data value or placeholder */}
+            {display || (
+                <Typography.Text type="secondary" italic>
+                    Click to edit
+                </Typography.Text>
             )}
-        </span>
+        </Typography.Text>
     );
 };
 

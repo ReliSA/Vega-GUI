@@ -24,10 +24,9 @@ const EditableColumnHeader: React.FC<EditableColumnHeaderProps> = (props) => {
         if (inputVal && inputVal !== props.col) props.onRename(inputVal);
     };
 
-    // If in edit mode, show an input field and a delete button
-    if (editing) {
-        return (
-            <Space align="center">
+    return (
+        <Space align="center">
+            {editing ? (
                 <Input
                     autoFocus
                     size="small"
@@ -37,26 +36,16 @@ const EditableColumnHeader: React.FC<EditableColumnHeaderProps> = (props) => {
                     onPressEnter={save}
                     style={{ minWidth: 80 }}
                 />
-                <DataDeleteButton
-                    index={props.colIndex}
-                    type='column'
-                    confirmDelete={props.confirmDelete}
-                    onDelete={props.onDelete}
-                />
-            </Space>
-        );
-    }
-
-    return (
-        <Space align="center">
-            <Typography.Text
-                style={{ cursor: 'pointer' }}
-                onClick={() => setEditing(true)}
-                title="Click to rename"
-                ellipsis
-            >
-                {toDisplay(props.col)}
-            </Typography.Text>
+            ) : (
+                <Typography.Text
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setEditing(true)}
+                    title="Click to rename"
+                    ellipsis
+                >
+                    {toDisplay(props.col)}
+                </Typography.Text>
+            )}
             <DataDeleteButton
                 index={props.colIndex}
                 type="column"
