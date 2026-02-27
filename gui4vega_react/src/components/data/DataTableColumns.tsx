@@ -1,23 +1,23 @@
 import type { ColumnsType } from 'antd/es/table';
 import EditableCell from './EditableCell';
 import React, { useState } from 'react';
-import { Button } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import DeleteDataButton from './DeleteDataButton';
 
 export function buildColumns(
     row: Record<string, unknown>,
     onCellChange: (rowIndex: number, col: string, newValue: unknown) => void,
     onColumnRename: (oldCol: string, newCol: string) => void,
     onColumnDelete: (col: string) => void,
-    deleteLock: boolean
+    confirmDelete: boolean
 ): ColumnsType<Record<string, unknown>> {
-    return Object.keys(row).map(col => ({
+    return Object.keys(row).map((col, colIndex) => ({
         title: (
             <EditableColumnHeader
                 col={col}
+                colIndex={colIndex}
                 onRename={newCol => onColumnRename(col, newCol)}
                 onDelete={() => onColumnDelete(col)}
-                deleteLock={deleteLock}
+                confirmDelete={confirmDelete}
             />
         ),
         dataIndex: col,
@@ -31,21 +31,12 @@ export function buildColumns(
     }));
 }
 
-const EditableColumnHeader: React.FC<{ col: string; onRename: (newCol: string) => void; onDelete: () => void; deleteLock: boolean }> = ({ col, onRename, onDelete, deleteLock }) => {
+const EditableColumnHeader: React.FC<{ col: string; colIndex: number; onRename: (newCol: string) => void; onDelete: () => void; confirmDelete: boolean }> = ({ col, colIndex, onRename, onDelete, confirmDelete }) => {
     const [editing, setEditing] = useState(false);
     const [inputVal, setInputVal] = useState(col);
     const save = () => {
         setEditing(false);
         if (inputVal && inputVal !== col) onRename(inputVal);
-    };
-    const handleDelete = () => {
-        if (deleteLock) {
-            onDelete();
-        } else {
-            if (window.confirm('Are you sure you want to delete this column?')) {
-                onDelete();
-            }
-        }
     };
     if (editing) {
         return (
@@ -58,7 +49,12 @@ const EditableColumnHeader: React.FC<{ col: string; onRename: (newCol: string) =
                     onKeyDown={e => { if (e.key === 'Enter') save(); }}
                     style={{ minWidth: 80 }}
                 />
-                <Button danger size="small" style={{ marginLeft: 4 }} onClick={handleDelete} title="Delete column" icon={<DeleteOutlined />} />
+                <DeleteDataButton
+                    index={colIndex}
+                    type='column'
+                    confirmDelete={confirmDelete}
+                    onDelete={() => onDelete()}
+                />
             </span>
         );
     }
@@ -67,7 +63,12 @@ const EditableColumnHeader: React.FC<{ col: string; onRename: (newCol: string) =
             <span style={{ cursor: 'pointer' }} onClick={() => setEditing(true)} title="Click to rename">
                 {col}
             </span>
-            <Button danger size="small" style={{ marginLeft: 4 }} onClick={handleDelete} title="Delete column" icon={<DeleteOutlined />} />
+            <DeleteDataButton
+                index={colIndex}
+                type="column"
+                confirmDelete={confirmDelete}
+                onDelete={() => onDelete()}
+            />
         </span>
     );
 };

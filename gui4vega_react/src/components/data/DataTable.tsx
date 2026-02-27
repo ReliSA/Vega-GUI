@@ -2,21 +2,21 @@ import React from 'react';
 import { Table, Typography, Button, Checkbox, Modal } from 'antd';
 import type { VegaDataset } from '../../types/vega';
 import { buildColumns } from './DataTableColumns';
-import { DeleteOutlined } from '@ant-design/icons';
+import DeleteDataButton from './DeleteDataButton.tsx';
 
 interface DataTableProps {
     dataset: VegaDataset;
     onCellChange: (rowIndex: number, col: string, newValue: unknown) => void;
     onAddRow: () => void;
     onDeleteRow: (rowIndex: number) => void;
-    deleteLock: boolean;
-    onLockChange: (locked: boolean) => void;
+    confirmDelete: boolean;
+    onConfirmDeleteChange: (value: boolean) => void;
     onColumnRename?: (oldCol: string, newCol: string, updatedRows: Record<string, unknown>[]) => void;
     onColumnDelete?: (col: string, updatedRows: Record<string, unknown>[]) => void;
     onColumnAdd?: (col: string, updatedRows: Record<string, unknown>[]) => void;
 }
 
-const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, onDeleteRow, deleteLock, onLockChange, onColumnRename, onColumnDelete, onColumnAdd }) => {
+const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, onDeleteRow, confirmDelete, onConfirmDeleteChange, onColumnRename, onColumnDelete, onColumnAdd }) => {
     const handleColumnRename = (oldCol: string, newCol: string) => {
         // Update all rows: rename key oldCol to newCol
         const updatedRows = dataset.values.map(row => {
@@ -29,14 +29,7 @@ const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, 
         if (onColumnRename) onColumnRename(oldCol, newCol, updatedRows);
     };
     const handleColumnDelete = (col: string) => {
-        if (deleteLock) {
-            const updatedRows = dataset.values.map(row => {
-                const newRow = { ...row };
-                delete newRow[col];
-                return newRow;
-            });
-            if (onColumnDelete) onColumnDelete(col, updatedRows);
-        } else {
+        if (confirmDelete) {
             Modal.confirm({
                 title: 'Are you sure?',
                 content: 'Do you really want to delete this column?',
@@ -52,6 +45,13 @@ const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, 
                     if (onColumnDelete) onColumnDelete(col, updatedRows);
                 },
             });
+        } else {
+            const updatedRows = dataset.values.map(row => {
+                const newRow = { ...row };
+                delete newRow[col];
+                return newRow;
+            });
+            if (onColumnDelete) onColumnDelete(col, updatedRows);
         }
     };
     const handleColumnAdd = () => {
@@ -69,7 +69,7 @@ const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, 
         onCellChange,
         handleColumnRename,
         handleColumnDelete,
-        deleteLock // unified lock
+        confirmDelete
     );
     // Add delete column
     const columnsWithDelete = [
@@ -78,22 +78,12 @@ const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, 
             title: '',
             key: 'delete',
             render: (_: unknown, _row: Record<string, unknown>, rowIndex: number) => (
-                <Button danger size="small" onClick={() => {
-                    if (deleteLock) {
-                        onDeleteRow(rowIndex);
-                    } else {
-                        Modal.confirm({
-                            title: 'Are you sure?',
-                            content: 'Do you really want to delete this record?',
-                            okText: 'Delete',
-                            okButtonProps: { danger: true },
-                            cancelText: 'Cancel',
-                            onOk: () => onDeleteRow(rowIndex),
-                        });
-                    }
-                }}>
-                    <DeleteOutlined />
-                </Button>
+                <DeleteDataButton
+                    index={rowIndex}
+                    type='record'
+                    confirmDelete={confirmDelete}
+                    onDelete={onDeleteRow}
+                />
             ),
         },
     ];
@@ -116,10 +106,10 @@ const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, 
                 </Button>
                 <Checkbox
                     style={{ marginLeft: 16 }}
-                    checked={deleteLock}
-                    onChange={e => onLockChange(e.target.checked)}
+                    checked={confirmDelete}
+                    onChange={e => onConfirmDeleteChange(e.target.checked)}
                 >
-                    Do not confirm delete
+                    Confirm delete
                 </Checkbox>
             </div>
             <Table
@@ -135,3 +125,4 @@ const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, 
 };
 
 export default DataTable;
+

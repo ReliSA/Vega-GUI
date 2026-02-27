@@ -8,13 +8,18 @@ interface DataViewProps {
     onCodeChange: (code: string) => void;
 }
 
-const DataViewPanel: React.FC<DataViewProps> = ({ code, onCodeChange }) => {
+const DataView: React.FC<DataViewProps> = ({ code, onCodeChange }: DataViewProps) => {
     const datasets = useMemo(() => parseDatasets(code), [code]);
-    // Lock state per dataset
-    const [deleteLock, setDeleteLock] = useState<Record<string, boolean>>({});
+    // Lock state per dataset, default to true for all datasets
+    const [confirmDelete, setConfirmDelete] = useState<Record<string, boolean>>(() => {
+        const initial: Record<string, boolean> = {};
+        const parsed = parseDatasets(code);
+        parsed.forEach(ds => { initial[ds.name] = true; });
+        return initial;
+    });
 
-    const handleLockChange = (datasetName: string, locked: boolean) => {
-        setDeleteLock(prev => ({ ...prev, [datasetName]: locked }));
+    const handleConfirmDeleteChange = (datasetName: string, value: boolean) => {
+        setConfirmDelete(prev => ({ ...prev, [datasetName]: value }));
     };
 
     return (
@@ -38,8 +43,8 @@ const DataViewPanel: React.FC<DataViewProps> = ({ code, onCodeChange }) => {
                         onDeleteRow={rowIndex =>
                             onCodeChange(deleteDatasetRow(code, ds.name, rowIndex))
                         }
-                        deleteLock={deleteLock[ds.name]}
-                        onLockChange={locked => handleLockChange(ds.name, locked)}
+                        confirmDelete={confirmDelete[ds.name]}
+                        onConfirmDeleteChange={value => handleConfirmDeleteChange(ds.name, value)}
                         onColumnRename={(_oldCol, _newCol, updatedRows) => {
                             // Update the dataset in the spec
                             try {
@@ -84,4 +89,4 @@ const DataViewPanel: React.FC<DataViewProps> = ({ code, onCodeChange }) => {
     );
 };
 
-export default DataViewPanel;
+export default DataView;
