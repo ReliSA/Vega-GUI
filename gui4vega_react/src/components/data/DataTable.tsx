@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Typography, Button, Checkbox, Modal } from 'antd';
+import { Table, Typography, Button, Checkbox } from 'antd';
 import type { VegaDataset } from '../../types/vega';
 import { buildColumns } from './DataTableColumns';
 import DeleteDataButton from './DeleteDataButton.tsx';
@@ -16,44 +16,28 @@ interface DataTableProps {
     onColumnAdd?: (col: string, updatedRows: Record<string, unknown>[]) => void;
 }
 
-const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, onDeleteRow, confirmDelete, onConfirmDeleteChange, onColumnRename, onColumnDelete, onColumnAdd }) => {
+const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, onDeleteRow, confirmDelete, onConfirmDeleteChange, onColumnRename, onColumnDelete, onColumnAdd }: DataTableProps) => {
+    // Update all rows: rename key oldCol to newCol
     const handleColumnRename = (oldCol: string, newCol: string) => {
-        // Update all rows: rename key oldCol to newCol
         const updatedRows = dataset.values.map(row => {
             const newRow = { ...row };
             newRow[newCol] = newRow[oldCol];
             delete newRow[oldCol];
             return newRow;
         });
-        // Update dataset structure
         if (onColumnRename) onColumnRename(oldCol, newCol, updatedRows);
     };
+
+    // Only perform the delete, confirmation is handled by DeleteDataButton
     const handleColumnDelete = (col: string) => {
-        if (confirmDelete) {
-            Modal.confirm({
-                title: 'Are you sure?',
-                content: 'Do you really want to delete this column?',
-                okText: 'Delete',
-                okButtonProps: { danger: true },
-                cancelText: 'Cancel',
-                onOk: () => {
-                    const updatedRows = dataset.values.map(row => {
-                        const newRow = { ...row };
-                        delete newRow[col];
-                        return newRow;
-                    });
-                    if (onColumnDelete) onColumnDelete(col, updatedRows);
-                },
-            });
-        } else {
-            const updatedRows = dataset.values.map(row => {
-                const newRow = { ...row };
-                delete newRow[col];
-                return newRow;
-            });
-            if (onColumnDelete) onColumnDelete(col, updatedRows);
-        }
+        const updatedRows = dataset.values.map(row => {
+            const newRow = { ...row };
+            delete newRow[col];
+            return newRow;
+        });
+        if (onColumnDelete) onColumnDelete(col, updatedRows);
     };
+
     const handleColumnAdd = () => {
         const col = prompt('Enter new column name:');
         if (!col) return;
@@ -64,6 +48,8 @@ const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, 
         const updatedRows = dataset.values.map(row => ({ ...row, [col]: '' }));
         if (onColumnAdd) onColumnAdd(col, updatedRows);
     };
+
+    // Define each column
     const columns = buildColumns(
         dataset.values[0] ?? {},
         onCellChange,
@@ -71,7 +57,8 @@ const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, 
         handleColumnDelete,
         confirmDelete
     );
-    // Add delete column
+
+    // Add delete column at the end
     const columnsWithDelete = [
         ...columns,
         {
@@ -125,4 +112,3 @@ const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, 
 };
 
 export default DataTable;
-

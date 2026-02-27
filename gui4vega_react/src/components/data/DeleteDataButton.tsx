@@ -17,7 +17,7 @@ const DeleteDataButton: React.FC<DeleteDataButtonProps> = ({ index, type, confir
                 title: 'Are you sure?',
                 content: `Do you really want to delete this ${type}?`,
                 okText: 'Delete',
-                okButtonProps: { danger: true },
+                okButtonProps: { danger: true, type: 'default' },
                 cancelText: 'Cancel',
                 onOk: () => onDelete(index),
             });
