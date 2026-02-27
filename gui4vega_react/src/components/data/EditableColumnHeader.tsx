@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { toDisplay } from './utils';
-import DeleteDataButton from './DeleteDataButton';
+import DataDeleteButton from './button/DataDeleteButton.tsx';
 import { Input, Space, Typography } from 'antd';
 
 interface EditableColumnHeaderProps {
@@ -37,7 +37,7 @@ const EditableColumnHeader: React.FC<EditableColumnHeaderProps> = (props) => {
                     onPressEnter={save}
                     style={{ minWidth: 80 }}
                 />
-                <DeleteDataButton
+                <DataDeleteButton
                     index={props.colIndex}
                     type='column'
                     confirmDelete={props.confirmDelete}
@@ -57,7 +57,7 @@ const EditableColumnHeader: React.FC<EditableColumnHeaderProps> = (props) => {
             >
                 {toDisplay(props.col)}
             </Typography.Text>
-            <DeleteDataButton
+            <DataDeleteButton
                 index={props.colIndex}
                 type="column"
                 confirmDelete={props.confirmDelete}

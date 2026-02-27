@@ -1,8 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { Typography, Space, message, Modal } from 'antd';
+import { Typography, Space, Flex, message } from 'antd';
 import { parseDatasets, addDataset, deleteDataset } from '../../types/vega';
-import AddDatasetButton from './AddDatasetButton.tsx';
+import DatasetAddButton from './button/DatasetAddButton.tsx';
 import DatasetCard from './DatasetCard';
+import DatasetDeleteButton from './button/DatasetDeleteButton.tsx';
 
 interface DataViewProps {
     code: string;
@@ -40,28 +41,19 @@ const DataView: React.FC<DataViewProps> = (props) => {
         props.onCodeChange(addDataset(props.code, trimmed, [{ NewColumn: '' }]));
     };
 
-    // Delete dataset handler
+    // Delete dataset handler (no modal here, handled in button)
     const handleDeleteDataset = (datasetName: string) => {
-        Modal.confirm({
-            title: `Delete dataset "${datasetName}"?`,
-            content: 'This will remove the entire dataset and all its data. This action cannot be undone.',
-            okText: 'Delete',
-            okType: 'danger',
-            cancelText: 'Cancel',
-            onOk: () => {
-                props.onCodeChange(deleteDataset(props.code, datasetName));
-            },
-        });
+        props.onCodeChange(deleteDataset(props.code, datasetName));
     };
 
     return (
-        <Space orientation="vertical" style={{ width: '100%', height: '100%', padding: 16, overflow: 'auto' }} size="middle">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography.Title level={5} style={{ margin: 0 }}>Datasets</Typography.Title>
-                <AddDatasetButton onAdd={handleAddDataset} />
-            </div>
+        <Space orientation="vertical" style={{ width: '100%', padding: 8, overflow: 'auto'}}>
+            <Flex justify="space-between" align="center">
+                <Typography.Title level={5}>Datasets</Typography.Title>
+                <DatasetAddButton onAdd={handleAddDataset} />
+            </Flex>
             {datasets.length === 0 ? (
-                <Typography.Text type="secondary">No inline data found in spec.</Typography.Text>
+                <Typography.Text type="secondary">No inline data found in Vega specification.</Typography.Text>
             ) : (
                 datasets.map(ds => (
                     <DatasetCard
@@ -71,7 +63,7 @@ const DataView: React.FC<DataViewProps> = (props) => {
                         onCodeChange={props.onCodeChange}
                         confirmDelete={confirmDelete[ds.name]}
                         onConfirmDeleteChange={value => handleConfirmDeleteChange(ds.name, value)}
-                        onDelete={handleDeleteDataset}
+                        deleteButton={<DatasetDeleteButton datasetName={ds.name} onDelete={handleDeleteDataset} />}
                     />
                 ))
             )}

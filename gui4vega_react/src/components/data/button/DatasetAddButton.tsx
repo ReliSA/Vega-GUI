@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Modal, Input, Button } from 'antd';
 
-interface AddDatasetButtonProps {
+interface DatasetAddButtonProps {
     onAdd: (datasetName: string) => void;
 }
 
-const AddDatasetButton: React.FC<AddDatasetButtonProps> = (props) => {
+const DatasetAddButton: React.FC<DatasetAddButtonProps> = (props) => {
     // State to control the visibility of the modal
     const [visible, setVisible] = useState(false);
 
@@ -50,4 +50,4 @@ const AddDatasetButton: React.FC<AddDatasetButtonProps> = (props) => {
     );
 };
 
-export default AddDatasetButton;
+export default DatasetAddButton;

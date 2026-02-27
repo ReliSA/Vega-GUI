@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Table, Space, Empty } from 'antd';
 import type { VegaDataset } from '../../types/vega';
 import { buildColumns } from './DataTableColumns';
-import DeleteDataButton from './DeleteDataButton.tsx';
+import DataDeleteButton from './button/DataDeleteButton.tsx';
 import { renameColumn, deleteColumn, addColumn } from './utils';
 import EditableDatasetHeader from './EditableDatasetHeader';
 
@@ -64,7 +64,7 @@ const DataTable: React.FC<DataTableProps> = (props) => {
             title: '',
             key: 'delete',
             render: (_: unknown, _row: Record<string, unknown>, rowIndex: number) => (
-                <DeleteDataButton
+                <DataDeleteButton
                     index={rowIndex}
                     type='record'
                     confirmDelete={props.confirmDelete}

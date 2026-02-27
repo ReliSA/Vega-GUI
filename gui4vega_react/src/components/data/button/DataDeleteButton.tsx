@@ -2,14 +2,14 @@ import React from 'react';
 import { Button, Modal } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 
-interface DeleteDataButtonProps {
+interface DataDeleteButtonProps {
     index: number;
     type: 'record' | 'column';
     confirmDelete: boolean;
     onDelete: (rowIndex: number) => void;
 }
 
-const DeleteDataButton: React.FC<DeleteDataButtonProps> = (props) => {
+const DataDeleteButton: React.FC<DataDeleteButtonProps> = (props) => {
     // Logic to handle delete with confirmation
     const handleClick = () => {
         if (props.confirmDelete) {
@@ -33,4 +33,4 @@ const DeleteDataButton: React.FC<DeleteDataButtonProps> = (props) => {
     );
 };
 
-export default DeleteDataButton;
+export default DataDeleteButton;

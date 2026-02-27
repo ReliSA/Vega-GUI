@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Typography, Button } from 'antd';
+import { Card, Typography, Flex } from 'antd';
 import DataTable from './DataTable';
 import type { VegaDataset as VegaDatasetType } from '../../types/vega';
 import { updateDatasetValue, addDatasetRow, deleteDatasetRow } from '../../types/vega';
@@ -10,7 +10,7 @@ interface DatasetCardProps {
     onCodeChange: (code: string) => void;
     confirmDelete: boolean;
     onConfirmDeleteChange: (value: boolean) => void;
-    onDelete: (datasetName: string) => void;
+    deleteButton: React.ReactNode;
 }
 
 const DatasetCard: React.FC<DatasetCardProps> = (props) => {
@@ -29,13 +29,11 @@ const DatasetCard: React.FC<DatasetCardProps> = (props) => {
     };
 
     return (
-        <Card key={props.ds.name} style={{ width: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+        <Card key={props.ds.name}>
+            <Flex justify="space-between" align="center">
                 <Typography.Text strong>{props.ds.name}</Typography.Text>
-                <Button danger size="small" onClick={() => props.onDelete(props.ds.name)}>
-                    Delete
-                </Button>
-            </div>
+                {props.deleteButton}
+            </Flex>
             <DataTable
                 dataset={props.ds}
                 onCellChange={(rowIndex, col, newValue) =>
