@@ -33,12 +33,16 @@ const DataTable: React.FC<DataTableProps> = (props) => {
         if (props.onColumnDelete) props.onColumnDelete(col, updatedRows);
     };
 
+    // Add a new column with empty values, name is prompted from user
     const handleColumnAdd = () => {
-        const col = prompt('Enter new column name:');
-        if (!col) return;
-        if (Object.keys(props.dataset.values[0] ?? {}).includes(col)) {
-            alert('Column already exists!');
-            return;
+        // Generate a unique default column name
+        const existingCols = Object.keys(props.dataset.values[0] ?? {});
+        const baseName = 'NewColumn';
+        let col = baseName;
+        let i = 1;
+        while (existingCols.includes(col)) {
+            col = `${baseName}${i}`;
+            i++;
         }
         const updatedRows = addColumn(props.dataset.values, col);
         if (props.onColumnAdd) props.onColumnAdd(col, updatedRows);
@@ -69,10 +73,12 @@ const DataTable: React.FC<DataTableProps> = (props) => {
             ),
         },
     ];
+
+    // Add a unique _rowKey to each row for React rendering
     const dataSource = props.dataset.values.map((row, i) => ({ ...row, _rowKey: i }));
 
     return (
-        <Space orientation="vertical" size="middle">
+        <Space orientation="vertical" size="middle" style={{ width: '100%' }}>
             <EditableDatasetHeader
                 datasetName={props.dataset.name}
                 rowCount={props.dataset.values.length}
