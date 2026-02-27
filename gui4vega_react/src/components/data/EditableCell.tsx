@@ -1,22 +1,13 @@
 import React, { useState } from 'react';
 import { Input } from 'antd';
+import { toDisplay, coerce } from './utils';
 
 interface EditableCellProps {
     value: unknown;
     onSave: (val: unknown) => void;
 }
 
-function toDisplay(value: unknown): string {
-    return value !== null && typeof value === 'object'
-        ? JSON.stringify(value)
-        : String(value ?? '');
-}
-
-function coerce(raw: string): unknown {
-    return raw.trim() !== '' && !isNaN(Number(raw)) ? Number(raw) : raw;
-}
-
-const EditableCell: React.FC<EditableCellProps> = ({ value, onSave }) => {
+const EditableCell: React.FC<EditableCellProps> = ({ value, onSave }: EditableCellProps) => {
     const display = toDisplay(value);
     const [editing, setEditing] = useState(false);
     const [inputVal, setInputVal] = useState(display);

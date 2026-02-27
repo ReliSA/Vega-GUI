@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
-import { Typography } from 'antd';
+import { Typography, Space } from 'antd';
 import { parseDatasets, updateDatasetValue, addDatasetRow, deleteDatasetRow } from '../../types/vega';
+import type { VegaDataset as VegaDatasetType } from '../../types/vega';
 import DataTable from './DataTable';
 
 interface DataViewProps {
@@ -23,7 +24,7 @@ const DataView: React.FC<DataViewProps> = ({ code, onCodeChange }: DataViewProps
     };
 
     return (
-        <div style={{ padding: 16, overflow: 'auto', height: '100%' }}>
+        <Space orientation="vertical" style={{ padding: 16, overflow: 'auto', height: '100%' }} size="middle">
             {datasets.length === 0 ? (
                 <Typography.Text type="secondary">No inline data found in spec.</Typography.Text>
             ) : (
@@ -49,7 +50,7 @@ const DataView: React.FC<DataViewProps> = ({ code, onCodeChange }: DataViewProps
                             // Update the dataset in the spec
                             try {
                                 const spec = JSON.parse(code);
-                                const dataset = spec.data.find((d: any) => d.name === ds.name);
+                                const dataset = spec.data.find((d: VegaDatasetType) => d.name === ds.name);
                                 if (dataset) {
                                     dataset.values = updatedRows;
                                 }
@@ -61,7 +62,7 @@ const DataView: React.FC<DataViewProps> = ({ code, onCodeChange }: DataViewProps
                         onColumnDelete={(_col, updatedRows) => {
                             try {
                                 const spec = JSON.parse(code);
-                                const dataset = spec.data.find((d: any) => d.name === ds.name);
+                                const dataset = spec.data.find((d: VegaDatasetType) => d.name === ds.name);
                                 if (dataset) {
                                     dataset.values = updatedRows;
                                 }
@@ -73,7 +74,7 @@ const DataView: React.FC<DataViewProps> = ({ code, onCodeChange }: DataViewProps
                         onColumnAdd={(_col, updatedRows) => {
                             try {
                                 const spec = JSON.parse(code);
-                                const dataset = spec.data.find((d: any) => d.name === ds.name);
+                                const dataset = spec.data.find((d: VegaDatasetType) => d.name === ds.name);
                                 if (dataset) {
                                     dataset.values = updatedRows;
                                 }
@@ -85,7 +86,7 @@ const DataView: React.FC<DataViewProps> = ({ code, onCodeChange }: DataViewProps
                     />
                 ))
             )}
-        </div>
+        </Space>
     );
 };
 

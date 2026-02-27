@@ -1,7 +1,6 @@
 import type { ColumnsType } from 'antd/es/table';
 import EditableCell from './EditableCell';
-import React, { useState } from 'react';
-import DeleteDataButton from './DeleteDataButton';
+import EditableColumnHeader from './EditableColumnHeader';
 
 export function buildColumns(
     row: Record<string, unknown>,
@@ -30,45 +29,3 @@ export function buildColumns(
         ),
     }));
 }
-
-const EditableColumnHeader: React.FC<{ col: string; colIndex: number; onRename: (newCol: string) => void; onDelete: () => void; confirmDelete: boolean }> = ({ col, colIndex, onRename, onDelete, confirmDelete }) => {
-    const [editing, setEditing] = useState(false);
-    const [inputVal, setInputVal] = useState(col);
-    const save = () => {
-        setEditing(false);
-        if (inputVal && inputVal !== col) onRename(inputVal);
-    };
-    if (editing) {
-        return (
-            <span style={{ display: 'flex', alignItems: 'center' }}>
-                <input
-                    autoFocus
-                    value={inputVal}
-                    onChange={e => setInputVal(e.target.value)}
-                    onBlur={save}
-                    onKeyDown={e => { if (e.key === 'Enter') save(); }}
-                    style={{ minWidth: 80 }}
-                />
-                <DeleteDataButton
-                    index={colIndex}
-                    type='column'
-                    confirmDelete={confirmDelete}
-                    onDelete={() => onDelete()}
-                />
-            </span>
-        );
-    }
-    return (
-        <span style={{ display: 'flex', alignItems: 'center' }}>
-            <span style={{ cursor: 'pointer' }} onClick={() => setEditing(true)} title="Click to rename">
-                {col}
-            </span>
-            <DeleteDataButton
-                index={colIndex}
-                type="column"
-                confirmDelete={confirmDelete}
-                onDelete={() => onDelete()}
-            />
-        </span>
-    );
-};

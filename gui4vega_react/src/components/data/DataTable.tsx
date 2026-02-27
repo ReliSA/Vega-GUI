@@ -1,8 +1,10 @@
-import React from 'react';
-import { Table, Typography, Button, Checkbox } from 'antd';
+import React, { useState } from 'react';
+import { Table, Space } from 'antd';
 import type { VegaDataset } from '../../types/vega';
 import { buildColumns } from './DataTableColumns';
 import DeleteDataButton from './DeleteDataButton.tsx';
+import { renameColumn, deleteColumn, addColumn } from './utils';
+import EditableDatasetHeader from './EditableDatasetHeader';
 
 interface DataTableProps {
     dataset: VegaDataset;
@@ -17,24 +19,17 @@ interface DataTableProps {
 }
 
 const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, onDeleteRow, confirmDelete, onConfirmDeleteChange, onColumnRename, onColumnDelete, onColumnAdd }: DataTableProps) => {
+    const [tableVisible, setTableVisible] = useState(true);
+
     // Update all rows: rename key oldCol to newCol
     const handleColumnRename = (oldCol: string, newCol: string) => {
-        const updatedRows = dataset.values.map(row => {
-            const newRow = { ...row };
-            newRow[newCol] = newRow[oldCol];
-            delete newRow[oldCol];
-            return newRow;
-        });
+        const updatedRows = renameColumn(dataset.values, oldCol, newCol);
         if (onColumnRename) onColumnRename(oldCol, newCol, updatedRows);
     };
 
     // Only perform the delete, confirmation is handled by DeleteDataButton
     const handleColumnDelete = (col: string) => {
-        const updatedRows = dataset.values.map(row => {
-            const newRow = { ...row };
-            delete newRow[col];
-            return newRow;
-        });
+        const updatedRows = deleteColumn(dataset.values, col);
         if (onColumnDelete) onColumnDelete(col, updatedRows);
     };
 
@@ -45,7 +40,7 @@ const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, 
             alert('Column already exists!');
             return;
         }
-        const updatedRows = dataset.values.map(row => ({ ...row, [col]: '' }));
+        const updatedRows = addColumn(dataset.values, col);
         if (onColumnAdd) onColumnAdd(col, updatedRows);
     };
 
@@ -77,37 +72,28 @@ const DataTable: React.FC<DataTableProps> = ({ dataset, onCellChange, onAddRow, 
     const dataSource = dataset.values.map((row, i) => ({ ...row, _rowKey: i }));
 
     return (
-        <div style={{ marginBottom: 24 }}>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
-                <Typography.Title level={5} style={{ marginBottom: 0 }}>
-                    {dataset.name}
-                    <Typography.Text type="secondary" style={{ fontWeight: 400, marginLeft: 8, fontSize: 13 }}>
-                        ({dataset.values.length} rows)
-                    </Typography.Text>
-                </Typography.Title>
-                <Button style={{ marginLeft: 16 }} size="small" type="primary" onClick={onAddRow}>
-                    Add Record
-                </Button>
-                <Button style={{ marginLeft: 8 }} size="small" onClick={handleColumnAdd}>
-                    Add Column
-                </Button>
-                <Checkbox
-                    style={{ marginLeft: 16 }}
-                    checked={confirmDelete}
-                    onChange={e => onConfirmDeleteChange(e.target.checked)}
-                >
-                    Confirm delete
-                </Checkbox>
-            </div>
-            <Table
-                columns={columnsWithDelete}
-                dataSource={dataSource}
-                rowKey="_rowKey"
-                size="small"
-                pagination={false}
-                scroll={{ x: 'max-content' }}
+        <Space orientation="vertical" size="middle">
+            <EditableDatasetHeader
+                datasetName={dataset.name}
+                rowCount={dataset.values.length}
+                confirmDelete={confirmDelete}
+                onAddRow={onAddRow}
+                onAddColumn={handleColumnAdd}
+                onConfirmDeleteChange={onConfirmDeleteChange}
+                tableVisible={tableVisible}
+                onToggleTable={() => setTableVisible(v => !v)}
             />
-        </div>
+            {tableVisible && (
+                <Table
+                    columns={columnsWithDelete}
+                    dataSource={dataSource}
+                    rowKey="_rowKey"
+                    size="small"
+                    pagination={false}
+                    scroll={{ x: 'max-content' }}
+                />
+            )}
+        </Space>
     );
 };
 
