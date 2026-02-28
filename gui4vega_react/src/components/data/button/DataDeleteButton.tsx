@@ -27,7 +27,7 @@ const DataDeleteButton: React.FC<DataDeleteButtonProps> = (props) => {
     };
 
     return (
-        <Button danger size="small" onClick={handleClick} title={"Delete " + props.type}>
+        <Button size="small" type="text" onClick={handleClick} title={"Delete " + props.type}>
             <DeleteOutlined />
         </Button>
     );

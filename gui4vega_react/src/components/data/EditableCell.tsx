@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from 'antd';
-import { toDisplay, coerce } from './utils';
+import { toDisplay } from './utils';
 
 // Maximum number of characters to display in the cell
 const MAX_DISPLAY_LENGTH = 20;
@@ -14,9 +14,11 @@ const EditableCell: React.FC<EditableCellProps> = (props) => {
     // Convert the value to a display string
     const display = toDisplay(props.value);
 
-    // Function to handle the save event of editable field
+    // Save only if the new value is different from the current
     const handleSave = (val: string) => {
-        props.onSave(coerce(val));
+        if (val !== props.value) {
+            props.onSave(val);
+        }
     };
 
     return (

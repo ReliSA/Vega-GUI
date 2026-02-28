@@ -1,6 +1,7 @@
 import type { ColumnsType } from 'antd/es/table';
 import EditableCell from './EditableCell';
-import EditableColumnHeader from './EditableColumnHeader';
+import {Space} from "antd";
+import DataDeleteButton from "./button/DataDeleteButton.tsx";
 
 export function buildColumns(
     row: Record<string, unknown>,
@@ -11,13 +12,18 @@ export function buildColumns(
 ): ColumnsType<Record<string, unknown>> {
     return Object.keys(row).map((col, colIndex) => ({
         title: (
-            <EditableColumnHeader
-                col={col}
-                colIndex={colIndex}
-                onRename={newCol => onColumnRename(col, newCol)}
-                onDelete={() => onColumnDelete(col)}
-                confirmDelete={confirmDelete}
-            />
+            <Space align="center" size="small">
+                <EditableCell
+                    value={col}
+                    onSave={newCol => typeof newCol === 'string' ? onColumnRename(col, newCol) : undefined}
+                />
+                <DataDeleteButton
+                    index={colIndex}
+                    type="column"
+                    confirmDelete={confirmDelete}
+                    onDelete={() => onColumnDelete(col)}
+                />
+            </Space>
         ),
         dataIndex: col,
         key: col,
