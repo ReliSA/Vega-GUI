@@ -1,8 +1,8 @@
 import React from 'react';
 import { Card, Typography, Flex } from 'antd';
 import DataTable from './DataTable';
-import type { VegaDataset as VegaDatasetType } from '../../types/vega';
-import { updateDatasetValue, addDatasetRow, deleteDatasetRow } from '../../types/vega';
+import type { VegaDataset as VegaDatasetType } from './helper/datasetEdit.ts';
+import { updateDatasetValue, addDatasetRow, deleteDatasetRow } from './helper/datasetEdit.ts';
 
 interface DatasetCardProps {
     ds: VegaDatasetType;

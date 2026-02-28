@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Table, Space, Empty } from 'antd';
-import type { VegaDataset } from '../../types/vega';
+import type { VegaDataset } from './helper/datasetEdit.ts';
 import { buildColumns } from './DataTableColumns';
 import DataDeleteButton from './button/DataDeleteButton.tsx';
-import { renameColumn, deleteColumn, addColumn } from './utils';
+import { renameColumn, deleteColumn, addColumn } from './helper/dataEdit.ts';
 import EditableDatasetHeader from './EditableDatasetHeader';
 
 interface DataTableProps {

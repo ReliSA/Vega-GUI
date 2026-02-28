@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from 'antd';
-import { toDisplay } from './utils';
+import { toDisplay } from './helper/dataEdit.ts';
 
 // Maximum number of characters to display in the cell
 const MAX_DISPLAY_LENGTH = 20;

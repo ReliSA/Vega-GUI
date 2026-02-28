@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Typography, Space, Flex, message } from 'antd';
-import { parseDatasets, addDataset, deleteDataset } from '../../types/vega';
+import { parseDatasets, addDataset, deleteDataset } from './helper/datasetEdit.ts';
 import DatasetAddButton from './button/DatasetAddButton.tsx';
 import DatasetCard from './DatasetCard';
 import DatasetDeleteButton from './button/DatasetDeleteButton.tsx';
