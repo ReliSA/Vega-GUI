@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { ConfigProvider, Splitter, Layout, theme } from 'antd';
+import { ConfigProvider, Splitter, Layout, Space, theme } from 'antd';
 import defaultSpec from '../assets/default.json';
 import EditorTab from './editor_tab/EditorTab.tsx';
 import SpecLoader from './loader/SpecLoader.tsx';
 import VegaView from './viewer/VegaView.tsx';
+import SpecExporter from './exporter/SpecExporter.tsx';
+import type { ExportedData } from "./exporter/helper/exportData.ts";
 
 export interface VegaEditorProps {
     initialSchema?: Record<string, unknown>;
     height: string;
     width?: string;
+    onExport?: (data: ExportedData) => void;
 }
 
 const VegaEditor: React.FC<VegaEditorProps> = (props: VegaEditorProps) => {
@@ -39,7 +42,10 @@ const VegaEditor: React.FC<VegaEditorProps> = (props: VegaEditorProps) => {
                     lineHeight: 'normal',
                     borderBottom: `1px solid ${antdToken.colorBorderSecondary}`
                 }}>
-                    <SpecLoader onLoad={handleSpecLoad} />
+                    <Space size="middle">
+                        <SpecLoader onLoad={handleSpecLoad} />
+                        <SpecExporter code={code} onExport={props.onExport} />
+                    </Space>
                 </Layout.Header>
                 <Layout.Content>
                     <Splitter>

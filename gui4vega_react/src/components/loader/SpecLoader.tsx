@@ -1,6 +1,6 @@
 import React from 'react';
 import { Upload, Button, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { DownloadOutlined } from '@ant-design/icons';
 
 interface SpecLoaderProps {
     onLoad: (spec: unknown) => void;
@@ -25,12 +25,10 @@ const SpecLoader: React.FC<SpecLoaderProps> = (props) => {
     };
 
     return (
-        <Upload
-            beforeUpload={handleFileUpload}
-            showUploadList={false}
-            accept=".json"
-        >
-            <Button icon={<UploadOutlined />}>Load JSON Spec</Button>
+        <Upload beforeUpload={handleFileUpload} showUploadList={false} accept=".json">
+            <Button icon={<DownloadOutlined />}>
+                Load JSON Specification
+            </Button>
         </Upload>
     );
 };
