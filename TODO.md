@@ -10,3 +10,5 @@ Dataview
 Export
 - export vybranych datasetu jako pole, to se preda ve funkci pro SPADe
   - stejne udelat export signalu
+
+import { autocompletion } from "@codemirror/autocomplete";

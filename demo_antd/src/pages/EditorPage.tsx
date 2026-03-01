@@ -1,8 +1,9 @@
+import { useState } from 'react'
 import { VegaEditor } from 'gui4vega_react'
-import {Layout, Typography, theme, Flex } from 'antd'
+import type { VegaDataset } from 'gui4vega_react'
+import { Layout, Typography, theme, Flex } from 'antd'
 import AppHeader from '../components/AppHeader'
 import AppFooter from '../components/AppFooter'
-import { useState } from 'react'
 import ExportedContent from '../components/ExportedContent'
 
 // import spec from '../../json/invalid.json'
@@ -10,6 +11,23 @@ import spec from '../../../json/anti/02_too_long_sprint.json'
 
 const { Sider, Content } = Layout
 const { Title, Paragraph } = Typography
+
+const datasets: VegaDataset[] = [
+    {
+        name: "initialDataset1",
+        values: [
+            { category: "A", value: 10 },
+            { category: "B", value: 20 }
+        ]
+    },
+    {
+        name: "initialDataset2",
+        values: [
+            { category: "X", value: 90 },
+            { category: "Y", value: 80 }
+        ]
+    }
+];
 
 export default function EditorPage() {
     // Access Ant Design theme token
@@ -36,6 +54,7 @@ export default function EditorPage() {
                         <VegaEditor
                             height="700px"
                             initialSchema={spec}
+                            initialDatasets={datasets}
                             onExport={setExported}
                         />
 

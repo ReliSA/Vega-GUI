@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ConfigProvider, Splitter, Layout, Space, theme } from 'antd';
-import defaultSpec from '../assets/default.json';
 import EditorTab from './editor_tab/EditorTab.tsx';
 import SpecLoader from './loader/SpecLoader.tsx';
 import VegaView from './viewer/VegaView.tsx';
 import SpecExporter from './exporter/SpecExporter.tsx';
 import type { ExportedData } from "./exporter/helper/exportData.ts";
+import type { VegaDataset } from './data/helper/datasetEdit.ts';
+import { useVegaEditor } from "./useVegaEditor.ts";
 
 export interface VegaEditorProps {
     initialSchema?: Record<string, unknown>;
+    initialDatasets?: VegaDataset[];
     height: string;
     width?: string;
     onExport?: (data: ExportedData) => void;
@@ -18,20 +20,12 @@ const VegaEditor: React.FC<VegaEditorProps> = (props: VegaEditorProps) => {
     // Access Ant Design theme token
     const { token: antdToken } = theme.useToken();
 
-    // State to hold the current Vega specification code
-    const [code, setCode] = useState<string>(() => JSON.stringify(props.initialSchema ?? defaultSpec, null, 2));
-
-    // Validate that the height prop is provided and is a string
-    useEffect(() => {
-        if (!props.height) {
-            throw new Error('gui4vega - VegaEditor: prop "height" is required and must be a string (e.g. "600px" or "100vh").');
-        }
-    }, [props.height]);
-
-    // Handler for when a new spec is loaded from the SpecLoader component
-    const handleSpecLoad = (spec: unknown) => {
-        setCode(JSON.stringify(spec, null, 2));
-    };
+    // Call useVegaEditor hook
+    const { code, setCode, handleSpecLoad } = useVegaEditor({
+        initialSchema: props.initialSchema,
+        initialDatasets: props.initialDatasets,
+        height: props.height
+    });
 
     return (
         <ConfigProvider>
