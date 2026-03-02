@@ -1,17 +1,17 @@
 import React from 'react';
 import { Button, Modal, Checkbox, Typography, Divider, Flex, Layout } from 'antd';
-import {useSpecExporter} from "./hooks/useSpecExporter.ts";
+import {useSelectionExporter} from "./hooks/useSelectionExporter.ts";
 import type { ExportedData } from './helper/exportSelectedData.ts';
 import { UploadOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
 
-interface SpecExporterProps {
+interface SelectionExporterProps {
     code: string;
     onExport?: (data: ExportedData) => void;
 }
 
-const SpecExporter: React.FC<SpecExporterProps> = (props: SpecExporterProps) => {
+const SelectionExporter: React.FC<SelectionExporterProps> = (props: SelectionExporterProps) => {
     const {
         isModalOpen,
         datasetNames,
@@ -23,12 +23,12 @@ const SpecExporter: React.FC<SpecExporterProps> = (props: SpecExporterProps) => 
         openExporter,
         closeExporter,
         confirmExport
-    } = useSpecExporter({ code: props.code, onExportSuccess: props.onExport });
+    } = useSelectionExporter({ code: props.code, onExportSuccess: props.onExport });
 
     return (
         <>
             <Button onClick={openExporter} icon={<UploadOutlined />}>
-                Export JSON Specification
+                Export by Selection
             </Button>
 
             <Modal
@@ -75,4 +75,4 @@ const SpecExporter: React.FC<SpecExporterProps> = (props: SpecExporterProps) => 
     );
 };
 
-export default SpecExporter;
+export default SelectionExporter;

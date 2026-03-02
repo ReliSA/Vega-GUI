@@ -5,12 +5,12 @@ import { parseSignals } from '../../signal/helper/signalEdit.ts';
 import { exportSelectedData } from '../helper/exportSelectedData.ts';
 import type { ExportedData } from '../helper/exportSelectedData.ts';
 
-interface UseSpecExporterProps {
+interface UseSelectionExporterProps {
     code: string;
     onExportSuccess?: (data: ExportedData) => void;
 }
 
-export const useSpecExporter = (props: UseSpecExporterProps) => {
+export const useSelectionExporter = (props: UseSelectionExporterProps) => {
     // Data extraction logic
     const datasetObjs = useMemo(() => parseDatasets(props.code), [props.code]);
     const signalObjs = useMemo(() => parseSignals(props.code), [props.code]);

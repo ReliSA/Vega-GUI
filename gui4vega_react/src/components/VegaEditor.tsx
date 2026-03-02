@@ -3,7 +3,7 @@ import { ConfigProvider, Splitter, Layout, Space, theme } from 'antd';
 import EditorTab from './editor_tab/EditorTab.tsx';
 import SpecLoader from './loader/SpecLoader.tsx';
 import VegaView from './viewer/VegaView.tsx';
-import SpecExporter from './exporter/SpecExporter.tsx';
+import SelectionExporter from './exporter/SelectionExporter.tsx';
 import type { ExportedData } from "./exporter/helper/exportSelectedData.ts";
 import type { VegaDataset } from './data/helper/datasetEdit.ts';
 import type { VegaSignal } from './signal/helper/signalEdit.ts';
@@ -43,7 +43,7 @@ const VegaEditor: React.FC<VegaEditorProps> = (props: VegaEditorProps) => {
                 }}>
                     <Space size="middle">
                         <SpecLoader onLoad={handleSpecLoad} />
-                        <SpecExporter code={code} onExport={props.onExport} />
+                        <SelectionExporter code={code} onExport={props.onExport} />
                     </Space>
                 </Layout.Header>
                 <Layout.Content>
