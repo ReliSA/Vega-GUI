@@ -6,7 +6,8 @@ import VegaView from './viewer/VegaView.tsx';
 import SpecExporter from './exporter/SpecExporter.tsx';
 import type { ExportedData } from "./exporter/helper/exportData.ts";
 import type { VegaDataset } from './data/helper/datasetEdit.ts';
-import { useVegaEditor, type VegaSignal } from "./useVegaEditor.ts";
+import type { VegaSignal } from './signal/helper/signalEdit.ts';
+import { useVegaEditor } from "./useVegaEditor.ts";
 
 export interface VegaEditorProps {
     height: string;

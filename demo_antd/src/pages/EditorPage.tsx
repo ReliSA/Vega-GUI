@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { VegaEditor } from 'gui4vega_react'
-import type { VegaDataset, VegaSignal } from 'gui4vega_react'
+import type { ExportedData, VegaDataset, VegaSignal } from 'gui4vega_react'
 import { Layout, Typography, theme, Flex } from 'antd'
 import AppHeader from '../components/AppHeader'
 import AppFooter from '../components/AppFooter'
@@ -39,7 +39,7 @@ export default function EditorPage() {
     const { token } = theme.useToken()
 
     // State to hold the exported specification and selected datasets from the VegaEditor
-    const [exported, setExported] = useState<{spec: string, datasets: string[]}>({spec: '', datasets: []})
+    const [exported, setExported] = useState<ExportedData>({spec: '', datasets: [], signals: []})
 
     return (
         <Layout>
