@@ -1,5 +1,5 @@
-import type { VegaDataset } from "../../data/helper/datasetEdit.ts";
-import type { VegaSignal } from "../../signal/helper/signalEdit.ts";
+import type { VegaDataset } from "../../../data/helper/datasetEdit.ts";
+import type { VegaSignal } from "../../../signal/helper/signalEdit.ts";
 
 export interface ImportedData {
     schema: Record<string, unknown>; // The base Vega spec

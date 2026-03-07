@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import defaultSpec from '../assets/default.json';
-import { prependDatasetsToSchema, prependSignalsToSchema } from "./loader/helper/importData.ts";
-import type { ImportedData } from "./loader/helper/importData.ts";
+import { prependDatasetsToSchema, prependSignalsToSchema } from "./controls/loader/helper/importData.ts";
+import type { ImportedData } from "./controls/loader/helper/importData.ts";
 
 interface useVegaEditorProps {
     initialSchema?: ImportedData;

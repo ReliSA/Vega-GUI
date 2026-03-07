@@ -1,0 +1,30 @@
+import React from 'react';
+import { Layout, Space, theme } from 'antd';
+import SpecLoader from './loader/SpecLoader.tsx';
+import SelectionExporter from './exporter/SelectionExporter.tsx';
+
+interface ControlsTabProps {
+    onLoad: (data: unknown) => void;
+    code: string;
+}
+
+const ControlsTab: React.FC<ControlsTabProps> = ({ onLoad, code }) => {
+    const { token: antdToken } = theme.useToken();
+    return (
+        <Layout.Header
+            style={{
+                padding: antdToken.padding,
+                background: antdToken.colorBgContainer,
+                lineHeight: 'normal',
+                borderBottom: `1px solid ${antdToken.colorBorderSecondary}`,
+            }}
+        >
+            <Space size="middle">
+                <SpecLoader onLoad={onLoad} />
+                <SelectionExporter code={code} />
+            </Space>
+        </Layout.Header>
+    );
+};
+
+export default ControlsTab;

@@ -8,8 +8,6 @@ Dataview
 - pri prejmenovani sloupce se zmeni poradi, fix
 
 Export
-- export vybranych datasetu jako pole, to se preda ve funkci pro SPADe
-  - stejne udelat export signalu
 - SVG export SPADe
 
 import { autocompletion } from "@codemirror/autocomplete";

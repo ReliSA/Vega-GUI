@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { message } from 'antd';
-import { parseDatasets } from '../../data/helper/datasetEdit.ts';
-import { parseSignals } from '../../signal/helper/signalEdit.ts';
+import { parseDatasets } from '../../../data/helper/datasetEdit.ts';
+import { parseSignals } from '../../../signal/helper/signalEdit.ts';
 import { exportSelectedData } from '../helper/exportSelectedData.ts';
 import type { ExportedData } from '../helper/exportSelectedData.ts';
 
