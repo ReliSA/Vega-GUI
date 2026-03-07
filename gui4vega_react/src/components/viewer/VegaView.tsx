@@ -1,6 +1,7 @@
 import React from 'react';
 import { Alert, Layout } from 'antd';
-import { useVegaView } from './useVegaView.ts'; // Import your new hook
+import { useVegaView } from './useVegaView.ts';
+import './VegaView.css';
 
 interface VegaViewProps {
     code: string;
@@ -10,8 +11,8 @@ const VegaView: React.FC<VegaViewProps> = (props) => {
     const { vegaContainerRef, error } = useVegaView(props.code);
 
     return (
-        <Layout style={{ height: '100%' }}>
-            {/* Vega view should always have white background */}
+        // Position must be relative to for action button to be positioned correctly
+        <Layout style={{ height: '100%', position: 'relative' }}>
             <Layout ref={vegaContainerRef} style={{ overflow: 'auto', background: '#fff' }} />
             {error && (
                 <Alert

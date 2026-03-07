@@ -26,7 +26,7 @@ export const useVegaView = (code: string) => {
                     vegaViewRef.current = null;
                 }
                 const spec = JSON.parse(code);
-                vegaViewRef.current = await vegaEmbed(vegaContainerRef.current, spec, { actions: false }) as unknown as { view?: { finalize?: () => void } };
+                vegaViewRef.current = await vegaEmbed(vegaContainerRef.current, spec, { actions: { editor: false }}) as unknown as { view?: { finalize?: () => void } };
                 setError(null);
             } catch (err) {
                 setError(err instanceof Error ? err.message : String(err));

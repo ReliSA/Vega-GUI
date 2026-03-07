@@ -1,0 +1,4 @@
+/* This makes the action button of vega-embed to be always at the top right corner */
+.vega-embed {
+    position: static !important;
+}
