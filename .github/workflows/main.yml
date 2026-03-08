@@ -22,6 +22,7 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: '@teemo6'
       - run: npm install
+      - run: npm run test
       - run: npm run build
       - run: npm publish
         env:
