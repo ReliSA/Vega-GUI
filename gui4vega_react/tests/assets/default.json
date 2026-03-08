@@ -5,6 +5,14 @@
 
   "signals": [
     {
+      "name": "testSignal1",
+      "value": 1
+    },
+    {
+      "name": "testSignal2",
+      "value": 2
+    },
+    {
       "name": "TLS1",
       "value": 9
     },
@@ -16,10 +24,29 @@
       "name": "threshold",
       "value": 50,
       "bind": {"input": "range", "min": 0, "max": 100, "step": 1}
+    },
+    {
+      "name": "testSignal3",
+      "value": 3
     }
   ],
 
   "data": [
+    {
+      "name": "testDataset1",
+      "values": [
+        {"category": "A", "value": 1},
+        {"category": "B", "value": 2}
+      ]
+    },
+    {
+      "name": "testDataset2",
+      "values": [
+        {"category": "A", "value": 3},
+        {"category": "B", "value": 4},
+        {"category": "C", "value": 5}
+      ]
+    },
     {
       "name": "table",
       "values": [
@@ -29,6 +56,15 @@
         {"category": "D", "value": 46},
         {"category": "E", "value": 75},
         {"category": "F", "value": 60}
+      ]
+    },
+    {
+      "name": "testDataset3",
+      "values": [
+        {"category": "A", "value": 6},
+        {"category": "B", "value": 7},
+        {"category": "C", "value": 8},
+        {"category": "D", "value": 9}
       ]
     }
   ],
