@@ -58,7 +58,7 @@ const VegaEditor = forwardRef<VegaEditorRef, VegaEditorProps>((props: VegaEditor
 
     // Returns the current Vega spec code. Exposed to parent via ref.
     useImperativeHandle(ref, () => ({
-        getCode: () => code
+        getCode: (): string => code
     }), [code]);
 
     return (

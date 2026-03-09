@@ -1,4 +1,4 @@
-name: Node.js Package
+name: Deploy Node.js Package to GitHub Packages
 
 on:
   push:
@@ -21,9 +21,17 @@ jobs:
           node-version: 20
           registry-url: https://npm.pkg.github.com/
           scope: '@teemo6'
-      - run: npm install
-      - run: npm run test
-      - run: npm run build
-      - run: npm publish
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build package
+        run: npm run build
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Publish package to GitHub Packages
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
