@@ -14,8 +14,8 @@ export const useVegaEditor = (props: useVegaEditorProps) => {
         let baseSpec = props.initialSchema?.schema ?? defaultSpec;
 
         // Prepend datasets and signals from the initial schema to the base spec if they exist
-        baseSpec = prependDatasetsToSchema(baseSpec, props.initialSchema);
-        baseSpec = prependSignalsToSchema(baseSpec, props.initialSchema);
+        baseSpec = prependDatasetsToSchema(baseSpec, props.initialSchema?.datasets);
+        baseSpec = prependSignalsToSchema(baseSpec, props.initialSchema?.signals);
 
         return JSON.stringify(baseSpec, null, 2);
     });

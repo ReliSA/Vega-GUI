@@ -7,18 +7,43 @@ import { useVegaEditor } from "./useVegaEditor.ts";
 import type { ImportedData } from "./controls/loader/helper/importData.ts";
 import ControlsTab from './controls/ControlsTab';
 
+ /**
+ * Props for {@link VegaEditor}.
+ */
 export interface VegaEditorProps {
+    /**
+     * Required editor container height (e.g. `"700px"`, `"80vh"`).
+     */
     height: string;
+    /**
+     * Optional editor container width (e.g. `"100%"`, `"1200px"`).
+     */
     width?: string;
+    /**
+     * Optional imported payload used to initialize the editor state.
+     */
     importedData?: ImportedData;
+    /**
+     * Hides the controls panel when `true`.
+     */
     hideControls?: boolean;
 }
 
-// Define the type for the imperative handle
+/**
+ * Imperative handle exposed by {@link VegaEditor}.
+ */
 export interface VegaEditorRef {
+    /**
+     * Returns the current Vega spec code/state shown by the editor.
+     */
     getCode: () => unknown;
 }
 
+/**
+ * Main Vega editor component with split panes for source editing and chart preview.
+ *
+ * Use a ref with {@link VegaEditorRef} to read the current editor content.
+ */
 const VegaEditor = forwardRef<VegaEditorRef, VegaEditorProps>((props: VegaEditorProps, ref: ForwardedRef<VegaEditorRef>) => {
     // Access Ant Design theme token
     const { token: antdToken } = theme.useToken();
