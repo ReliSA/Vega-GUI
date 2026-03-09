@@ -3,5 +3,7 @@
   "entryPoints": ["src/index.ts"],
   "entryPointStrategy": "resolve",
   "tsconfig": "tsconfig.app.json",
-  "out": "doc"
+  "out": "doc",
+  "plugin": ["typedoc-github-theme"],
+  "theme": "typedoc-github-theme"
 }
