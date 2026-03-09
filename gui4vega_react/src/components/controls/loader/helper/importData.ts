@@ -2,49 +2,39 @@ import type { VegaDataset } from "../../../data/helper/datasetEdit.ts";
 import type { VegaSignal } from "../../../signal/helper/signalEdit.ts";
 
 export interface ImportedData {
-    schema: Record<string, unknown>; // The base Vega spec
+    schema: Record<string, unknown>;
     datasets?: VegaDataset[];
     signals?: VegaSignal[];
 }
 
-export function prependDatasetsToSchema(baseSpec: Record<string, unknown>, initialSchema?: ImportedData): Record<string, unknown> {
-    // If provided, add initial datasets to the beginning of the data block
-    const initialDatasets = initialSchema?.datasets;
-    if (initialDatasets && Array.isArray(initialDatasets) && initialDatasets.length > 0) {
-        // Ensure the data block exists and is an array
-        if (!Array.isArray(baseSpec.data)) {
-            baseSpec.data = [];
-        }
+function prependImported<T extends { name: string }>(existing: unknown, imported: T[] | undefined): T[] {
+    // Type casting array
+    const oldItems: T[] = Array.isArray(existing) ? (existing as T[]) : [];
+    const newItems: T[] = Array.isArray(imported) ? imported : [];
 
-        // Remove any existing datasets with the same name as those in initialDatasets
-        const initialDatasetNames = initialDatasets.map((ds) => ds.name);
-        const filteredData = (baseSpec.data as VegaDataset[]).filter(
-            (d) => !initialDatasetNames.includes(d.name)
-        );
-
-        // Prepend initialDatasets to the beginning of the data array
-        baseSpec.data = [...initialDatasets, ...filteredData];
+    // If there is nothing to import, return existing
+    if (!Array.isArray(newItems) || newItems.length === 0) {
+        return oldItems;
     }
-    return baseSpec;
+
+    // Filter duplicates
+    const importedNames = new Set(newItems.map(item => item.name));
+    const uniqueOld = oldItems.filter(item => !importedNames.has(item.name));
+
+    // Imported items are first
+    return [...newItems, ...uniqueOld];
 }
 
-export function prependSignalsToSchema(baseSpec: Record<string, unknown>, initialSchema?: ImportedData): Record<string, unknown> {
-    // If provided, add initial signals to the beginning of the signals block
-    const initialSignals = initialSchema?.signals;
-    if (initialSignals && Array.isArray(initialSignals) && initialSignals.length > 0) {
-        // Ensure the signals block exists and is an array
-        if (!Array.isArray(baseSpec.signals)) {
-            baseSpec.signals = [];
-        }
+export function prependDatasetsToSchema(baseSpec: Record<string, unknown>, datasets?: VegaDataset[]): Record<string, unknown> {
+    return {
+        ...baseSpec,
+        data: prependImported(baseSpec.data, datasets)
+    };
+}
 
-        // Remove any existing signals with the same name as those in initialSignals
-        const initialSignalNames = initialSignals.map((sgn) => sgn.name);
-        const filteredSignals = (baseSpec.signals as VegaSignal[]).filter(
-            (s) => !initialSignalNames.includes(s.name)
-        );
-
-        // Prepend initialSignals to the beginning of the signals array
-        baseSpec.signals = [...initialSignals, ...filteredSignals];
-    }
-    return baseSpec;
+export function prependSignalsToSchema(baseSpec: Record<string, unknown>, signals?: VegaSignal[]): Record<string, unknown> {
+    return {
+        ...baseSpec,
+        signals: prependImported(baseSpec.signals, signals)
+    };
 }

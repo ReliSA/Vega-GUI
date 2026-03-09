@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { exportSelectedData } from '../../../../../src/components/controls/exporter/helper/exportSelectedData';
 
-import defaultSpecification from '../../../../assets/default.json';
+import defaultSpecification from '../../../../assets/export.json';
 import minimalSpecification from '../../../../assets/minimal.json';
 
 interface TestCase {
