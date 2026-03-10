@@ -8,8 +8,9 @@ import type { ImportedData } from "./controls/loader/helper/importData.ts";
 import ControlsTab from './controls/ControlsTab';
 import { normalizeHideControls } from './HideControls.ts';
 import type { HideControls } from "./HideControls.ts";
+import { overrideTheme } from './overrideTheme.ts';
 
- /**
+/**
  * Props for {@link VegaEditor}.
  */
 export interface VegaEditorProps {
@@ -69,8 +70,8 @@ const VegaEditor = forwardRef<VegaEditorRef, VegaEditorProps>((props: VegaEditor
     const showControlsTab = !hideControlsObj.import || !hideControlsObj.export;
 
     return (
-        <ConfigProvider>
-            <Layout style={{ width: props.width, height: height, background: antdToken.colorBgContainer }}>
+        <ConfigProvider theme={overrideTheme(antdToken)}>
+            <Layout style={{ width: props.width, height: height }}>
                 { showControlsTab && (
                     <ControlsTab
                         onLoad={handleSpecLoad}

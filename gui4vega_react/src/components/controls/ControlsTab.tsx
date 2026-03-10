@@ -17,7 +17,6 @@ const ControlsTab: React.FC<ControlsTabProps> = (props: ControlsTabProps) => {
         <Layout.Header
             style={{
                 padding: antdToken.padding,
-                background: antdToken.colorBgContainer,
                 lineHeight: 'normal',
                 borderBottom: `1px solid ${antdToken.colorBorderSecondary}`,
             }}
