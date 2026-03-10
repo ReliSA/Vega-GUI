@@ -23,7 +23,8 @@ export interface VegaEditorProps {
      */
     width?: string;
     /**
-     * Optional imported payload used to initialize the editor state.
+     * Optional imported data used to initialize the editor state.
+     * If not provided, the editor will initialize with a default Vega spec.
      */
     importedData?: ImportedData;
     /**
@@ -57,7 +58,7 @@ const VegaEditor = forwardRef<VegaEditorRef, VegaEditorProps>((props: VegaEditor
 
     // Call useVegaEditor hook with unified initialSchema
     const { code, setCode, handleSpecLoad } = useVegaEditor({
-        initialSchema: props.importedData,
+        importedData: props.importedData,
     });
 
     // Returns the current Vega spec code. Exposed to parent via ref.
