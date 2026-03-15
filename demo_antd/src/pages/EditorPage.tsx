@@ -9,7 +9,7 @@ import AppFooter from '../components/AppFooter'
 import schema from '../../../json/anti/02_too_long_sprint.json'
 import { datasets, signals } from '../assets/import'
 
-const { Sider, Content } = Layout
+const { Content } = Layout
 const { Title, Paragraph } = Typography
 
 export default function EditorPage() {
@@ -37,49 +37,49 @@ export default function EditorPage() {
         }
     }
 
-    // Handler for export: print to console and close modal
+    // Handler for external export
     const handleExternalExport = (data: ExportedData) => {
-        console.log('User-defined further processing:', data)
+        console.log('Library user now has acces to the exported data.')
         setExported(data)
     }
 
     return (
         <Layout>
             <AppHeader />
-            <Content>
-                <Flex vertical align="center" gap="small" style={{ padding: '24px 32px 16px', borderBottom: `1px solid ${token.colorBorderSecondary}` }}>
-                    <Title level={3}>Visual Specification Editor</Title>
+            <Flex vertical align="center" gap="small" style={{ padding: '24px 32px 16px', borderBottom: `1px solid ${token.colorBorderSecondary}` }}>
+                <Title level={3}>Visual Specification Editor</Title>
+                <Paragraph type="secondary" style={{ maxWidth: 600, textAlign: 'center' }}>
+                    Below this paragraph is the imported VegaEditor component from the <code>gui4vega_react</code> library.
+                    Edit the JSON specification on the left and see the rendered visualization on the right.
+                </Paragraph>
+            </Flex>
+
+            <Content style={{ padding: "0 32px" }}>
+                <VegaEditor
+                    ref={editorRef}
+                    height="700px"
+                    importedData={{schema: schema, datasets: datasets, signals: signals}}
+                />
+
+                <Flex vertical align="center" gap="small" style={{ padding: '24px 0px 16px', borderBottom: `1px solid ${token.colorBorderSecondary}` }}>
                     <Paragraph type="secondary" style={{ maxWidth: 600, textAlign: 'center' }}>
-                        Below this paragraph is the imported VegaEditor component from the <code>gui4vega_react</code> library.
-                        Edit the JSON specification on the left and see the rendered visualization on the right.
+                        This is no longer content of the VegaEditor, but part of this demo page.
+                        Below this paragraph are the results of exporting the JSON specification and selected datasets using the export functionality of the VegaEditor.
                     </Paragraph>
                 </Flex>
 
-                <Layout>
-                    <Sider width={32} style={{ background: token.colorBgLayout, borderRight: `1px solid ${token.colorBorderSecondary}` }} />
-                    <Content>
-                        <VegaEditor
-                            ref={editorRef}
-                            height="700px"
-                            importedData={{schema: schema, datasets: datasets, signals: signals}}
-                        />
-                        <Flex vertical align="center" gap="small" style={{ padding: '24px 32px 16px', borderBottom: `1px solid ${token.colorBorderSecondary}` }}>
-                            <Paragraph type="secondary" style={{ maxWidth: 600, textAlign: 'center' }}>
-                                This is no longer content of the VegaEditor, but part of this demo page.
-                                Below this paragraph are the results of exporting the JSON specification and selected datasets using the export functionality of the VegaEditor.
-                            </Paragraph>
-                        </Flex>
-                        <Button onClick={handleUserExportClick}>User Export via ExternalSelectionExporter</Button>
-                        <ExternalSelectionExporter
-                            code={currentCode}
-                            isOpen={isExternalExporterOpen}
-                            onClose={() => setExternalExporterOpen(false)}
-                            onExport={handleExternalExport}
-                        />
-                        <ExportedContent data={exported} />
-                    </Content>
-                    <Sider width={32} style={{ background: token.colorBgLayout, borderLeft: `1px solid ${token.colorBorderSecondary}` }} />
-                </Layout>
+                <Button onClick={handleUserExportClick}>
+                    User Export via ExternalSelectionExporter
+                </Button>
+
+                <ExternalSelectionExporter
+                    code={currentCode}
+                    isOpen={isExternalExporterOpen}
+                    onClose={() => setExternalExporterOpen(false)}
+                    onExport={handleExternalExport}
+                />
+
+                <ExportedContent data={exported} />
             </Content>
             <AppFooter />
         </Layout>
