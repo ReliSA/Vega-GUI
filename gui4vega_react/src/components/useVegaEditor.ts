@@ -18,7 +18,7 @@ interface useVegaEditorProps {
  * Custom hook to manage the state of the Vega visualization specification code.
  * Handles the initial merge of external datasets/signals into the schema.
  * @param props - {@link useVegaEditorProps}
- * @return An object containing the current code, a setter for the code, and a handler for loading new specs.
+ * @return An object containing the current code and a setter for the code.
  */
 export const useVegaEditor = (props: useVegaEditorProps) => {
     // State to hold the current Vega specification code
@@ -34,10 +34,5 @@ export const useVegaEditor = (props: useVegaEditorProps) => {
         return JSON.stringify(baseSpec, null, 2);
     });
 
-    // Handler for when a new spec is loaded from the SpecLoader component
-    const handleSpecLoad = (spec: unknown) => {
-        setCode(JSON.stringify(spec, null, 2));
-    };
-
-    return { code, setCode, handleSpecLoad };
+    return { code, setCode };
 };

@@ -67,7 +67,7 @@ const VegaEditor = forwardRef<VegaEditorRef, VegaEditorProps>((props: VegaEditor
     const height = props.height || '700px';
 
     // Call useVegaEditor hook
-    const { code, setCode, handleSpecLoad } = useVegaEditor({
+    const { code, setCode } = useVegaEditor({
         importedData: props.importedData,
     });
 
@@ -87,8 +87,8 @@ const VegaEditor = forwardRef<VegaEditorRef, VegaEditorProps>((props: VegaEditor
             <Layout style={{ width: props.width, height: height }}>
                 { isControlsTabShown(hideControlsObj) && (
                     <ControlsTab
-                        onLoad={handleSpecLoad}
                         code={code}
+                        setCode={setCode}
                         hideImport={!!hideControlsObj.import}
                         hideExport={!!hideControlsObj.export}
                     />

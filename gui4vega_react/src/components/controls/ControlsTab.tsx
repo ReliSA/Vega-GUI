@@ -8,14 +8,14 @@ import SelectionExporter from './exporter/SelectionExporter.tsx';
  */
 interface ControlsTabProps {
     /**
-     * Callback function that is called when a new Vega specification is loaded using the `SpecLoader` component.
-     * @param data - The loaded Vega specification data.
-     */
-    onLoad: (data: unknown) => void;
-    /**
      * The Vega specification code that is currently being edited or viewed in the editor.
      */
     code: string;
+    /**
+     * Handler function to change editor code.
+     * @param code - The new Vega specification code to set in the editor.
+     */
+    setCode: (code: string) => void;
     /**
      * Optional flag to hide the import controls.
      */
@@ -42,7 +42,7 @@ const ControlsTab: React.FC<ControlsTabProps> = (props: ControlsTabProps) => {
             }}
         >
             <Space size="middle">
-                {!props.hideImport && <SpecLoader onLoad={props.onLoad} />}
+                {!props.hideImport && <SpecLoader setCode={props.setCode} />}
                 {!props.hideExport && <SelectionExporter code={props.code} />}
             </Space>
         </Layout.Header>

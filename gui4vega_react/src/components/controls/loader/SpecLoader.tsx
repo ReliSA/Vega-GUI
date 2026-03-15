@@ -9,9 +9,9 @@ import { gui4VegaLogger } from '../../../logger';
 interface SpecLoaderProps {
     /**
      * Callback function that is called when a new Vega specification is loaded using the file upload functionality.
-     * @param spec - The loaded Vega specification data, parsed from the uploaded JSON file.
+     * @param code - The loaded Vega specification serialized as formatted JSON.
      */
-    onLoad: (spec: unknown) => void;
+    setCode: (code: string) => void;
 }
 
 /**
@@ -22,10 +22,10 @@ const SpecLoader: React.FC<SpecLoaderProps> = (props: SpecLoaderProps) => {
     const handleFileUpload = (file: File) => {
         const reader = new FileReader();
         reader.onload = (e) => {
+            const content = e.target?.result as string;
             try {
-                const content = e.target?.result as string;
-                const jsonContent = JSON.parse(content);
-                props.onLoad(jsonContent);
+                JSON.parse(content);
+                props.setCode(content);
                 message.success('JSON specification loaded successfully');
             } catch (err) {
                 message.error('Failed to parse JSON file');
