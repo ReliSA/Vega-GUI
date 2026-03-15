@@ -4,16 +4,20 @@ import { parseDatasets } from '../../../data/helper/datasetEdit.ts';
 import { parseSignals } from '../../../signal/helper/signalEdit.ts';
 import { exportSelectedData } from '../helper/exportSelectedData.ts';
 import type { ExportedData } from '../helper/exportSelectedData.ts';
+import type { VegaEditorState } from "../../../useVegaEditor.ts";
 
 interface UseSelectionExporterProps {
-    code: string;
+    /**
+     * Vega editor state with code specification.
+     */
+    editorState: VegaEditorState;
     onExportSuccess?: (data: ExportedData) => void;
 }
 
 export const useSelectionExporter = (props: UseSelectionExporterProps) => {
     // Data extraction logic
-    const datasetObjs = useMemo(() => parseDatasets(props.code), [props.code]);
-    const signalObjs = useMemo(() => parseSignals(props.code), [props.code]);
+    const datasetObjs = useMemo(() => parseDatasets(props.editorState.code), [props.editorState.code]);
+    const signalObjs = useMemo(() => parseSignals(props.editorState.code), [props.editorState.code]);
 
     // Data names for checkbox groups
     const datasetNames = useMemo(() => datasetObjs.map(ds => ds.name), [datasetObjs]);
@@ -44,7 +48,7 @@ export const useSelectionExporter = (props: UseSelectionExporterProps) => {
     // Confirm the export and call the export function with selected datasets and signals
     const confirmExport = () => {
         try {
-            const exported = exportSelectedData(props.code, datasetSelection, signalSelection);
+            const exported = exportSelectedData(props.editorState.code, datasetSelection, signalSelection);
             if (props.onExportSuccess) props.onExportSuccess(exported);
             setIsModalOpen(false);
         } catch (err) {

@@ -15,7 +15,7 @@ interface VegaViewProps {
     /**
      * When `true`, hides the action buttons in the Vega view.
      */
-    hideActions?: boolean;
+    hideActions: boolean;
 }
 
 /**
@@ -23,7 +23,7 @@ interface VegaViewProps {
  */
 const VegaView: React.FC<VegaViewProps> = (props: VegaViewProps) => {
     // Call useVegaView hook
-    const { vegaContainerRef, error } = useVegaView(props.editorState.code, props.hideActions);
+    const { vegaContainerRef, error } = useVegaView(props);
 
     return (
         // Position must be relative to for action button to be positioned correctly

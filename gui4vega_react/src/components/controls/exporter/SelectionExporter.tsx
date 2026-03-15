@@ -36,7 +36,10 @@ const SelectionExporter: React.FC<SelectionExporterProps> = (props: SelectionExp
         setExportedData(null);
     };
 
-    const exporter = useSelectionExporter({ code: props.editorState.code, onExportSuccess: handleExportSuccess });
+    const exporter = useSelectionExporter({
+        editorState: props.editorState,
+        onExportSuccess: handleExportSuccess,
+    });
     const {
         isModalOpen,
         datasetNames,

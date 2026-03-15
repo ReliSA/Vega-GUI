@@ -1,8 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import vegaEmbed from 'vega-embed';
 import { gui4VegaLogger } from '../../logger';
+import type { VegaEditorState } from "../useVegaEditor.ts";
 
-export const useVegaView = (code: string, hideActions: boolean = false) => {
+interface useVegaViewProps {
+    /**
+     * Vega editor state with code specification.
+     */
+    editorState: VegaEditorState;
+    hideActions: boolean;
+}
+
+export const useVegaView = (props: useVegaViewProps) => {
     // Error state of the Vega spec parsing/rendering
     const [error, setError] = useState<string | null>(null);
 
@@ -26,8 +35,11 @@ export const useVegaView = (code: string, hideActions: boolean = false) => {
                     }
                     vegaViewRef.current = null;
                 }
-                const spec = JSON.parse(code);
-                const actions = hideActions ? false : { editor: false };    // editor: false will hide redirect to Vega Editor
+                const spec = JSON.parse(props.editorState.code);
+
+                // 'false' will hide actions completely
+                // 'editor: false' will only hide redirect button to Vega Editor
+                const actions = props.hideActions ? false : { editor: false };
 
                 vegaViewRef.current = await vegaEmbed(vegaContainerRef.current, spec, { actions }) as unknown as { view?: { finalize?: () => void } };
                 setError(null);
@@ -36,7 +48,7 @@ export const useVegaView = (code: string, hideActions: boolean = false) => {
             }
         };
         renderVega();
-    }, [code, hideActions]);
+    }, [props.editorState.code, props.hideActions]);
 
     return { vegaContainerRef, error };
 };
