@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Form, Select, Button, Card, Segmented } from 'antd';
-import { parseDatasets } from '../data/helper/datasetEdit';
-import { generateSpec, adapters, type ChartType } from './helper/wizardSpec';
-import type { VegaEditorState } from '../useVegaEditor';
+import { useWizardView, type WizardFormValues } from './useWizardView';
+import type {VegaEditorState} from "../useVegaEditor.ts";
+import {generateSpec} from "./helper/wizardSpec.ts";
 
 interface WizardViewProps {
     /**
@@ -11,33 +11,14 @@ interface WizardViewProps {
     editorState: VegaEditorState;
 }
 
-interface WizardFormValues {
-    chartType: ChartType;
-    dataset: string;
-    fields: Record<string, string>;
-}
-
 const WizardView: React.FC<WizardViewProps> = (props: WizardViewProps) => {
-    const [form] = Form.useForm();
-    const datasets = useMemo(() => parseDatasets(props.editorState.code), [props.editorState.code]);
-
-    const datasetName = Form.useWatch('dataset', form);
-    const chartType = Form.useWatch('chartType', form) as ChartType;
-
-    const fields = useMemo(() => {
-        if (!datasetName) return [];
-        const selectedDataset = datasets.find(d => d.name === datasetName);
-        if (selectedDataset && selectedDataset.values.length > 0) {
-            return Object.keys(selectedDataset.values[0]);
-        }
-        return [];
-    }, [datasetName, datasets]);
-
-    const adapterFields = useMemo(() => {
-        if (!chartType) return [];
-        const adapter = adapters[chartType];
-        return adapter ? adapter.getFields() : [];
-    }, [chartType]);
+    const {
+        form,
+        datasets,
+        datasetName,
+        adapterFields,
+        fields
+    } = useWizardView(props);
 
     const handleFinish = (values: WizardFormValues) => {
         const { chartType, dataset, fields } = values;
