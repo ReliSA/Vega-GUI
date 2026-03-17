@@ -3,9 +3,10 @@ import type { WizardConfig } from "../helper/wizardSpec.ts";
 export interface WizardField {
     name: string;
     label: string;
-    type: 'string' | 'number' | 'boolean';
+    type: 'string' | 'number' | 'boolean' | 'color';
     required?: boolean;
     description?: string;
+    defaultValue?: string | number | boolean;
 }
 
 export interface WizardSpec {

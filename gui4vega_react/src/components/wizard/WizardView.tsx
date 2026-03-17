@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Select, Button, Card, Segmented } from 'antd';
 import { useWizardView } from './useWizardView';
+import { WizardDynamicField } from './WizardDynamicField';
 import type { VegaEditorState } from "../useVegaEditor.ts";
 
 interface WizardViewProps {
@@ -28,6 +29,7 @@ const WizardView: React.FC<WizardViewProps> = (props: WizardViewProps) => {
                 onFinish={handleFinish}
                 initialValues={{ chartType: 'bar' }}
             >
+                {/* This should have same name as the WizardConfig attribute */}
                 <Form.Item name="chartType" label="Chart Type">
                     <Segmented
                         block
@@ -38,6 +40,7 @@ const WizardView: React.FC<WizardViewProps> = (props: WizardViewProps) => {
                     />
                 </Form.Item>
 
+                {/* This should have same name as the WizardConfig attribute */}
                 <Form.Item name="datasetName" label="Dataset">
                     <Select
                         placeholder="Select a dataset"
@@ -46,19 +49,11 @@ const WizardView: React.FC<WizardViewProps> = (props: WizardViewProps) => {
                 </Form.Item>
 
                 {datasetName && adapterFields.map(field => (
-                    <Form.Item
+                    <WizardDynamicField
                         key={field.name}
-                        name={['fields', field.name]}
-                        label={field.label}
-                        rules={[{ required: field.required, message: `Please select ${field.label}` }]}
-                        tooltip={field.description}
-                    >
-                        <Select
-                            placeholder={`Select ${field.label}`}
-                            allowClear={!field.required}
-                            options={fields.map(f => ({ label: f, value: f }))}
-                        />
-                    </Form.Item>
+                        field={field}
+                        availableFields={fields}
+                    />
                 ))}
 
                 <Form.Item>

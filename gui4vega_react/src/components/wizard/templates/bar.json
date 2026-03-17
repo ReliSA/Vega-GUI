@@ -39,13 +39,13 @@
           "width": {"scale": "xscale", "band": 1},
           "y": {"scale": "yscale", "field": "__Y_FIELD__"},
           "y2": {"scale": "yscale", "value": 0},
-          "fill": {"value": "#7bbe1f"}
+          "fill": {"value": "__COLOR__"}
         },
         "hover": {
           "fill": {"value": "#ff5722"}
         },
         "update": {
-          "fill": {"value": "#7bbe1f"}
+          "fill": {"value": "__COLOR__"}
         }
       }
     },
