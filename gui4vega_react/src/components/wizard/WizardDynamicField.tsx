@@ -21,7 +21,6 @@ export const WizardDynamicField: React.FC<WizardDynamicFieldProps> = (props: Wiz
             name={['fields', props.field.name]}
             label={props.field.label}
             rules={[{ required: props.field.required, message: `Please select ${props.field.label}` }]}
-            tooltip={props.field.description}
             initialValue={props.field.defaultValue}
             getValueFromEvent={props.field.type === 'color' ? normalizeColor : undefined}
         >

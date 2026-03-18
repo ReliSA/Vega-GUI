@@ -5,19 +5,18 @@ export interface WizardField {
     label: string;
     type: 'string' | 'number' | 'boolean' | 'color';
     required?: boolean;
-    description?: string;
     defaultValue?: string | number | boolean;
 }
 
 export interface WizardSpec {
-    $schema: string;
-    description: string;
-    width: number;
-    height: number;
-    padding: number;
+    $schema?: string;
+    description?: string;
+    width?: number;
+    height?: number;
+    padding?: number;
     autosize?: string;
-    data: Record<string, unknown>[];
-    signals: Record<string, unknown>[];
+    data?: Record<string, unknown>[];
+    signals?: Record<string, unknown>[];
     scales?: Record<string, unknown>[];
     axes?: Record<string, unknown>[];
     marks?: Record<string, unknown>[];

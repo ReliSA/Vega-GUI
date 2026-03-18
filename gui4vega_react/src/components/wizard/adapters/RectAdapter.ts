@@ -1,0 +1,72 @@
+import type { WizardAdapter, WizardField, WizardSpec } from "./WizardAdapter.ts";
+import type { WizardConfig } from "../helper/wizardSpec.ts";
+
+export class RectAdapter implements WizardAdapter {
+    getFields(): WizardField[] {
+        return [
+            { name: 'xField', type: 'string', label: 'X Axis / Category', required: true },
+            { name: 'yField', type: 'string', label: 'Y Axis / Value', required: true },
+            { name: 'colorBar', type: 'color',  label: 'Color of the bars', required: false, defaultValue: '#7bbe1f' },
+            { name: 'colorHover', type: 'color', label: 'Color when hovered', required: false, defaultValue: '#ff5722' }
+        ];
+    }
+
+    getSpec(config: WizardConfig): WizardSpec {
+        const { datasetName, fields } = config;
+
+        const xField = fields['xField'];
+        const yField = fields['yField'];
+        const colorBar = fields['colorBar'];
+        const colorHover = fields['colorHover'];
+
+        const suffix = Math.floor(Math.random() * 10000);
+        const xScale = `xscale_${suffix}`;
+        const yScale = `yscale_${suffix}`;
+
+        return {
+            "scales": [
+                {
+                    "name": xScale,
+                    "type": "band",
+                    "domain": { "data": datasetName, "field": xField },
+                    "range": "width",
+                    "padding": 0.05,
+                    "round": true
+                },
+                {
+                    "name": yScale,
+                    "type": "linear",
+                    "domain": { "data": datasetName, "field": yField },
+                    "nice": true,
+                    "range": "height"
+                }
+            ],
+
+            "axes": [
+                { "orient": "bottom", "scale": xScale, "title": xField },
+                { "orient": "left", "scale": yScale, "title": yField }
+            ],
+
+            "marks": [
+                {
+                    "type": "rect",
+                    "from": { "data": datasetName },
+                    "encode": {
+                        "enter": {
+                            "x": { "scale": xScale, "field": xField },
+                            "width": { "scale": xScale, "band": 1 },
+                            "y": { "scale": yScale, "field": yField },
+                            "y2": { "scale": yScale, "value": 0 }
+                        },
+                        "update": {
+                            "fill": { "value": colorBar }
+                        },
+                        "hover": {
+                            "fill": { "value": colorHover }
+                        }
+                    }
+                }
+            ]
+        };
+    }
+}

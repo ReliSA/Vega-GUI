@@ -35,7 +35,8 @@ const WizardView: React.FC<WizardViewProps> = (props: WizardViewProps) => {
                         block
                         options={[
                             { label: 'Bar Chart', value: 'bar' },
-                            { label: 'Circular Chart', value: 'pie' }
+                            { label: 'Circular Chart', value: 'pie' },
+                            { label: 'Add Rect', value: 'rect' }
                         ]}
                     />
                 </Form.Item>

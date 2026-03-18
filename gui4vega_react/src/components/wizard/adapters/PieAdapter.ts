@@ -1,23 +1,70 @@
 import type { WizardAdapter, WizardField, WizardSpec } from "./WizardAdapter.ts";
 import type { WizardConfig } from "../helper/wizardSpec.ts";
 
-import pieTemplate from "../templates/pie.json";
-
 export class PieAdapter implements WizardAdapter {
     getFields(): WizardField[] {
         return [
-            { name: 'category', label: 'Category Field', type: 'string', required: true, description: 'Field for color' },
-            { name: 'value', label: 'Value Field', type: 'string', required: true, description: 'Field to determine size/angle' }
+            { name: 'category', type: 'string', label: 'Category Field', required: true },
+            { name: 'value', type: 'string', label: 'Value Field', required: true }
         ];
     }
 
     getSpec(config: WizardConfig): WizardSpec {
-        let templateString = JSON.stringify(pieTemplate);
+        const { datasetName, fields } = config;
 
-        templateString = templateString.replace(/__DATASET__/g, config.datasetName);
-        templateString = templateString.replace(/__ID_FIELD__/g, config.fields['value']);
-        templateString = templateString.replace(/__VALUE_FIELD__/g, config.fields['category']);
+        const categoryField = fields['category'];
+        const valueField = fields['value'];
 
-        return JSON.parse(templateString);
+        return {
+            "$schema": "https://vega.github.io/schema/vega/v6.json",
+            "width": 500,
+            "height": 300,
+
+            "data": [
+                {
+                    "name": "pie_data",
+                    "source": datasetName,
+                    "transform": [
+                        {
+                            "type": "pie",
+                            "field": valueField
+                        }
+                    ]
+                }
+            ],
+
+            "scales": [
+                {
+                    "name": "color",
+                    "type": "ordinal",
+                    "domain": { "data": "pie_data", "field": categoryField },
+                    "range": { "scheme": "category20" }
+                }
+            ],
+
+            "marks": [
+                {
+                    "type": "arc",
+                    "from": { "data": "pie_data" },
+                    "encode": {
+                        "enter": {
+                            "fill": { "scale": "color", "field": categoryField },
+                            "x": { "signal": "width / 2" },
+                            "y": { "signal": "height / 2" }
+                        },
+                        "update": {
+                            "startAngle": { "field": "startAngle" },
+                            "endAngle": { "field": "endAngle" },
+                            "innerRadius": { "value": 0 },
+                            "outerRadius": { "signal": "min(width, height) / 2" }
+                        }
+                    }
+                }
+            ],
+
+            "legends": [
+                { "fill": "color", "title": categoryField }
+            ]
+        };
     }
 }
