@@ -1,9 +1,10 @@
 import type { WizardAdapter } from "../adapters/WizardAdapter.ts";
-import { BarAdapter } from "../adapters/template/BarAdapter.ts";
+import { BarVerticalAdapter } from "../adapters/template/BarVerticalAdapter.ts";
+import { BarHorizontalAdapter } from "../adapters/template/BarHorizontalAdapter.ts";
 import { PieAdapter } from "../adapters/template/PieAdapter.ts";
 import { RectAdapter } from "../adapters/append/RectAdapter.ts";
 
-export type ChartType = 'bar' | 'pie' | 'rect';
+export type ChartType = 'barVertical' | 'barHorizontal' | 'pie' | 'rect';
 
 export interface WizardConfig {
     chartType: ChartType;
@@ -12,7 +13,8 @@ export interface WizardConfig {
 }
 
 export const adapters: Record<ChartType, WizardAdapter> = {
-    bar: new BarAdapter(),
+    barVertical: new BarVerticalAdapter(),
+    barHorizontal: new BarHorizontalAdapter(),
     pie: new PieAdapter(),
     rect: new RectAdapter()
 };

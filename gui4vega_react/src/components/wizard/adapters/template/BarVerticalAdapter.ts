@@ -1,13 +1,13 @@
 import type { AdapterMode, WizardAdapter, WizardField, WizardSpec } from "../WizardAdapter.ts";
 import type { WizardConfig } from "../../helper/wizardSpec.ts";
 
-export class BarAdapter implements WizardAdapter {
+export class BarVerticalAdapter implements WizardAdapter {
     mode: AdapterMode = 'template';
 
     getFields(): WizardField[] {
         return [
-            { name: 'xField', type: 'string', label: 'X Axis / Category', required: true },
-            { name: 'yField', type: 'string', label: 'Y Axis / Value', required: true },
+            { name: 'xCategory', type: 'string', label: 'X Axis / Category', required: true },
+            { name: 'yValue', type: 'string', label: 'Y Axis / Value', required: true },
             { name: 'colorBar', type: 'color',  label: 'Color of the bars', required: false, defaultValue: '#7bbe1f' },
             { name: 'colorHover', type: 'color', label: 'Color when hovered', required: false, defaultValue: '#ff5722' }
         ];
@@ -16,8 +16,8 @@ export class BarAdapter implements WizardAdapter {
     getSpec(config: WizardConfig): WizardSpec {
         const { datasetName, fields } = config;
 
-        const xField = fields['xField'];
-        const yField = fields['yField'];
+        const xCategory = fields['xCategory'];
+        const yValue = fields['yValue'];
         const colorBar = fields['colorBar'];
         const colorHover = fields['colorHover'];
 
@@ -30,22 +30,22 @@ export class BarAdapter implements WizardAdapter {
                 {
                     "name": "xscale",
                     "type": "band",
-                    "domain": {"data": datasetName, "field": xField},
+                    "domain": {"data": datasetName, "field": xCategory},
                     "range": "width",
                     "padding": 0.2
                 },
                 {
                     "name": "yscale",
                     "type": "linear",
-                    "domain": {"data": datasetName, "field": yField},
+                    "domain": {"data": datasetName, "field": yValue},
                     "nice": true,
                     "range": "height"
                 }
             ],
 
             "axes": [
-                { "orient": "bottom", "scale": "xscale", "title": xField },
-                { "orient": "left", "scale": "yscale", "title": yField }
+                { "orient": "bottom", "scale": "xscale", "title": xCategory },
+                { "orient": "left", "scale": "yscale", "title": yValue }
             ],
 
             "marks": [
@@ -54,9 +54,9 @@ export class BarAdapter implements WizardAdapter {
                     "from": { "data": datasetName },
                     "encode": {
                         "enter": {
-                            "x": { "scale": "xscale", "field": xField },
+                            "x": { "scale": "xscale", "field": xCategory },
                             "width": { "scale": "xscale", "band": 1 },
-                            "y": { "scale": "yscale", "field": yField },
+                            "y": { "scale": "yscale", "field": yValue },
                             "y2": { "scale": "yscale", "value": 0 },
                             "fill": { "value": colorBar }
                         },
@@ -73,8 +73,8 @@ export class BarAdapter implements WizardAdapter {
                     "from": { "data": datasetName },
                     "encode": {
                         "enter": {
-                            "x": { "scale": "xscale", "field": xField, "band": 0.5 },
-                            "y": { "scale": "yscale", "field": yField },
+                            "x": { "scale": "xscale", "field": xCategory, "band": 0.5 },
+                            "y": { "scale": "yscale", "field": yValue },
                             "stroke": { "value": "rgb(0, 140, 150)" },
                             "strokeWidth": { "value": 3 }
                         }
@@ -85,8 +85,8 @@ export class BarAdapter implements WizardAdapter {
                     "from": { "data": datasetName },
                     "encode": {
                         "enter": {
-                            "x": { "scale": "xscale", "field": xField, "band": 0.5 },
-                            "y": { "scale": "yscale", "field": yField },
+                            "x": { "scale": "xscale", "field": xCategory, "band": 0.5 },
+                            "y": { "scale": "yscale", "field": yValue },
                             "size": { "value": 140 },
                             "fill": { "value": "rgb(255, 193, 7)" },
                             "stroke": { "value": "rgb(0, 0, 0)" },
@@ -99,10 +99,10 @@ export class BarAdapter implements WizardAdapter {
                     "from": { "data": datasetName },
                     "encode": {
                         "enter": {
-                            "x": { "scale": "xscale", "field": xField, "band": 0.5 },
-                            "y": { "scale": "yscale", "field": yField },
+                            "x": { "scale": "xscale", "field": xCategory, "band": 0.5 },
+                            "y": { "scale": "yscale", "field": yValue },
                             "dy": { "value": -14 },
-                            "text": { "field": yField },
+                            "text": { "field": yValue },
                             "align": { "value": "center" },
                             "fill": { "value": "rgb(33, 33, 33)" },
                             "fontSize": { "value": 12 }

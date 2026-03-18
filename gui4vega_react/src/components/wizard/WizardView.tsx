@@ -34,7 +34,8 @@ const WizardView: React.FC<WizardViewProps> = (props: WizardViewProps) => {
                     <Segmented
                         block
                         options={[
-                            { label: 'Bar Chart', value: 'bar' },
+                            { label: 'Vertical Bar Chart', value: 'barVertical' },
+                            { label: 'Horizontal Bar Chart', value: 'barHorizontal' },
                             { label: 'Circular Chart', value: 'pie' },
                             { label: 'Add Rect', value: 'rect' }
                         ]}
