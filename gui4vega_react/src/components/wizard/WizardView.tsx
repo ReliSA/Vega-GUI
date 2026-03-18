@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Select, Button, Card, Segmented } from 'antd';
+import { Form, Select, Button, Card, Typography, Flex, Tabs } from 'antd';
 import { useWizardView } from './hooks/useWizardView.ts';
 import { WizardDynamicField } from './WizardDynamicField';
 import type { VegaEditorState } from "../useVegaEditor.ts";
@@ -21,33 +21,48 @@ const WizardView: React.FC<WizardViewProps> = (props: WizardViewProps) => {
         handleFinish
     } = useWizardView(props);
 
+    // Chart types for the tabs
+    const chartTypeOptions = [
+        { label: 'Vertical Bar Chart', value: 'barVertical' },
+        { label: 'Horizontal Bar Chart', value: 'barHorizontal' },
+        { label: 'Circular Chart', value: 'pie' },
+        { label: 'Scatter Plot', value: 'scatter' },
+        { label: 'Add Rect', value: 'rect' }
+    ];
+
+    // Default chart the first one in the options list
+    const defaultChartType = chartTypeOptions[0].value;
+
+    // Default dataset the first one in the list
+    const defaultDatasetName = datasets?.[0]?.name;
+
     return (
         <Card variant={'borderless'} style={{ height: '100%', overflowY: 'auto' }}>
             <Form
                 form={form}
                 layout="vertical"
                 onFinish={handleFinish}
-                initialValues={{ chartType: 'bar' }}
+                initialValues={{
+                    chartType: defaultChartType,
+                    datasetName: defaultDatasetName
+                }}
             >
-                {/* This should have same name as the WizardConfig attribute */}
-                <Form.Item name="chartType" label="Chart Type">
-                    <Segmented
-                        block
-                        options={[
-                            { label: 'Vertical Bar Chart', value: 'barVertical' },
-                            { label: 'Horizontal Bar Chart', value: 'barHorizontal' },
-                            { label: 'Circular Chart', value: 'pie' },
-                            { label: 'Scatter Plot', value: 'scatter' },
-                            { label: 'Add Rect', value: 'rect' }
-                        ]}
-                    />
-                </Form.Item>
-
                 {/* This should have same name as the WizardConfig attribute */}
                 <Form.Item name="datasetName" label="Dataset">
                     <Select
                         placeholder="Select a dataset"
                         options={datasets.map(ds => ({ label: ds.name, value: ds.name }))}
+                    />
+                </Form.Item>
+
+                {/* Name of chart type must match with onChange in tabs */}
+                <Form.Item name="chartType" label="Chart Type">
+                    <Tabs
+                        onChange={(key) => form.setFieldValue('chartType', key)}
+                        items={chartTypeOptions.map(option => ({
+                            label: option.label,
+                            key: option.value,
+                        }))}
                     />
                 </Form.Item>
 
@@ -60,9 +75,14 @@ const WizardView: React.FC<WizardViewProps> = (props: WizardViewProps) => {
                 ))}
 
                 <Form.Item>
-                    <Button block type="primary" htmlType="submit" disabled={!datasetName}>
-                        Generate Visualization
-                    </Button>
+                    <Flex vertical align='center' gap='small'>
+                        <Typography.Text type="secondary" style={{ textAlign: 'center' }}>
+                            Pressing the button below will overwrite existing Vega specification, except for data and signals.
+                        </Typography.Text>
+                        <Button block type="primary" htmlType="submit" disabled={!datasetName}>
+                            Generate Visualization
+                        </Button>
+                    </Flex>
                 </Form.Item>
             </Form>
         </Card>
