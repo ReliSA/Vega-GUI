@@ -31,7 +31,7 @@ const DataView: React.FC<DataViewProps> = (props) => {
     };
 
     // Add dataset handler
-    const handleAddDataset = (datasetName: string) => {
+    const handleAddDataset = (datasetName: string, data?: Record<string, unknown>[]) => {
         const trimmed = datasetName.trim();
         if (!trimmed) {
             message.error('Dataset name cannot be empty.');
@@ -41,7 +41,9 @@ const DataView: React.FC<DataViewProps> = (props) => {
             message.error('Dataset name already exists.');
             return;
         }
-        props.editorState.setCode(addDataset(props.editorState.code, trimmed, [{ NewColumn: '' }]));
+
+        const initialData = data && data.length > 0 ? data : [{ NewColumn: '' }];
+        props.editorState.setCode(addDataset(props.editorState.code, trimmed, initialData));
     };
 
     // Delete dataset handler (no modal here, handled in button)

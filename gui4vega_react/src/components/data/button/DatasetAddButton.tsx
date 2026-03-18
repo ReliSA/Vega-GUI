@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Modal, Input, Button } from 'antd';
+import { Button } from 'antd';
+import DatasetImportModal from './DatasetImportModal';
 
 /**
  * Props for {@link DatasetAddButton}.
@@ -8,8 +9,9 @@ interface DatasetAddButtonProps {
     /**
      * Callback function that is called when a new dataset is added.
      * @param datasetName - The name of the new dataset to be added.
+     * @param data - The data to be added to the dataset, if imported from a file.
      */
-    onAdd: (datasetName: string) => void;
+    onAdd: (datasetName: string, data?: Record<string, unknown>[]) => void;
 }
 
 /**
@@ -20,43 +22,16 @@ const DatasetAddButton: React.FC<DatasetAddButtonProps> = (props: DatasetAddButt
     // State to control the visibility of the modal
     const [visible, setVisible] = useState(false);
 
-    // State to hold the input value for the new dataset name
-    const [value, setValue] = useState('');
-
-    // Call the onAdd callback and close the modal
-    const handleOk = () => {
-        props.onAdd(value);
-        setVisible(false);
-        setValue('');
-    };
-
-    // Close the modal and reset the input value
-    const handleCancel = () => {
-        setVisible(false);
-        setValue('');
-    };
-
     return (
         <>
             <Button type="primary" onClick={() => setVisible(true)}>
                 Add Dataset
             </Button>
-            <Modal
-                title="Add New Dataset"
+            <DatasetImportModal
                 open={visible}
-                onOk={handleOk}
-                onCancel={handleCancel}
-                okText="Add"
-                cancelText="Cancel"
-            >
-                <Input
-                    placeholder="Dataset name"
-                    value={value}
-                    onChange={e => setValue(e.target.value)}
-                    onPressEnter={handleOk}
-                    autoFocus
-                />
-            </Modal>
+                onCancel={() => setVisible(false)}
+                onAdd={props.onAdd}
+            />
         </>
     );
 };
