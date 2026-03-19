@@ -11,10 +11,14 @@ interface DatasetEditorProps {
     editorState: VegaEditorState;
     dataset: VegaDataset;
     onDeleteDataset: (datasetName: string) => void;
+    onMoveDataset: (datasetName: string, direction: 'up' | 'down') => void;
 }
 
 const DatasetEditor: React.FC<DatasetEditorProps> = (props: DatasetEditorProps) => {
-    const [tableVisible, setTableVisible] = useState(true);
+    // Controls visibility of the dataset table editor
+    const [tableVisible, setTableVisible] = useState(false);
+
+    // Controls whether delete actions require confirmation
     const [confirmDelete, setConfirmDelete] = useState(true);
 
     const {
@@ -48,6 +52,7 @@ const DatasetEditor: React.FC<DatasetEditorProps> = (props: DatasetEditorProps) 
                 tableVisible={tableVisible}
                 onToggleTable={() => setTableVisible(!tableVisible)}
                 onDeleteDataset={props.onDeleteDataset}
+                onMoveDataset={props.onMoveDataset}
             />
 
             {/* Toolbar and Table */}

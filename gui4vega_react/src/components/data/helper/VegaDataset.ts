@@ -12,4 +12,8 @@ export interface VegaDataset {
      * Inline data values of the dataset.
      */
     values: Record<string, unknown>[];
+    /**
+     * Additional properties of the dataset that may be present in the Vega specification.
+     */
+    [key: string]: unknown;
 }

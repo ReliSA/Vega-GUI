@@ -74,7 +74,6 @@ const DatasetImportModal: React.FC<DatasetImportModalProps> = (props: DatasetImp
             try {
                 const data = isCSV ? await importCSV(file) : await importJSON(file);
                 setImportedData(data);
-                message.error(`Successfully imported ${file.name}.`);
             } catch {
                 gui4VegaLogger.error(`Failed to parse ${file.name}`);
                 return Upload.LIST_IGNORE;

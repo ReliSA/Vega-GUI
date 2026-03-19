@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Typography, Space, Flex, message } from 'antd';
-import { parseDatasets, addDataset, deleteDataset } from './helper/EditDataset.ts';
+import { parseDatasets, addDataset, deleteDataset, moveDataset } from './helper/EditDataset.ts';
 import DatasetAddButton from './button/DatasetAddButton';
 import DatasetEditor from './DatasetEditor';
 import type { VegaEditorState } from "../useVegaEditor";
@@ -45,6 +45,11 @@ const DataView: React.FC<DataViewProps> = (props: DataViewProps) => {
         props.editorState.setCode(deleteDataset(props.editorState.code, datasetName));
     };
 
+    // Move dataset handler
+    const handleMoveDataset = (datasetName: string, direction: 'up' | 'down') => {
+        props.editorState.setCode(moveDataset(props.editorState.code, datasetName, direction));
+    };
+
     return (
         <Space orientation="vertical" style={{ width: '100%', padding: 8, overflow: 'auto'}}>
             <Flex justify="space-between" align="center">
@@ -59,6 +64,7 @@ const DataView: React.FC<DataViewProps> = (props: DataViewProps) => {
                         dataset={dataset}
                         editorState={props.editorState}
                         onDeleteDataset={handleDeleteDataset}
+                        onMoveDataset={handleMoveDataset}
                     />
                 ))
             )}

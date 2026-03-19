@@ -9,4 +9,4 @@ Dataview
 
 import { autocompletion } from "@codemirror/autocomplete";
 
-@property komentare
+token margin a padding a dalsi veci misto statickyho nastaveni
