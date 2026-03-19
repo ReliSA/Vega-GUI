@@ -1,7 +1,7 @@
-import {useMemo} from 'react';
-import {Space} from 'antd';
-import type {ColumnsType} from 'antd/es/table';
-import type {VegaDataset} from '../helper/datasetEdit';
+import { useMemo } from 'react';
+import { Flex } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
+import type { VegaDataset } from '../helper/datasetEdit';
 import EditableCell from '../EditableCell';
 import DataDeleteButton from '../button/DataDeleteButton';
 
@@ -15,15 +15,15 @@ interface DatasetColumnsProps {
 }
 
 export const useDatasetColumns = (props: DatasetColumnsProps) => {
-
     return useMemo(() => {
-        const firstRow = props.dataset.values[0] || {};
+        const firstRow = props.dataset?.values?.[0] || {};
+
         const cols: ColumnsType<Record<string, unknown>> = Object.keys(firstRow).map((col, colIndex) => ({
             title: (
-                <Space align="center" size="small">
+                <Flex align="center" justify="space-between" gap="small">
                     <EditableCell
                         value={col}
-                        onSave={newCol => typeof newCol === 'string' && props.onColumnRename(col, newCol)}
+                        onSave={(newCol) => props.onColumnRename(col, newCol)}
                     />
                     <DataDeleteButton
                         index={colIndex}
@@ -31,28 +31,32 @@ export const useDatasetColumns = (props: DatasetColumnsProps) => {
                         confirmDelete={props.confirmDelete}
                         onDelete={() => props.onColumnDelete(col)}
                     />
-                </Space>
+                </Flex>
             ),
             dataIndex: col,
             key: col,
-            render: (val: unknown, _row: Record<string, unknown>, rowIndex: number) => (
+            width: 180,
+            render: (val, _, rowIndex) => (
                 <EditableCell
                     value={val}
-                    onSave={newValue => props.onCellChange(rowIndex, col, newValue)}
+                    onSave={(newValue) => props.onCellChange(rowIndex, col, newValue)}
                 />
             ),
         }));
 
-        // Add Delete Row Column
+        // Delete button column
         cols.push({
             title: '',
             key: 'delete',
-            render: (_: unknown, _row: Record<string, unknown>, rowIndex: number) => (
+            width: 40,
+            fixed:'right',
+            align:'center',
+            render: (_, __, rowIndex) => (
                 <DataDeleteButton
                     index={rowIndex}
                     type='record'
                     confirmDelete={props.confirmDelete}
-                    onDelete={props.onDeleteRow}
+                    onDelete={() => props.onDeleteRow(rowIndex)}
                 />
             ),
         });
