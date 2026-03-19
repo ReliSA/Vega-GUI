@@ -1,16 +1,4 @@
 /**
- * Converts a value to a string for display purposes.
- * If the value is an object, it will be stringified as JSON.
- * @param value - The value to convert to a display string.
- * @returns A string representation of the value for display.
- */
-export function toDisplay(value: unknown): string {
-    return value !== null && typeof value === 'object'
-        ? JSON.stringify(value)
-        : String(value ?? '');
-}
-
-/**
  * Renames a key (column) in each row of a dataset
  * @param rows - The dataset rows to modify
  * @param oldCol - The column name to rename

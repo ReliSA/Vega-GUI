@@ -1,20 +1,34 @@
 import React from 'react';
 import { Typography } from 'antd';
-import { toDisplay } from './helper/dataEdit.ts';
 
 const { Text } = Typography;
 
-// Maximum number of characters to display in the cell
-const MAX_DISPLAY_LENGTH = 20;
-
+/**
+ * Props for {@link EditableCell}.
+ */
 interface EditableCellProps {
     value: unknown;
     onSave: (val: string) => void;
 }
 
+/**
+ * Converts a value to a string for display purposes.
+ * If the value is an object, it will be stringified as JSON.
+ * @param value - The value to convert to a display string.
+ * @returns A string representation of the value for display.
+ */
+function toDisplay(value: unknown): string {
+    return value !== null && typeof value === 'object'
+        ? JSON.stringify(value)
+        : String(value ?? '');
+}
+
 const EditableCell: React.FC<EditableCellProps> = (props: EditableCellProps) => {
     // Convert the value to a display string
     const display = toDisplay(props.value);
+
+    // Maximum number of characters to display in the cell
+    const MAX_DISPLAY_LENGTH = 20;
 
     return (
         <Text
