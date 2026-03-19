@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Input, Tabs, Upload, Form, Typography, message } from 'antd';
 import { CheckCircleOutlined, InboxOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
-import { importCSV, importJSON } from '../helper/datasetImport.ts';
+import { importCSV, importJSON } from '../helper/ImportDataset.ts';
 import { gui4VegaLogger } from "../../../logger.ts";
 
 const { Text, Paragraph } = Typography;

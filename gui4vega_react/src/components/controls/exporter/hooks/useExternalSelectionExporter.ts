@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import { parseDatasets } from '../../../data/helper/datasetEdit.ts';
-import { parseSignals } from '../../../signal/helper/signalEdit.ts';
+import { parseDatasets } from '../../../data/helper/EditDataset.ts';
+import { parseSignals } from '../../../signal/helper/VegaSignal.ts';
 import { exportSelectedData } from '../helper/exportSelectedData.ts';
 
 interface UseExternalSelectionExporterProps {

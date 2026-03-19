@@ -12,5 +12,5 @@ export type { ExportedContentProps } from './components/controls/exporter/Export
 export type { ExportedData } from './components/controls/exporter/helper/exportSelectedData.ts';
 export type { ImportedData } from './components/controls/loader/helper/importData.ts';
 
-export type { VegaDataset } from './components/data/helper/datasetEdit.ts';
-export type { VegaSignal } from './components/signal/helper/signalEdit.ts';
+export type { VegaDataset } from "./components/data/helper/VegaDataset.ts";
+export type { VegaSignal } from './components/signal/helper/VegaSignal.ts';

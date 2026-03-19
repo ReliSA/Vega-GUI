@@ -1,5 +1,5 @@
-import type { VegaDataset } from "../../../data/helper/datasetEdit.ts";
-import type { VegaSignal } from "../../../signal/helper/signalEdit.ts";
+import type { VegaDataset } from "../../../data/helper/VegaDataset.ts";
+import type { VegaSignal } from "../../../signal/helper/VegaSignal.ts";
 
 /**
  * Imported Vega content used to merge external JSON into the current specification.

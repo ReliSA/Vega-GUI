@@ -1,13 +1,9 @@
 import { useCallback } from 'react';
-import type { VegaDataset } from '../helper/datasetEdit';
-import {
-    updateDatasetValue,
-    addDatasetRow,
-    deleteDatasetRow
-} from '../helper/datasetEdit';
-import { renameColumn, deleteColumn, addColumn } from '../helper/dataEdit';
+import { renameColumn, deleteColumn, addColumn } from '../helper/EditColumn.ts';
 import type { VegaEditorState } from "../../useVegaEditor";
 import { gui4VegaLogger } from "../../../logger";
+import { addDatasetRow, deleteDatasetRow, updateDatasetValue } from "../helper/EditRow.ts";
+import type { VegaDataset } from "../helper/VegaDataset.ts";
 
 export const useDatasetActions = (editorState: VegaEditorState, dataset: VegaDataset) => {
     const updateSpec = useCallback((newCode: string) => {

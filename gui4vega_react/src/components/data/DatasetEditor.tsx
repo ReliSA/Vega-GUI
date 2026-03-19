@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { Card, Space, Table, Empty } from 'antd';
-import type { VegaDataset } from './helper/datasetEdit';
 import type { VegaEditorState } from "../useVegaEditor";
 import { useDatasetActions } from './hooks/useDatasetActions';
 import { useDatasetColumns } from './hooks/useDatasetColumns';
 import DatasetHeader from './DatasetHeader';
 import DatasetToolbar from './DatasetToolbar';
+import type { VegaDataset } from "./helper/VegaDataset.ts";
 
 interface DatasetEditorProps {
     editorState: VegaEditorState;

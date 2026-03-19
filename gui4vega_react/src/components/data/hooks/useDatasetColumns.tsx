@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { Flex } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import type { VegaDataset } from '../helper/datasetEdit';
 import EditableCell from '../EditableCell';
 import DataDeleteButton from '../button/DataDeleteButton';
+import type { VegaDataset } from "../helper/VegaDataset.ts";
 
 interface DatasetColumnsProps {
     dataset: VegaDataset;
