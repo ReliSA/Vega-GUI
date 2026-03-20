@@ -37,7 +37,7 @@ const EditableCell: React.FC<EditableCellProps> = (props: EditableCellProps) => 
 
     return (
         <Text
-            style={{ cursor: 'pointer', maxWidth: 100 }}
+            style={{ cursor: 'pointer', maxWidth: 150 }}
             ellipsis={display.length > MAX_DISPLAY_LENGTH ? { tooltip: display } : false}
             editable={{
                 onChange: props.onSave,
