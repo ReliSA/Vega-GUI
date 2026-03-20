@@ -1,64 +1,58 @@
 import { useCallback } from 'react';
 import { renameColumn, deleteColumn, addColumn } from '../helper/EditColumn.ts';
+import { transformSpec, addDatasetRow, deleteDatasetRow, updateDatasetValue } from "../helper/EditRow.ts";
 import type { VegaEditorState } from "../../useVegaEditor";
-import { gui4VegaLogger } from "../../../logger";
-import { addDatasetRow, deleteDatasetRow, updateDatasetValue } from "../helper/EditRow.ts";
 import type { VegaDataset } from "../helper/VegaDataset.ts";
 
+/**
+ * Custom hook to manage dataset actions in a Vega spec editor.
+ * @param editorState - The current state of the Vega editor
+ * @param dataset - The dataset being edited
+ * @returns An object containing handlers for further processing
+ */
 export const useDatasetActions = (editorState: VegaEditorState, dataset: VegaDataset) => {
-    const updateSpec = useCallback((newCode: string) => {
-        editorState.setCode(newCode);
-    }, [editorState]);
+    // Apply dataset transformation in Vega spec
+    const applyUpdate = useCallback((transform: (ds: VegaDataset) => void) => {
+        const newCode = transformSpec(editorState.code, dataset.name, transform);
+        if (newCode !== editorState.code) editorState.setCode(newCode);
+    }, [editorState, dataset.name]);
 
-    const updateDatasetRows = useCallback((updatedRows: Record<string, unknown>[]) => {
-        try {
-            const spec = JSON.parse(editorState.code);
-            const ds = spec.data.find((d: VegaDataset) => d.name === dataset.name);
-            if (ds) {
-                ds.values = updatedRows;
-            }
-            updateSpec(JSON.stringify(spec, null, 2));
-        } catch {
-            gui4VegaLogger.error('Failed to update dataset rows: Invalid JSON in editor code.');
-        }
-    }, [editorState.code, dataset.name, updateSpec]);
-
-    const handleColumnRename = useCallback((oldCol: string, newCol: string) => {
-        const updatedRows = renameColumn(dataset.values, oldCol, newCol);
-        updateDatasetRows(updatedRows);
-    }, [dataset.values, updateDatasetRows]);
-
-    const handleColumnDelete = useCallback((col: string) => {
-        const updatedRows = deleteColumn(dataset.values, col);
-        updateDatasetRows(updatedRows);
-    }, [dataset.values, updateDatasetRows]);
-
+    // Add column
     const handleColumnAdd = useCallback(() => {
-        const existingCols = Object.keys(dataset.values[0] ?? {});
-        const baseName = 'NewColumn';
-        let col = baseName;
-        let i = 1;
-        while (existingCols.includes(col)) {
-            col = `${baseName}${i}`;
-            i++;
-        }
-        const updatedRows = addColumn(dataset.values, col);
-        updateDatasetRows(updatedRows);
-    }, [dataset.values, updateDatasetRows]);
+        applyUpdate((ds) => {
+            const existing = Object.keys(ds.values[0] ?? {});
+            let col = 'NewColumn', i = 1;
+            while (existing.includes(col)) col = `NewColumn${i++}`;
+            ds.values = addColumn(ds.values, col);
+        });
+    }, [applyUpdate]);
 
+    // Delete column
+    const handleColumnDelete = useCallback((col: string) => {
+        applyUpdate((ds) => { ds.values = deleteColumn(ds.values, col); });
+    }, [applyUpdate]);
+
+    // Rename column
+    const handleColumnRename = useCallback((oldCol: string, newCol: string) => {
+        applyUpdate((ds) => { ds.values = renameColumn(ds.values, oldCol, newCol); });
+    }, [applyUpdate]);
+
+    // Add row
     const handleAddRow = useCallback(() => {
         const keys = Object.keys(dataset.values[0] ?? {});
-        const newRow = keys.reduce((acc, key) => ({ ...acc, [key]: '' }), {} as Record<string, unknown>);
-        updateSpec(addDatasetRow(editorState.code, dataset.name, newRow));
-    }, [dataset.values, dataset.name, editorState.code, updateSpec]);
+        const newRow = keys.reduce((acc, key) => ({ ...acc, [key]: '' }), {});
+        applyUpdate((ds) => addDatasetRow(ds, newRow));
+    }, [dataset.values, applyUpdate]);
 
-    const handleDeleteRow = useCallback((rowIndex: number) => {
-        updateSpec(deleteDatasetRow(editorState.code, dataset.name, rowIndex));
-    }, [dataset.name, editorState.code, updateSpec]);
+    // Delete row
+    const handleDeleteRow = useCallback((index: number) => {
+        applyUpdate((ds) => deleteDatasetRow(ds, index));
+    }, [applyUpdate]);
 
-    const handleCellChange = useCallback((rowIndex: number, col: string, newValue: unknown) => {
-        updateSpec(updateDatasetValue(editorState.code, dataset.name, rowIndex, col, newValue));
-    }, [dataset.name, editorState.code, updateSpec]);
+    // Update cell value
+    const handleCellChange = useCallback((index: number, col: string, val: unknown) => {
+        applyUpdate((ds) => updateDatasetValue(ds, index, col, val));
+    }, [applyUpdate]);
 
     return {
         handleColumnRename,
