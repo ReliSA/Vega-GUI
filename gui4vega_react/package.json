@@ -1,14 +1,14 @@
 {
-  "name": "@teemo6/gui4vega_react",
-  "version": "0.0.14",
+  "name": "@relisa/gui4vega",
+  "version": "0.1.0",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Teemo6/DP_code.git"
+    "url": "https://github.com/ReliSA/Vega-GUI.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/@Teemo6",
-    "access": "restricted"
+    "registry": "https://npm.pkg.github.com/@ReliSA",
+    "access": "public"
   },
   "files": [
     "dist"
