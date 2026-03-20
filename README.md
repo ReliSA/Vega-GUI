@@ -14,7 +14,7 @@ npm install
 npm run dev
  ```
 
-### Push to npm @teemo6/gui4vega_react
+### Push to npm @relisa/gui4vega
 
 ```bash
 cd gui4vega_react

@@ -49,7 +49,7 @@ export default function EditorPage() {
             <Flex vertical align="center" gap="small" style={{ padding: '24px 32px 16px', borderBottom: `1px solid ${token.colorBorderSecondary}` }}>
                 <Title level={3}>Visual Specification Editor</Title>
                 <Paragraph type="secondary" style={{ maxWidth: 600, textAlign: 'center' }}>
-                    Below this paragraph is the imported VegaEditor component from the <code>gui4vega_react</code> library.
+                    Below this paragraph is the imported VegaEditor component from the <code>@relisa/gui4vega</code> library.
                     Edit the JSON specification on the left and see the rendered visualization on the right.
                 </Paragraph>
             </Flex>

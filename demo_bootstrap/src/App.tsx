@@ -44,7 +44,7 @@ function App() {
 
           <Col md={7} className="p-3">
             <h2>Vega Editor Integration</h2>
-            <p className="text-muted">A minimal example showing the VegaEditor component from <code>gui4vega_react</code>.</p>
+            <p className="text-muted">A minimal example showing the VegaEditor component from <code>@relisa/gui4vega</code>.</p>
 
             <div className="border rounded p-2 bg-white" style={{ height: '75vh', width: '70vw' }}>
               <VegaEditor height="100%" />
@@ -56,7 +56,7 @@ function App() {
       <footer className="bg-dark text-white text-center py-2 mt-3">
         <Container>
           <small>
-              Demo of importing <code>gui4vega_react</code>
+              Demo of importing <code>@relisa/gui4vega</code>
           </small>
         </Container>
       </footer>

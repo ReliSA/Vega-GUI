@@ -13,7 +13,7 @@ jobs:
       id-token: write
     defaults:
       run:
-        working-directory: gui4vega_react
+        working-directory: gui4vega
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: gui4vega_react/package-lock.json
+          cache-dependency-path: gui4vegapackage-lock.json
 
       - name: Install dependencies
         run: npm install
@@ -38,7 +38,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: gui4vega_react/doc
+          path: gui4vega/doc
 
       - name: Deploy TypeDoc to GitHub Pages
         id: deployment

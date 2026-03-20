@@ -14,7 +14,7 @@ export default function AppFooter() {
             borderTop: `1px solid ${token.colorBorderSecondary}`,
         }}>
             <Text type="secondary" style={{ fontSize: '0.8rem' }}>
-                Demo of importing <code>gui4vega_react</code>
+                Demo of importing <code>@relisa/gui4vega</code>
             </Text>
         </Footer>
     )
