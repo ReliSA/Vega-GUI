@@ -43,8 +43,10 @@ export const useVegaEditor = (props: useVegaEditorProps): VegaEditorState => {
         let baseSpec = props.importedData?.schema ?? defaultSpec;
 
         // Prepend datasets and signals from the initial schema to the base spec if they exist
-        baseSpec = prependDatasetsToSchema(baseSpec, props.importedData?.datasets);
-        baseSpec = prependSignalsToSchema(baseSpec, props.importedData?.signals);
+        if (props.importedData?.schema) {
+            baseSpec = prependDatasetsToSchema(baseSpec, props.importedData?.datasets);
+            baseSpec = prependSignalsToSchema(baseSpec, props.importedData?.signals);
+        }
 
         // Serialize the final spec for the editor
         return JSON.stringify(baseSpec, null, 2);
