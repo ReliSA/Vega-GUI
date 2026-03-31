@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
 import { Typography, Space, Flex, message } from 'antd';
-import { parseDatasets, addDataset, deleteDataset, moveDataset } from './helper/EditDataset.ts';
+import { addDataset, deleteDataset, moveDataset } from './helper/EditDataset.ts';
 import DatasetAddButton from './button/DatasetAddButton';
 import DatasetEditor from './DatasetEditor';
 import type { VegaEditorState } from "../useVegaEditor";
+import { parseDatasets } from "./helper/VegaDataset.ts";
 
 /**
  * Props for {@link DataView}.

@@ -17,3 +17,21 @@ export interface VegaDataset {
      */
     [key: string]: unknown;
 }
+
+/**
+ * Parses the provided Vega spec code to extract datasets defined in the `data` array.
+ * @param code - The Vega spec as a JSON string
+ * @returns An array of VegaDataset objects found in the spec
+ */
+export function parseDatasets(code: string): VegaDataset[] {
+    try {
+        const spec = JSON.parse(code);
+        if (!Array.isArray(spec.data)) return [];
+
+        return spec.data
+            .filter((d: VegaDataset) => Array.isArray(d.values) && d.values.length > 0)
+            .map((d: VegaDataset) => ({name: d.name, values: d.values}));
+    } catch {
+        return [];
+    }
+}

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { parseDatasets } from '../../../data/helper/EditDataset.ts';
+import { parseDatasets } from '../../../data/helper/VegaDataset.ts';
 import { parseSignals } from '../../../signal/helper/VegaSignal.ts';
 import { exportSelectedData } from '../helper/exportSelectedData.ts';
 
