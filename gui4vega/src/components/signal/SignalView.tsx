@@ -72,7 +72,6 @@ const SignalView: React.FC<SignalViewProps> = (props) => {
             ) : (
                 signals.map((signal: VegaSignal) => (
                     <SignalEditor
-                        key={signal.name}
                         signal={signal}
                         onDeleteSignal={handleDeleteSignal}
                         onMoveSignal={handleMoveSignal}

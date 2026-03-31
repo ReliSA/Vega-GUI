@@ -5,6 +5,7 @@ import DatasetAddButton from './button/DatasetAddButton';
 import DatasetEditor from './DatasetEditor';
 import type { VegaEditorState } from "../useVegaEditor";
 import { parseDatasets } from "./helper/VegaDataset.ts";
+import type { VegaDataset } from "./helper/VegaDataset.ts";
 
 /**
  * Props for {@link DataView}.
@@ -60,7 +61,7 @@ const DataView: React.FC<DataViewProps> = (props: DataViewProps) => {
             {datasets.length === 0 ? (
                 <Typography.Text type="secondary">No inline data found in Vega specification.</Typography.Text>
             ) : (
-                datasets.map(dataset => (
+                datasets.map((dataset: VegaDataset) => (
                     <DatasetEditor
                         dataset={dataset}
                         editorState={props.editorState}
