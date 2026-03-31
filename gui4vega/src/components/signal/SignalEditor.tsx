@@ -69,6 +69,8 @@ const SignalEditor: React.FC<SignalEditorProps> = (props: SignalEditorProps) => 
             props.onUpdateSignalBind(props.signal.name, undefined);
         } else if (type === 'range') {
             props.onUpdateSignalBind(props.signal.name, { input: 'range', min: 0, max: 100, step: 1 });
+        } else if (type === 'checkbox') {
+            props.onUpdateSignalBind(props.signal.name, { input: 'checkbox' });
         }
     };
 
@@ -80,7 +82,7 @@ const SignalEditor: React.FC<SignalEditorProps> = (props: SignalEditorProps) => 
                 onMoveSignal={props.onMoveSignal}
             />
             <Form layout="vertical" size="small">
-                <Form.Item label="Default value">
+                <Form.Item label="Value">
                     <Input
                         defaultValue={typeof props.signal.value === 'object' ? JSON.stringify(props.signal.value) : String(props.signal.value)}
                         onBlur={(e) => props.onUpdateSignal(props.signal.name, e.target.value)}
@@ -95,6 +97,7 @@ const SignalEditor: React.FC<SignalEditorProps> = (props: SignalEditorProps) => 
                         options={[
                             { value: '', label: 'None' },
                             { value: 'range', label: 'Slider' },
+                            { value: 'checkbox', label: 'Checkbox' },
                         ]}
                     />
                 </Form.Item>
