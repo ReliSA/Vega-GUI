@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Typography, Flex } from 'antd';
+import {Typography, Flex, message} from 'antd';
 import { parseSignals } from './helper/VegaSignal';
 import type { VegaSignal } from './helper/VegaSignal';
 import { addSignal, deleteSignal, moveSignal, updateSignal } from './helper/EditSignal';
@@ -22,32 +22,47 @@ interface SignalViewProps {
  * @param props - {@link SignalViewProps}
  */
 const SignalView: React.FC<SignalViewProps> = (props) => {
+    // Parse signals from spec with code memo
     const signals = useMemo(() => parseSignals(props.editorState.code), [props.editorState.code]);
 
-    const handleAddSignal = (name: string) => {
-        props.editorState.setCode(addSignal(props.editorState.code, name, ""));
+    // Add signal handler
+    const handleAddSignal = (signalName: string) => {
+        const trimmed = signalName.trim();
+        if (!trimmed) {
+            message.error('Dataset name cannot be empty.');
+            return;
+        }
+        if (signals.some(s => s.name === trimmed)) {
+            message.error('Dataset name already exists.');
+            return;
+        }
+
+        props.editorState.setCode(addSignal(props.editorState.code, signalName, ""));
     };
 
-    const handleDeleteSignal = (name: string) => {
-        props.editorState.setCode(deleteSignal(props.editorState.code, name));
+    // Delete signal handler
+    const handleDeleteSignal = (signalName: string) => {
+        props.editorState.setCode(deleteSignal(props.editorState.code, signalName));
     };
 
-    const handleMoveSignal = (name: string, direction: 'up' | 'down') => {
-        props.editorState.setCode(moveSignal(props.editorState.code, name, direction));
+    // Move signal handler
+    const handleMoveSignal = (signalName: string, direction: 'up' | 'down') => {
+        props.editorState.setCode(moveSignal(props.editorState.code, signalName, direction));
     };
 
-    const handleUpdateSignal = (name: string, value: string) => {
+    // Update signal handler
+    const handleUpdateSignal = (signalName: string, value: string) => {
         let parsed: unknown = value;
         try {
             parsed = JSON.parse(value);
         } catch {
             // keep as string
         }
-        props.editorState.setCode(updateSignal(props.editorState.code, name, parsed));
+        props.editorState.setCode(updateSignal(props.editorState.code, signalName, parsed));
     };
 
     return (
-        <Flex vertical gap={16} style={{ width: '100%', padding: 8 }}>
+        <Flex vertical style={{ width: '100%', padding: 8, overflow: 'auto' }}>
             <Flex justify="space-between" align="center">
                 <Typography.Title level={5}>Signals</Typography.Title>
                 <SignalAddButton onAdd={handleAddSignal} />

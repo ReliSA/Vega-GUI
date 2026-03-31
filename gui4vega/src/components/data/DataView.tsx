@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Typography, Space, Flex, message } from 'antd';
+import { Typography, Flex, message } from 'antd';
 import { addDataset, deleteDataset, moveDataset } from './helper/EditDataset.ts';
 import DatasetAddButton from './button/DatasetAddButton';
 import DatasetEditor from './DatasetEditor';
@@ -22,7 +22,7 @@ interface DataViewProps {
  * @constructor
  */
 const DataView: React.FC<DataViewProps> = (props: DataViewProps) => {
-    // Parse datasets from spec, memoized by code
+    // Parse datasets from spec with code memo
     const datasets = useMemo(() => parseDatasets(props.editorState.code), [props.editorState.code]);
 
     // Add dataset handler
@@ -52,7 +52,7 @@ const DataView: React.FC<DataViewProps> = (props: DataViewProps) => {
     };
 
     return (
-        <Space orientation="vertical" style={{ width: '100%', padding: 8, overflow: 'auto'}}>
+        <Flex vertical style={{ width: '100%', padding: 8, overflow: 'auto'}}>
             <Flex justify="space-between" align="center">
                 <Typography.Title level={5}>Datasets</Typography.Title>
                 <DatasetAddButton onAdd={handleAddDataset} />
@@ -69,7 +69,7 @@ const DataView: React.FC<DataViewProps> = (props: DataViewProps) => {
                     />
                 ))
             )}
-        </Space>
+        </Flex>
     );
 };
 
