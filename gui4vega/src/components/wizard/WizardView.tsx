@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Select, Button, Card, Typography, Flex, Tabs, Modal, Checkbox, Space } from 'antd';
+import { Form, Select, Button, Card, Typography, Flex, Modal, Checkbox, Space } from 'antd';
 import { useWizardView } from './hooks/useWizardView.ts';
 import { WizardDynamicField } from './WizardDynamicField';
 import type { VegaEditorState } from "../useVegaEditor.ts";
@@ -29,19 +29,29 @@ const WizardView: React.FC<WizardViewProps> = (props: WizardViewProps) => {
         handleFinish
     } = useWizardView(props);
 
-    // Chart types for the tabs
+    // Chart types grouped by adapter mode
     const chartTypeOptions = [
-        { label: 'Column Chart', value: 'barVertical' },
-        { label: 'Bar Chart', value: 'barHorizontal' },
-        { label: 'Pie Chart', value: 'pie' },
-        { label: 'Scatter Plot', value: 'scatter' },
-        { label: 'Add Rect', value: 'rect' },
-        { label: 'Add Line', value: 'line' },
-        { label: 'Add Symbol', value: 'symbol' }
+        {
+            label: 'Template',
+            options: [
+                { label: 'Column Chart', value: 'barVertical' },
+                { label: 'Bar Chart', value: 'barHorizontal' },
+                { label: 'Pie Chart', value: 'pie' },
+                { label: 'Scatter Plot', value: 'scatter' }
+            ]
+        },
+        {
+            label: 'Append',
+            options: [
+                { label: 'Add Rect', value: 'rect' },
+                { label: 'Add Line', value: 'line' },
+                { label: 'Add Symbol', value: 'symbol' }
+            ]
+        }
     ];
 
     // Default chart the first one in the options list
-    const defaultChartType = chartTypeOptions[0].value;
+    const defaultChartType = chartTypeOptions[0].options[0].value;
 
     // Default dataset the first one in the list
     const defaultDatasetName = datasets?.[0]?.name;
@@ -108,12 +118,9 @@ const WizardView: React.FC<WizardViewProps> = (props: WizardViewProps) => {
 
                 {/* Name of chart type must match with onChange in tabs */}
                 <Form.Item name="chartType" label="Chart Type">
-                    <Tabs
-                        onChange={(key) => form.setFieldValue('chartType', key)}
-                        items={chartTypeOptions.map(option => ({
-                            label: option.label,
-                            key: option.value,
-                        }))}
+                    <Select
+                        placeholder="Select a chart type"
+                        options={chartTypeOptions}
                     />
                 </Form.Item>
 
