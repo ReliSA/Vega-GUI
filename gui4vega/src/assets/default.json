@@ -22,6 +22,29 @@
         {"category": "E", "value": 75},
         {"category": "F", "value": 60}
       ]
+    },
+    {
+      "name": "stacked",
+      "values": [
+        {"category": "A", "value": 28, "group": "0"},
+        {"category": "A", "value": 55, "group": "1"},
+        {"category": "A", "value": 12, "group": "2"},
+        {"category": "B", "value": 43, "group": "0"},
+        {"category": "B", "value": 91, "group": "1"},
+        {"category": "B", "value": 72, "group": "2"},
+        {"category": "C", "value": 81, "group": "0"},
+        {"category": "C", "value": 24, "group": "1"},
+        {"category": "C", "value": 53, "group": "2"},
+        {"category": "D", "value": 19, "group": "0"},
+        {"category": "D", "value": 54, "group": "1"},
+        {"category": "D", "value": 87, "group": "2"},
+        {"category": "E", "value": 52, "group": "0"},
+        {"category": "E", "value": 31, "group": "1"},
+        {"category": "E", "value": 48, "group": "2"},
+        {"category": "F", "value": 24, "group": "0"},
+        {"category": "F", "value": 10, "group": "1"},
+        {"category": "F", "value": 87, "group": "2"}
+      ]
     }
   ],
 
