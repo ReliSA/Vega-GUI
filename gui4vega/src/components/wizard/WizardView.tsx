@@ -51,6 +51,7 @@ const WizardView: React.FC<WizardViewProps> = (props: WizardViewProps) => {
                 { label: <Space><MenuOutlined /> Bar Chart</Space>, value: 'barHorizontal' },
                 { label: <Space><AppstoreOutlined /> Stacked Bar Chart</Space>, value: 'barStacked' },
                 { label: <Space><BuildOutlined /> Grouped Bar Chart</Space>, value: 'barGrouped' },
+                { label: <Space><AreaChartOutlined /> Area Chart</Space>, value: 'area' },
                 { label: <Space><AreaChartOutlined /> Stacked Area Chart</Space>, value: 'stackedArea' },
                 { label: <Space><PieChartOutlined /> Pie Chart</Space>, value: 'pie' },
                 { label: <Space><DotChartOutlined /> Scatter Plot</Space>, value: 'scatter' },
