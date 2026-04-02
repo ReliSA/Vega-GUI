@@ -4,7 +4,7 @@ import type { WizardConfig } from "../../helper/wizardSpec.ts";
 /**
  * Adapter for generating a stacked area chart Vega specification based on user input from the wizard form.
  */
-export class StackedAreaAdapter implements WizardAdapter {
+export class AreaStackedAdapter implements WizardAdapter {
     // Select the mode for the adapter
     mode: AdapterMode = 'template';
 
@@ -14,6 +14,7 @@ export class StackedAreaAdapter implements WizardAdapter {
             { name: 'x', type: 'field', label: 'X Field', required: true },
             { name: 'y', type: 'field', label: 'Y Field', required: true },
             { name: 'c', type: 'field', label: 'Category Field', required: true },
+            { name: 'interpolate', type: 'select', label: 'Interpolation', required: false, options: ['linear', 'step', 'step-before', 'step-after', 'basis', 'cardinal', 'monotone'], defaultValue: 'linear' },
         ];
     }
 
@@ -24,6 +25,7 @@ export class StackedAreaAdapter implements WizardAdapter {
         const xField = fields['x'];
         const yField = fields['y'];
         const cField = fields['c'];
+        const interpolate = fields['interpolate'] || 'linear';
 
         const suffix = Math.floor(Math.random() * 10000);
         const transformedDataName = `stacked_area_data_${suffix}`;
@@ -92,7 +94,7 @@ export class StackedAreaAdapter implements WizardAdapter {
                             "from": {"data": "facet_data"},
                             "encode": {
                                 "enter": {
-                                    "interpolate": {"value": "monotone"},
+                                    "interpolate": {"value": interpolate},
                                     "x": {"scale": "x", "field": xField},
                                     "y": {"scale": "y", "field": "y0"},
                                     "y2": {"scale": "y", "field": "y1"},

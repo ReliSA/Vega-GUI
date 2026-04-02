@@ -7,7 +7,7 @@ import { PieAdapter } from "../adapters/template/PieAdapter.ts";
 import { ScatterAdapter } from "../adapters/template/ScatterAdapter.ts";
 import { SpiderAdapter } from "../adapters/template/SpiderAdapter.ts";
 import { AreaAdapter } from "../adapters/template/AreaAdapter.ts";
-import { StackedAreaAdapter } from "../adapters/template/StackedAreaAdapter.ts";
+import { AreaStackedAdapter } from "../adapters/template/AreaStackedAdapter.ts";
 import { RectAdapter } from "../adapters/append/RectAdapter.ts";
 import { LineAdapter } from "../adapters/append/LineAdapter.ts";
 import { SymbolAdapter } from "../adapters/append/SymbolAdapter.ts";
@@ -49,7 +49,7 @@ export const adapters: Record<ChartType, WizardAdapter> = {
     scatter: new ScatterAdapter(),
     spider: new SpiderAdapter(),
     area: new AreaAdapter(),
-    stackedArea: new StackedAreaAdapter(),
+    stackedArea: new AreaStackedAdapter(),
     rect: new RectAdapter(),
     line: new LineAdapter(),
     symbol: new SymbolAdapter()

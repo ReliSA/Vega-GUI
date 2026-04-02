@@ -13,6 +13,8 @@ export class AreaAdapter implements WizardAdapter {
         return [
             { name: 'x', type: 'field', label: 'X Field', required: true },
             { name: 'y', type: 'field', label: 'Y Field', required: true },
+            { name: 'color', type: 'color', label: 'Color', required: false, defaultValue: '#4682b4' },
+            { name: 'interpolate', type: 'select', label: 'Interpolation', required: false, defaultValue: 'linear', options: ['linear', 'step', 'step-before', 'step-after', 'basis', 'cardinal', 'monotone'] },
         ];
     }
 
@@ -22,6 +24,8 @@ export class AreaAdapter implements WizardAdapter {
 
         const xField = fields['x'];
         const yField = fields['y'];
+        const color = fields['color'];
+        const interpolate = fields['interpolate'];
 
         return {
             "$schema": "https://vega.github.io/schema/vega/v6.json",
@@ -56,11 +60,11 @@ export class AreaAdapter implements WizardAdapter {
                     "from": {"data": datasetName},
                     "encode": {
                         "enter": {
-                            "interpolate": {"value": "monotone"},
+                            "interpolate": {"value": interpolate},
                             "x": {"scale": "x", "field": xField},
                             "y": {"scale": "y", "field": yField},
                             "y2": {"scale": "y", "value": 0},
-                            "fill": {"value": "steelblue"}
+                            "fill": {"value": color}
                         },
                         "update": {
                             "fillOpacity": {"value": 1}
