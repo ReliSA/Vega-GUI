@@ -68,8 +68,8 @@ export default function EditorPage() {
                     </Paragraph>
                 </Flex>
 
-                <Button onClick={handleUserExportClick}>
-                    User Export via ExternalSelectionExporter
+                <Button onClick={handleUserExportClick} style={{ marginBottom: '24px' }}>
+                    Export via ExternalSelectionExporter
                 </Button>
 
                 <ExternalSelectionExporter

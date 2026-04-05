@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { prependDatasetsToSchema, prependSignalsToSchema } from "./controls/loader/helper/importData.ts";
+import { isDarkMode } from "./overrideTheme.ts";
 import type { ImportedData } from "./controls/loader/helper/importData.ts";
+import type { GlobalToken } from "antd";
 
 import defaultSpec from '../assets/default.json';
+import defaultSpecDark from '../assets/default_dark.json';
 
 /**
  * Props for {@link useVegaEditor}.
@@ -13,6 +16,10 @@ interface useVegaEditorProps {
      * If not provided, the editor will initialize with a default Vega spec.
      */
     importedData?: ImportedData;
+    /**
+     * The global theme token from Ant Design.
+     */
+    token: GlobalToken;
 }
 
 /**
@@ -39,8 +46,11 @@ export interface VegaEditorState {
 export const useVegaEditor = (props: useVegaEditorProps): VegaEditorState => {
     // State to hold the current Vega specification code
     const [code, setCode] = useState<string>(() => {
+        // Choose default spec based on theme preference
+        const defSpec = isDarkMode(props.token) ? defaultSpecDark : defaultSpec;
+
         // Start with the provided initial schema or fall back to the default spec
-        let baseSpec = props.importedData?.schema ?? defaultSpec;
+        let baseSpec = props.importedData?.schema ?? defSpec;
 
         // Prepend datasets and signals from the initial schema to the base spec if they exist
         if (props.importedData?.schema) {

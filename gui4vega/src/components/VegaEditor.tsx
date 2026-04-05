@@ -68,6 +68,7 @@ const VegaEditor = forwardRef<VegaEditorRef, VegaEditorProps>((props: VegaEditor
     // Call useVegaEditor hook
     const editorState = useVegaEditor({
         importedData: props.importedData,
+        token: antdToken
     });
 
     // Returns the current Vega spec code. Exposed to parent via ref.

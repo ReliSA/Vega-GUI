@@ -1,0 +1,175 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v6.json",
+  "width": 500,
+  "height": 300,
+
+  "config": {
+    "axis": {
+      "domainColor": "white",
+      "gridColor": "lightgray",
+      "tickColor": "white",
+      "labelColor": "white",
+      "titleColor": "white"
+    },
+    "legend": {
+      "titleColor": "white",
+      "labelColor": "white"
+    }
+  },
+
+  "signals": [
+    {
+      "name": "threshold",
+      "value": 40,
+      "bind": {"input": "range", "min": 0, "max": 80, "step": 1}
+    }
+  ],
+
+  "data": [
+    {
+      "name": "table",
+      "values": [
+        {"category": "A", "value": 32},
+        {"category": "B", "value": 21},
+        {"category": "C", "value": 28},
+        {"category": "D", "value": 46},
+        {"category": "E", "value": 75},
+        {"category": "F", "value": 60}
+      ]
+    },
+    {
+      "name": "stacked",
+      "values": [
+        {"category": "A", "value": 28, "group": "0"},
+        {"category": "A", "value": 55, "group": "1"},
+        {"category": "A", "value": 12, "group": "2"},
+        {"category": "B", "value": 43, "group": "0"},
+        {"category": "B", "value": 91, "group": "1"},
+        {"category": "B", "value": 72, "group": "2"},
+        {"category": "C", "value": 81, "group": "0"},
+        {"category": "C", "value": 24, "group": "1"},
+        {"category": "C", "value": 53, "group": "2"},
+        {"category": "D", "value": 19, "group": "0"},
+        {"category": "D", "value": 54, "group": "1"},
+        {"category": "D", "value": 87, "group": "2"},
+        {"category": "E", "value": 58, "group": "0"},
+        {"category": "E", "value": 31, "group": "1"},
+        {"category": "E", "value": 48, "group": "2"},
+        {"category": "F", "value": 24, "group": "0"},
+        {"category": "F", "value": 10, "group": "1"},
+        {"category": "F", "value": 87, "group": "2"}
+      ]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "xscale",
+      "type": "band",
+      "domain": {"data": "table", "field": "category"},
+      "range": "width",
+      "padding": 0.2
+    },
+    {
+      "name": "yscale",
+      "type": "linear",
+      "domain": {
+        "fields": [
+          {"data": "table", "field": "value"},
+          {"signal": "threshold"}
+        ]
+      },
+      "nice": true,
+      "range": "height"
+    }
+  ],
+
+  "axes": [
+    {"orient": "bottom", "scale": "xscale", "title": "Category"},
+    {"orient": "left", "scale": "yscale", "title": "Value"}
+  ],
+
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "table"},
+      "encode": {
+        "enter": {
+          "x": {"scale": "xscale", "field": "category"},
+          "width": {"scale": "xscale", "band": 1},
+          "y": {"scale": "yscale", "field": "value"},
+          "y2": {"scale": "yscale", "value": 0}
+        },
+        "update": {
+          "fill": [
+            {"test": "datum.value < threshold", "value": "#d95f5f"},
+            {"value": "#7bbe1f"}
+          ]
+        },
+        "hover": {
+          "fill": {"value": "#2f7ed8"}
+        }
+      }
+    },
+
+    {
+      "type": "rule",
+      "encode": {
+        "enter": {
+          "x": {"value": 0},
+          "x2": {"signal": "width"},
+          "stroke": {"value": "white"},
+          "strokeWidth": {"value": 2},
+          "strokeDash": {"value": [4, 4]}
+        },
+        "update": {
+          "y": {"scale": "yscale", "signal": "threshold"}
+        }
+      }
+    },
+
+    {
+      "type": "line",
+      "from": {"data": "table"},
+      "encode": {
+        "enter": {
+          "x": {"scale": "xscale", "field": "category", "band": 0.5},
+          "y": {"scale": "yscale", "field": "value"},
+          "stroke": {"value": "#00d2eb"},
+          "strokeWidth": {"value": 3}
+        }
+      }
+    },
+
+    {
+      "type": "symbol",
+      "from": {"data": "table"},
+      "encode": {
+        "enter": {
+          "x": {"scale": "xscale", "field": "category", "band": 0.5},
+          "y": {"scale": "yscale", "field": "value"},
+          "size": {"value": 140},
+          "fill": {"value": "rgb(255, 193, 7)"},
+          "stroke": {"value": "white"},
+          "strokeWidth": {"value": 1.5}
+        }
+      }
+    },
+
+    {
+      "type": "text",
+      "from": {"data": "table"},
+      "encode": {
+        "enter": {
+          "x": {"scale": "xscale", "field": "category", "band": 0.5},
+          "y": {"scale": "yscale", "field": "value"},
+          "dy": {"value": -14},
+          "text": {"field": "value"},
+          "align": {"value": "center"},
+          "fill": {"value": "white"},
+          "fontSize": {"value": 12}
+        }
+      }
+    }
+  ]
+}

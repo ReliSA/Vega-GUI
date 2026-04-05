@@ -3,6 +3,7 @@ import CodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
 import { vscodeLight, vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { theme } from 'antd';
+import { isDarkMode } from '../overrideTheme.ts';
 import type { VegaEditorState } from "../useVegaEditor.ts";
 
 /**
@@ -23,17 +24,12 @@ const SpecView: React.FC<SpecViewProps> = (props: SpecViewProps) => {
     // Access Ant Design theme token
     const { token } = theme.useToken();
 
-    // Do the best to determine if theme is dark
-    const isDarkMode = token.colorBgContainer === '#141414' ||
-        token.colorTextBase === '#fff' ||
-        token.colorBgBase.includes('0, 0, 0');
-
     return (
         <CodeMirror
             value={props.editorState.code}
             onChange={props.editorState.setCode}
             extensions={[json()]}
-            theme={isDarkMode ? vscodeDark : vscodeLight}
+            theme={isDarkMode(token) ? vscodeDark : vscodeLight}
         />
     );
 };

@@ -36,3 +36,14 @@ function getComponentOverrides(token: GlobalToken): ThemeConfig['components'] {
         },
     };
 }
+
+/**
+ * Does the best to determine if the current theme is dark based on the provided token values.
+ * @param token - The global theme token provided by Ant Design.
+ * @returns A boolean indicating whether the theme is likely in dark mode.
+ */
+export function isDarkMode(token: GlobalToken): boolean {
+    return token.colorBgContainer === '#141414' ||
+        token.colorTextBase === '#fff' ||
+        token.colorBgBase.includes('0, 0, 0');
+}
