@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { prependDatasetsToSchema, prependSignalsToSchema } from "./controls/loader/helper/importData.ts";
 import { isDarkMode } from "./overrideTheme.ts";
 import type { ImportedData } from "./controls/loader/helper/importData.ts";
@@ -44,8 +44,8 @@ export interface VegaEditorState {
  * @return An object containing the current code and a setter for the code.
  */
 export const useVegaEditor = (props: useVegaEditorProps): VegaEditorState => {
-    // State to hold the current Vega specification code
-    const [code, setCode] = useState<string>(() => {
+    // Initial code state hold
+    const initialCode = (() => {
         // Choose default spec based on theme preference
         const defSpec = isDarkMode(props.token) ? defaultSpecDark : defaultSpec;
 
@@ -60,7 +60,34 @@ export const useVegaEditor = (props: useVegaEditorProps): VegaEditorState => {
 
         // Serialize the final spec for the editor
         return JSON.stringify(baseSpec, null, 2);
-    });
+    })();
+
+    // State to hold the current Vega specification code
+    const [code, setCode] = useState<string>(initialCode);
+
+    // Ref to hold the initial code value for comparison
+    const initialCodeRef = useRef(initialCode);
+
+    // Prevent accidental closing of the edited specification
+    useEffect(() => {
+        // Handler for beforeunload event to prevent accidental navigation away from the page
+        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+            if (code !== initialCodeRef.current) {
+                event.preventDefault();
+                return '';
+            }
+        };
+
+        // Add the beforeunload event listener only if there are unsaved changes
+        if (code !== initialCodeRef.current) {
+            window.addEventListener('beforeunload', handleBeforeUnload);
+        }
+
+        // Clean event listener when code changes to initialCode
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [code]);
 
     return { code, setCode };
 };

@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle} from 'react';
+import { forwardRef, useImperativeHandle } from 'react';
 import type { ForwardedRef } from 'react';
 import { ConfigProvider, Splitter, Layout, theme } from 'antd';
 import EditorTab from './editor_tab/EditorTab.tsx';
