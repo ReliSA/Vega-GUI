@@ -113,6 +113,11 @@ export function generateSpec(currentCode: string, config: WizardConfig): string 
             newSpec.signals = newSpec.signals ? [...currentSpec.signals, ...newSpec.signals] : [...currentSpec.signals];
         }
 
+        // Keep the config
+        if (currentSpec.config) {
+            newSpec.config = currentSpec.config;
+        }
+
         return JSON.stringify(newSpec, null, 2);
 
     } catch (e) {
