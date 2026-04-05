@@ -13,6 +13,7 @@ export class SymbolAdapter implements WizardAdapter {
         return [
             { name: 'xField', type: 'field', label: 'X Axis', required: true },
             { name: 'yField', type: 'field', label: 'Y Axis', required: true },
+            { name: 'shape', type: 'select', label: 'Shape', required: false, defaultValue: 'circle', options: ['circle', 'square', 'cross', 'diamond', 'triangle-up', 'triangle-down', 'triangle-right', 'triangle-left', 'arrow', 'wedge', 'triangle'] },
             { name: 'colorSymbol', type: 'color',  label: 'Color of the symbols', required: false, defaultValue: '#7bbe1f' },
             { name: 'colorHover', type: 'color', label: 'Color when hovered', required: false, defaultValue: '#ff5722' },
             { name: 'sizeSymbol', type: 'number', label: 'Size of symbol', required: false, defaultValue: 300 },
@@ -27,9 +28,12 @@ export class SymbolAdapter implements WizardAdapter {
 
         const xField = fields['xField'];
         const yField = fields['yField'];
+        const shape = fields['shape'];
         const colorSymbol = fields['colorSymbol'];
         const colorHover = fields['colorHover'];
         const sizeSymbol = fields['sizeSymbol'];
+        const strokeWidth = fields['strokeWidth'];
+        const strokeColor = fields['strokeColor'];
 
         const suffix = Math.floor(Math.random() * 10000);
         const xScale = `symbol_xscale_${suffix}`;
@@ -67,9 +71,10 @@ export class SymbolAdapter implements WizardAdapter {
                             "x": { "scale": xScale, "field": xField, "band": 0.5 },
                             "y": { "scale": yScale, "field": yField },
                             "size": { "value": sizeSymbol },
+                            "shape": { "value": shape },
                             "fill": { "value": colorSymbol },
-                            "stroke": { "value": "rgb(0, 0, 0)" },
-                            "strokeWidth": { "value": 1.5 }
+                            "stroke": { "value": strokeColor },
+                            "strokeWidth": { "value": strokeWidth }
                         },
                         "update": {
                             "fill": { "value": colorSymbol }

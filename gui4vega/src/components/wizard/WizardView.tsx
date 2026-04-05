@@ -9,7 +9,7 @@ import {
     DotChartOutlined,
     BorderOutlined,
     LineChartOutlined,
-    StarOutlined,
+    PlusCircleOutlined,
     RadarChartOutlined,
     AreaChartOutlined
 } from '@ant-design/icons';
@@ -63,7 +63,7 @@ const WizardView: React.FC<WizardViewProps> = (props: WizardViewProps) => {
             options: [
                 { label: <Space><BorderOutlined /> Add Rect</Space>, value: 'rect' },
                 { label: <Space><LineChartOutlined /> Add Line</Space>, value: 'line' },
-                { label: <Space><StarOutlined /> Add Symbol</Space>, value: 'symbol' }
+                { label: <Space><PlusCircleOutlined /> Add Symbol</Space>, value: 'symbol' }
             ]
         }
     ];
