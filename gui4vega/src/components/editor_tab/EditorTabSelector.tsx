@@ -35,8 +35,8 @@ const EditorTabSelector: React.FC<EditorTabSelectorProps> = (props: EditorTabSel
     // Define the tab items for the Tabs component.
     const tabItems = [
         {
-            key: 'spec',
-            label: 'Specification',
+            key: 'wizard',
+            label: 'Wizard',
         },
         {
             key: 'data',
@@ -51,8 +51,8 @@ const EditorTabSelector: React.FC<EditorTabSelectorProps> = (props: EditorTabSel
             label: 'Properties',
         },
         {
-            key: 'wizard',
-            label: 'Wizard',
+            key: 'spec',
+            label: 'Specification',
         },
     ];
 

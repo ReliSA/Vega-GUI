@@ -25,7 +25,7 @@ interface EditorTabsProps {
  */
 const EditorTab: React.FC<EditorTabsProps> = (props) => {
     // State to track the active tab
-    const [activeTab, setActiveTab] = useState<EditorTabKey>('spec');
+    const [activeTab, setActiveTab] = useState<EditorTabKey>('wizard');
 
     return (
         <Layout style={{ height: props.height }}>

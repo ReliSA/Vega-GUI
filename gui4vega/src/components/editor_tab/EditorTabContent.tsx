@@ -27,16 +27,16 @@ interface EditorContentProps {
  */
 const EditorTabContent: React.FC<EditorContentProps> = (props: EditorContentProps) => {
     switch (props.activeTab) {
-        case 'spec':
-            return <SpecView editorState={props.editorState} />;
+        case 'wizard':
+            return <WizardView editorState={props.editorState} />;
         case 'data':
             return <DataView editorState={props.editorState} />;
         case 'signals':
             return <SignalView editorState={props.editorState} />;
         case 'properties':
             return <PropertiesView editorState={props.editorState} />;
-        case 'wizard':
-            return <WizardView editorState={props.editorState} />;
+        case 'spec':
+            return <SpecView editorState={props.editorState} />;
         default:
             return null;
     }
