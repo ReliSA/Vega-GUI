@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Divider } from 'antd';
+import {Modal, Typography} from 'antd';
 import type { ExportedData } from './helper/exportSelectedData.ts';
 import { useExternalSelectionExporter } from "./hooks/useExternalSelectionExporter.ts";
 import SelectionConfigurator from "./SelectionConfigurator.tsx";
@@ -77,7 +77,10 @@ const ExternalSelectionExporter: React.FC<ExternalSelectionExporterProps> = (pro
                 onCancel={handleClose}
                 width={900}
             >
-                <Divider style={{ width: 'auto' }} />
+                <Typography.Text type="secondary" style={{ textAlign: 'center' }}>
+                    Selected datasets and signals will be extracted from the specification and exported separately.
+                    To export the entire specification with datasets and signals, do not select anything.
+                </Typography.Text>
                 <SelectionConfigurator
                     datasetNames={datasetNames}
                     signalNames={signalNames}
