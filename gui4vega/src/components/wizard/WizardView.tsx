@@ -80,7 +80,9 @@ const WizardView: React.FC<WizardViewProps> = (props: WizardViewProps) => {
     const defaultDatasetName = datasets?.[0]?.name;
 
     // State to track whether the user has chosen to skip the confirmation warning
-    const [dontAskWarning, setDontAskWarning] = useState(false);
+    const [dontAskWarning, setDontAskWarning] = useState(() => {
+        return sessionStorage.getItem('vegaViewerDontAskWarning') === 'true';
+    });
 
     // Confirmation modal before generating new visualization to prevent accidental overwrites
     const onFinish = (values: WizardConfig) => {
@@ -114,6 +116,7 @@ const WizardView: React.FC<WizardViewProps> = (props: WizardViewProps) => {
             onOk() {
                 if (isChecked) {
                     setDontAskWarning(true);
+                    sessionStorage.setItem('vegaViewerDontAskWarning', 'true');
                 }
                 handleFinish(values);
             },
