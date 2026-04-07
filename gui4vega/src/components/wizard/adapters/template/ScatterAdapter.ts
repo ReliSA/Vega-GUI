@@ -13,8 +13,11 @@ export class ScatterAdapter implements WizardAdapter {
         return [
             { name: 'xField', type: 'field', label: 'X Axis Field', required: true },
             { name: 'yField', type: 'field', label: 'Y Axis Field', required: true },
-            { name: 'color', type: 'color', label: 'Point Color', required: false, defaultValue: '#7bbe1f' }
-            // TODO: size, tick count, grid
+            { name: 'color', type: 'color', label: 'Point Color', required: false, defaultValue: '#7bbe1f' },
+            { name: 'size', type: 'number', label: 'Symbol Size', required: false, defaultValue: 100 },
+            { name: 'shape', type: 'select', label: 'Symbol Type', required: false, defaultValue: 'circle', options: ['circle', 'square', 'cross', 'diamond', 'triangle-up', 'triangle-down', 'triangle-right', 'triangle-left'] },
+            { name: 'stroke', type: 'color', label: 'Stroke Color', required: false, defaultValue: 'transparent' },
+            { name: 'strokeWidth', type: 'number', label: 'Stroke Width', required: false, defaultValue: 0 }
         ];
     }
 
@@ -26,6 +29,9 @@ export class ScatterAdapter implements WizardAdapter {
         const yField = fields['yField'];
         const color = fields['color'];
         const size = fields['size'];
+        const shape = fields['shape'];
+        const stroke = fields['stroke'];
+        const strokeWidth = fields['strokeWidth'];
 
         return {
             "$schema": "https://vega.github.io/schema/vega/v6.json",
@@ -79,13 +85,15 @@ export class ScatterAdapter implements WizardAdapter {
                         "update": {
                             "x": { "scale": "xscale", "field": xField },
                             "y": { "scale": "yscale", "field": yField },
-                            "size": { "value": 50 },
-                            "shape": { "value": "circle" },
-                            "fill": { "value": color }
+                            "size": { "value": size },
+                            "shape": { "value": shape },
+                            "fill": { "value": color },
+                            "stroke": { "value": stroke },
+                            "strokeWidth": { "value": strokeWidth }
                         },
                         "hover": {
                             "fillOpacity": { "value": 1 },
-                            "size": { "value": Number(size) * 1.5 }
+                            "size": { "value": Number(size) * 2 }
                         }
                     }
                 }
