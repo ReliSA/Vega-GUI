@@ -66,6 +66,7 @@ const SignalHeader: React.FC<SignalHeaderProps> = (props: SignalHeaderProps) => 
                     onClick={props.onToggleForm}
                     size="small"
                     type="text"
+                    title={props.formVisible ? 'Hide editor' : 'Show editor'}
                 />
             </Space>
             <SignalDeleteButton

@@ -70,6 +70,7 @@ const DatasetHeader: React.FC<DatasetHeaderProps> = (props: DatasetHeaderProps) 
                     onClick={props.onToggleTable}
                     size="small"
                     type="text"
+                    title={props.tableVisible ? 'Hide editor' : 'Show editor'}
                 />
                 <Text type="secondary" style={{ fontSize: 12 }}>
                     {props.rowCount} rows
