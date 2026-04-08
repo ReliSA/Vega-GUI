@@ -84,6 +84,7 @@ const DataView: React.FC<DataViewProps> = (props: DataViewProps) => {
             ) : (
                 datasets.map((dataset: VegaDataset) => (
                     <DatasetEditor
+                        key={dataset.name}
                         dataset={dataset}
                         editorState={props.editorState}
                         onDeleteDataset={handleDeleteDataset}

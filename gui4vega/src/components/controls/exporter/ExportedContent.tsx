@@ -36,7 +36,7 @@ const ExportedContent: React.FC<ExportedContentProps> = (props: ExportedContentP
     return (
         <Row gutter={[16, 16]}>
             {sections.map((section) => (
-                <Col span={8}>
+                <Col span={8} key={section.title}>
                     <Flex vertical gap={8}>
                         <Flex justify="space-between" align="center">
                             <Text strong>{section.title}:</Text>
