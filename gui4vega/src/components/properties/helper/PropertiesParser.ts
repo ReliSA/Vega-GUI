@@ -1,5 +1,5 @@
-import type { VegaMark } from './markEdit.ts';
-import type { VegaAxis } from './axisEdit.ts';
+import type { VegaMark } from './VegaMark.ts';
+import type { VegaAxis } from './VegaAxis.ts';
 
 /**
  * Result of parsing Vega specification properties.

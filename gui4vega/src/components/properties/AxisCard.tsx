@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Tag, Typography, Table, Flex } from 'antd';
-import type { VegaAxis } from './helper/axisEdit.ts';
+import type { VegaAxis } from './helper/VegaAxis.ts';
 
 /**
  * Props for {@link AxisCard}.

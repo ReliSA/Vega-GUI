@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
 import { Divider, Flex, Typography } from 'antd';
-import { updateMarkProperty } from './helper/markEdit.ts';
-import { updateAxisProperty } from './helper/axisEdit.ts';
+import { updateMarkProperty } from './helper/VegaMark.ts';
+import { updateAxisProperty } from './helper/VegaAxis.ts';
 import MarkCard from './MarkCard';
 import AxisCard from './AxisCard';
 import type { VegaEditorState } from "../useVegaEditor.ts";
-import { parseProperties } from "./helper/propertiesParser.ts";
+import { parseProperties } from "./helper/PropertiesParser.ts";
 
 /**
  * Props for {@link PropertiesView}.
