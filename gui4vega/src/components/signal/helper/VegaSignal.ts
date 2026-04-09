@@ -1,5 +1,5 @@
 /**
- * Represents a signal in a Vega specification, containing its name and value.
+ * Represents a signal in a Vega specification.
  */
 export interface VegaSignal {
     /**

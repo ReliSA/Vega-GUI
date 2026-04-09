@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
 import { Divider, Flex, Typography } from 'antd';
-import { parseMarks, updateMarkProperty } from './helper/markEdit.ts';
-import { parseAxes, updateAxisProperty } from './helper/axisEdit.ts';
+import { updateMarkProperty } from './helper/markEdit.ts';
+import { updateAxisProperty } from './helper/axisEdit.ts';
 import MarkCard from './MarkCard';
 import AxisCard from './AxisCard';
 import type { VegaEditorState } from "../useVegaEditor.ts";
+import { parseProperties } from "./helper/propertiesParser.ts";
 
 /**
  * Props for {@link PropertiesView}.
@@ -21,9 +22,8 @@ interface PropertiesViewProps {
  * @param props - {@link PropertiesViewProps}
  */
 const PropertiesView: React.FC<PropertiesViewProps> = (props: PropertiesViewProps) => {
-    // Parse marks and axes from spec
-    const marks = useMemo(() => parseMarks(props.editorState.code), [props.editorState.code]);
-    const axes = useMemo(() => parseAxes(props.editorState.code), [props.editorState.code]);
+    // Parse properties from spec
+    const { marks, axes } = useMemo(() => parseProperties(props.editorState.code), [props.editorState.code]);
 
     return (
         <Flex vertical style={{ width: '100%', padding: 8, overflow: 'auto'}}>
