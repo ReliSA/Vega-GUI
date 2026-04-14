@@ -13,8 +13,8 @@ export class BarHorizontalAdapter implements WizardAdapter {
         return [
             { name: 'yCategory', type: 'field', label: 'Y Axis / Category', required: true },
             { name: 'xValue', type: 'field', label: 'X Axis / Value', required: true },
-            { name: 'colorBar', type: 'color',  label: 'Color of the bars', required: false, defaultValue: '#7bbe1f' },
-            { name: 'colorHover', type: 'color', label: 'Color when hovered', required: false, defaultValue: '#ff5722' }
+            { name: 'colorBar', type: 'color',  label: 'Base Color', required: false, defaultValue: '#7bbe1f' },
+            { name: 'colorHover', type: 'color', label: 'Hover Color', required: false, defaultValue: '#ff5722' }
         ];
     }
 

@@ -13,8 +13,8 @@ export class LineAdapter implements WizardAdapter {
         return [
             { name: 'xField', type: 'field', label: 'X Axis', required: true },
             { name: 'yField', type: 'field', label: 'Y Axis', required: true },
-            { name: 'colorLine', type: 'color',  label: 'Color of the line', required: false, defaultValue: '#000000' },
-            { name: 'strokeWidth', type: 'number', label: 'Line width', required: false, defaultValue: 3 }
+            { name: 'colorLine', type: 'color',  label: 'Base Color', required: false, defaultValue: '#000000' },
+            { name: 'strokeWidth', type: 'number', label: 'Line Width', required: false, defaultValue: 3 }
         ];
     }
 

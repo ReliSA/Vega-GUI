@@ -13,12 +13,12 @@ export class SymbolAdapter implements WizardAdapter {
         return [
             { name: 'xField', type: 'field', label: 'X Axis', required: true },
             { name: 'yField', type: 'field', label: 'Y Axis', required: true },
-            { name: 'shape', type: 'select', label: 'Shape', required: false, defaultValue: 'circle', options: ['circle', 'square', 'cross', 'diamond', 'triangle-up', 'triangle-down', 'triangle-right', 'triangle-left', 'arrow', 'wedge', 'triangle'] },
-            { name: 'colorSymbol', type: 'color',  label: 'Color of the symbols', required: false, defaultValue: '#7bbe1f' },
-            { name: 'colorHover', type: 'color', label: 'Color when hovered', required: false, defaultValue: '#ff5722' },
-            { name: 'sizeSymbol', type: 'number', label: 'Size of symbol', required: false, defaultValue: 300 },
-            { name: 'strokeWidth', type: 'number', label: 'Width of the stroke', required: false, defaultValue: 2 },
-            { name: 'strokeColor', type: 'color', label: 'Color of the stroke', required: false, defaultValue: '#000000' }
+            { name: 'shape', type: 'select', label: 'Symbol Shape', required: false, defaultValue: 'circle', options: ['circle', 'square', 'cross', 'diamond', 'triangle-up', 'triangle-down', 'triangle-right', 'triangle-left', 'arrow', 'wedge', 'triangle'] },
+            { name: 'sizeSymbol', type: 'number', label: 'Symbol Size', required: false, defaultValue: 300 },
+            { name: 'colorSymbol', type: 'color',  label: 'Base Color', required: false, defaultValue: '#7bbe1f' },
+            { name: 'colorHover', type: 'color', label: 'Hover Color', required: false, defaultValue: '#ff5722' },
+            { name: 'strokeWidth', type: 'number', label: 'Stroke Width', required: false, defaultValue: 2 },
+            { name: 'strokeColor', type: 'color', label: 'Stroke Color', required: false, defaultValue: '#000000' }
         ];
     }
 

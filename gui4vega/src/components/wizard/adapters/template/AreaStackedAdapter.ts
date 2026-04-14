@@ -11,9 +11,9 @@ export class AreaStackedAdapter implements WizardAdapter {
     // Define the fields that will be displayed in the wizard form for this adapter
     getFields(): WizardField[] {
         return [
-            { name: 'x', type: 'field', label: 'X Field', required: true },
-            { name: 'y', type: 'field', label: 'Y Field', required: true },
-            { name: 'c', type: 'field', label: 'Category Field', required: true },
+            { name: 'xField', type: 'field', label: 'X Axis / Category', required: true },
+            { name: 'yField', type: 'field', label: 'Y Axis / Value', required: true },
+            { name: 'colorGroup', type: 'field', label: 'Color / Group', required: true },
             { name: 'interpolate', type: 'select', label: 'Interpolation', required: false, options: ['linear', 'step', 'step-before', 'step-after', 'basis', 'cardinal', 'monotone'], defaultValue: 'linear' },
         ];
     }
@@ -22,10 +22,10 @@ export class AreaStackedAdapter implements WizardAdapter {
     getSpec(config: WizardConfig): WizardSpec {
         const { datasetName, fields } = config;
 
-        const xField = fields['x'];
-        const yField = fields['y'];
-        const cField = fields['c'];
-        const interpolate = fields['interpolate'] || 'linear';
+        const xField = fields['xField'];
+        const yField = fields['yField'];
+        const colorGroup = fields['colorGroup'];
+        const interpolate = fields['interpolate'];
 
         const suffix = Math.floor(Math.random() * 10000);
         const transformedDataName = `stacked_area_data_${suffix}`;
@@ -33,7 +33,7 @@ export class AreaStackedAdapter implements WizardAdapter {
         return {
             "$schema": "https://vega.github.io/schema/vega/v6.json",
             "width": 500,
-            "height": 200,
+            "height": 300,
 
             "data": [
                 {
@@ -43,7 +43,7 @@ export class AreaStackedAdapter implements WizardAdapter {
                         {
                             "type": "stack",
                             "groupby": [xField],
-                            "sort": {"field": cField},
+                            "sort": {"field": colorGroup},
                             "field": yField
                         }
                     ]
@@ -69,7 +69,7 @@ export class AreaStackedAdapter implements WizardAdapter {
                     "name": "color",
                     "type": "ordinal",
                     "range": "category",
-                    "domain": {"data": transformedDataName, "field": cField}
+                    "domain": {"data": transformedDataName, "field": colorGroup}
                 }
             ],
 
@@ -85,7 +85,7 @@ export class AreaStackedAdapter implements WizardAdapter {
                         "facet": {
                             "name": "facet_data",
                             "data": transformedDataName,
-                            "groupby": cField
+                            "groupby": colorGroup
                         }
                     },
                     "marks": [
@@ -98,7 +98,7 @@ export class AreaStackedAdapter implements WizardAdapter {
                                     "x": {"scale": "x", "field": xField},
                                     "y": {"scale": "y", "field": "y0"},
                                     "y2": {"scale": "y", "field": "y1"},
-                                    "fill": {"scale": "color", "field": cField}
+                                    "fill": {"scale": "color", "field": colorGroup}
                                 },
                                 "update": {
                                     "fillOpacity": {"value": 1}

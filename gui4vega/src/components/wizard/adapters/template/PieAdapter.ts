@@ -11,8 +11,8 @@ export class PieAdapter implements WizardAdapter {
     // Define the fields that will be displayed in the wizard form for this adapter
     getFields(): WizardField[] {
         return [
-            { name: 'category', type: 'field', label: 'Category Field', required: true },
-            { name: 'value', type: 'field', label: 'Value Field', required: true },
+            { name: 'category', type: 'field', label: 'Category', required: true },
+            { name: 'value', type: 'field', label: 'Value', required: true },
             { name: 'sort', type: 'select', label: 'Sort by Value', options: ['none', 'ascending', 'descending'], required: false, defaultValue: 'none' },
             { name: 'hollow', type: 'boolean', label: 'Hollow Center', required: false, defaultValue: false },
             { name: 'roundedCorners', type: 'boolean', label: 'Rounded Corners', required: false, defaultValue: false },

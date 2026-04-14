@@ -11,9 +11,9 @@ export class AreaAdapter implements WizardAdapter {
     // Define the fields that will be displayed in the wizard form for this adapter
     getFields(): WizardField[] {
         return [
-            { name: 'x', type: 'field', label: 'X Field', required: true },
-            { name: 'y', type: 'field', label: 'Y Field', required: true },
-            { name: 'color', type: 'color', label: 'Color', required: false, defaultValue: '#4682b4' },
+            { name: 'xField', type: 'field', label: 'X Axis / Category', required: true },
+            { name: 'yField', type: 'field', label: 'Y Axis / Value', required: true },
+            { name: 'color', type: 'color', label: 'Base Color', required: false, defaultValue: '#7bbe1f' },
             { name: 'interpolate', type: 'select', label: 'Interpolation', required: false, defaultValue: 'linear', options: ['linear', 'step', 'step-before', 'step-after', 'basis', 'cardinal', 'monotone'] },
         ];
     }
@@ -22,15 +22,15 @@ export class AreaAdapter implements WizardAdapter {
     getSpec(config: WizardConfig): WizardSpec {
         const { datasetName, fields } = config;
 
-        const xField = fields['x'];
-        const yField = fields['y'];
+        const xField = fields['xField'];
+        const yField = fields['yField'];
         const color = fields['color'];
         const interpolate = fields['interpolate'];
 
         return {
             "$schema": "https://vega.github.io/schema/vega/v6.json",
             "width": 500,
-            "height": 200,
+            "height": 300,
 
             "scales": [
                 {

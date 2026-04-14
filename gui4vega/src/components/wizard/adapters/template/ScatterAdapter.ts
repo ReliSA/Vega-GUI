@@ -11,11 +11,11 @@ export class ScatterAdapter implements WizardAdapter {
     // Define the fields that will be displayed in the wizard form for this adapter
     getFields(): WizardField[] {
         return [
-            { name: 'xField', type: 'field', label: 'X Axis Field', required: true },
-            { name: 'yField', type: 'field', label: 'Y Axis Field', required: true },
-            { name: 'color', type: 'color', label: 'Point Color', required: false, defaultValue: '#7bbe1f' },
+            { name: 'xField', type: 'field', label: 'X Axis', required: true },
+            { name: 'yField', type: 'field', label: 'Y Axis', required: true },
+            { name: 'color', type: 'color', label: 'Base Color', required: false, defaultValue: '#7bbe1f' },
+            { name: 'shape', type: 'select', label: 'Symbol Shape', required: false, defaultValue: 'circle', options: ['circle', 'square', 'cross', 'diamond', 'triangle-up', 'triangle-down', 'triangle-right', 'triangle-left'] },
             { name: 'size', type: 'number', label: 'Symbol Size', required: false, defaultValue: 100 },
-            { name: 'shape', type: 'select', label: 'Symbol Type', required: false, defaultValue: 'circle', options: ['circle', 'square', 'cross', 'diamond', 'triangle-up', 'triangle-down', 'triangle-right', 'triangle-left'] },
             { name: 'stroke', type: 'color', label: 'Stroke Color', required: false, defaultValue: 'transparent' },
             { name: 'strokeWidth', type: 'number', label: 'Stroke Width', required: false, defaultValue: 0 }
         ];

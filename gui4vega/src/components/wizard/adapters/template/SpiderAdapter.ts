@@ -8,9 +8,9 @@ export class SpiderAdapter implements WizardAdapter {
     // Define the fields that will be displayed in the wizard form for this adapter
     getFields(): WizardField[] {
         return [
-            { name: 'category', type: 'field', label: 'Category Field', required: true },
-            { name: 'value', type: 'field', label: 'Value Field', required: true },
-            { name: 'group', type: 'field', label: 'Group Field', required: true },
+            { name: 'category', type: 'field', label: 'Category', required: true },
+            { name: 'value', type: 'field', label: 'Value', required: true },
+            { name: 'colorGroup', type: 'field', label: 'Color / Group', required: true },
         ];
     }
 
@@ -20,7 +20,7 @@ export class SpiderAdapter implements WizardAdapter {
 
         const categoryField = fields['category'];
         const valueField = fields['value'];
-        const groupField = fields['group'];
+        const colorGroup = fields['colorGroup'];
 
         const suffix = Math.floor(Math.random() * 10000);
         const keysData = `spider_keys_${suffix}`;
@@ -69,7 +69,7 @@ export class SpiderAdapter implements WizardAdapter {
                     "name": "color",
                     "type": "ordinal",
                     "range": {"scheme": "category10"},
-                    "domain": {"data": datasetName, "field": groupField}
+                    "domain": {"data": datasetName, "field": colorGroup}
                 }
             ],
 
@@ -114,7 +114,7 @@ export class SpiderAdapter implements WizardAdapter {
                         {
                             "type": "group",
                             "from": {
-                                "facet": {"data": datasetName, "name": "facet_data", "groupby": [groupField]}
+                                "facet": {"data": datasetName, "name": "facet_data", "groupby": [colorGroup]}
                             },
                             "marks": [
                                 {
@@ -125,8 +125,8 @@ export class SpiderAdapter implements WizardAdapter {
                                             "interpolate": {"value": "linear-closed"},
                                             "x": {"signal": `scale('radial', datum['${valueField}']) * cos(scale('angular', datum['${categoryField}']))`},
                                             "y": {"signal": `scale('radial', datum['${valueField}']) * sin(scale('angular', datum['${categoryField}']))`},
-                                            "stroke": {"scale": "color", "field": groupField},
-                                            "fill": {"scale": "color", "field": groupField},
+                                            "stroke": {"scale": "color", "field": colorGroup},
+                                            "fill": {"scale": "color", "field": colorGroup},
                                             "fillOpacity": {"value": 0.1}
                                         }
                                     }
@@ -140,7 +140,7 @@ export class SpiderAdapter implements WizardAdapter {
                                 "enter": {
                                     "x": {"signal": `scale('radial', datum['${valueField}']) * cos(scale('angular', datum['${categoryField}']))`},
                                     "y": {"signal": `scale('radial', datum['${valueField}']) * sin(scale('angular', datum['${categoryField}']))`},
-                                    "fill": {"scale": "color", "field": groupField},
+                                    "fill": {"scale": "color", "field": colorGroup},
                                     "tooltip": {"field": valueField}
                                 },
                                 "update": {

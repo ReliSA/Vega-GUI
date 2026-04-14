@@ -13,7 +13,7 @@ export class BarStackedAdapter implements WizardAdapter {
         return [
             { name: 'xCategory', type: 'field', label: 'X Axis / Category', required: true },
             { name: 'yValue', type: 'field', label: 'Y Axis / Value', required: true },
-            { name: 'colorCategory', type: 'field', label: 'Color / Stack Category', required: true }
+            { name: 'colorGroup', type: 'field', label: 'Color / Group', required: true }
         ];
     }
 
@@ -23,7 +23,7 @@ export class BarStackedAdapter implements WizardAdapter {
 
         const xCategory = fields['xCategory'];
         const yValue = fields['yValue'];
-        const colorCategory = fields['colorCategory'];
+        const colorGroup = fields['colorGroup'];
 
         return {
             "$schema": "https://vega.github.io/schema/vega/v6.json",
@@ -38,7 +38,7 @@ export class BarStackedAdapter implements WizardAdapter {
                         {
                             "type": "stack",
                             "groupby": [xCategory],
-                            "sort": {"field": colorCategory},
+                            "sort": {"field": colorGroup},
                             "field": yValue
                         }
                     ]
@@ -65,7 +65,7 @@ export class BarStackedAdapter implements WizardAdapter {
                     "name": "color",
                     "type": "ordinal",
                     "range": "category",
-                    "domain": {"data": "stacked_data", "field": colorCategory}
+                    "domain": {"data": "stacked_data", "field": colorGroup}
                 }
             ],
 
@@ -84,7 +84,7 @@ export class BarStackedAdapter implements WizardAdapter {
                             "width": { "scale": "xscale", "band": 1 },
                             "y": { "scale": "yscale", "field": "y0" },
                             "y2": { "scale": "yscale", "field": "y1" },
-                            "fill": { "scale": "color", "field": colorCategory }
+                            "fill": { "scale": "color", "field": colorGroup }
                         },
                         "update": {
                             "fillOpacity": { "value": 1 }
@@ -99,7 +99,7 @@ export class BarStackedAdapter implements WizardAdapter {
             "legends": [
                 {
                     "fill": "color",
-                    "title": colorCategory,
+                    "title": colorGroup,
                     "orient": "right"
                 }
             ]
