@@ -29,7 +29,7 @@ const EditorTab: React.FC<EditorTabsProps> = (props) => {
 
     return (
         <Layout style={{ height: props.height }}>
-            <Layout.Header>
+            <Layout.Header style={{ padding: '0 24px' }}>
                 <EditorTabSelector activeTab={activeTab} onChange={setActiveTab} />
             </Layout.Header>
 
