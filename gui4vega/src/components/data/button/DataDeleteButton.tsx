@@ -30,10 +30,13 @@ interface DataDeleteButtonProps {
  * @param props - {@link DataDeleteButtonProps}
  */
 const DataDeleteButton: React.FC<DataDeleteButtonProps> = (props: DataDeleteButtonProps) => {
+    // State to hold modal visibility
+    const [modal, contextHolder] = Modal.useModal();
+
     // Logic to handle delete with confirmation
     const handleClick = () => {
         if (props.confirmDelete) {
-            Modal.confirm({
+            modal.confirm({
                 title: 'Are you sure?',
                 content: `Do you really want to delete this ${props.type}?`,
                 okText: 'Delete',
@@ -47,9 +50,12 @@ const DataDeleteButton: React.FC<DataDeleteButtonProps> = (props: DataDeleteButt
     };
 
     return (
-        <Button size="small" type="text" onClick={handleClick} title={"Delete " + props.type}>
-            <DeleteOutlined />
-        </Button>
+        <>
+            {contextHolder}
+            <Button size="small" type="text" onClick={handleClick} title={"Delete " + props.type}>
+                <DeleteOutlined />
+            </Button>
+        </>
     );
 };
 

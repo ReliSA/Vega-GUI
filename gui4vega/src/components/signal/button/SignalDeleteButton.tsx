@@ -21,9 +21,12 @@ interface SignalDeleteButtonProps {
  * @param props - {@link SignalDeleteButtonProps}
  */
 const SignalDeleteButton: React.FC<SignalDeleteButtonProps> = (props: SignalDeleteButtonProps) => {
+    // State to hold modal visibility
+    const [modal, contextHolder] = Modal.useModal();
+
     // Show a confirmation before deleting the signal
     const handleClick = () => {
-        Modal.confirm({
+        modal.confirm({
             title: `Delete signal "${props.signalName}"?`,
             content: 'This will remove the signal entirely. This action cannot be undone.',
             okText: 'Delete',
@@ -34,9 +37,12 @@ const SignalDeleteButton: React.FC<SignalDeleteButtonProps> = (props: SignalDele
     };
 
     return (
-        <Button danger size="small" onClick={handleClick}>
-            Delete
-        </Button>
+        <>
+            {contextHolder}
+            <Button danger size="small" onClick={handleClick}>
+                Delete
+            </Button>
+        </>
     );
 };
 

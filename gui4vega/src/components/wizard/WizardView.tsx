@@ -33,6 +33,9 @@ interface WizardViewProps {
  * @param props - {@link WizardViewProps}
  */
 const WizardView: React.FC<WizardViewProps> = (props: WizardViewProps) => {
+    // State to hold modal visibility
+    const [modal, contextHolder] = Modal.useModal();
+
     const {
         form,
         datasets,
@@ -96,7 +99,7 @@ const WizardView: React.FC<WizardViewProps> = (props: WizardViewProps) => {
         let isChecked = false;
 
         // Show confirmation modal
-        Modal.confirm({
+        modal.confirm({
             title: 'Are you sure?',
             content: (
                 <Space orientation="vertical" style={{ marginTop: 12 }}>
@@ -125,6 +128,7 @@ const WizardView: React.FC<WizardViewProps> = (props: WizardViewProps) => {
 
     return (
         <Card variant={'borderless'} style={{ height: '100%', overflowY: 'auto' }}>
+            {contextHolder}
             <Form
                 form={form}
                 layout="vertical"

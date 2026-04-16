@@ -21,9 +21,12 @@ interface DatasetDeleteButtonProps {
  * @param props - {@link DatasetDeleteButtonProps}
  */
 const DatasetDeleteButton: React.FC<DatasetDeleteButtonProps> = (props: DatasetDeleteButtonProps) => {
+    // State to hold modal visibility
+    const [modal, contextHolder] = Modal.useModal();
+
     // Show a confirmation before deleting the dataset
     const handleClick = () => {
-        Modal.confirm({
+        modal.confirm({
             title: `Delete dataset "${props.datasetName}"?`,
             content: 'This will remove the entire dataset and all its data. This action cannot be undone.',
             okText: 'Delete',
@@ -34,9 +37,12 @@ const DatasetDeleteButton: React.FC<DatasetDeleteButtonProps> = (props: DatasetD
     };
     
     return (
-        <Button danger size="small" onClick={handleClick}>
-            Delete
-        </Button>
+        <>
+            {contextHolder}
+            <Button danger size="small" onClick={handleClick}>
+                Delete
+            </Button>
+        </>
     );
 };
 
