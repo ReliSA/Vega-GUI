@@ -12,6 +12,9 @@ export default defineConfig({
             tsconfigPath: './tsconfig.app.json'
         })
     ],
+    resolve: {
+        dedupe: ['react', 'react-dom']
+    },
     build: {
         lib: {
             entry: resolve(__dirname, 'src/index.ts'),
@@ -20,11 +23,12 @@ export default defineConfig({
             formats: ['es', 'cjs']
         },
         rollupOptions: {
-            external: ['react', 'react-dom', 'vega'],
+            external: ['react', 'react-dom', 'react/jsx-runtime', 'vega'],
             output: {
                 globals: {
                     react: 'React',
                     'react-dom': 'ReactDOM',
+                    'react/jsx-runtime': 'jsxRuntime',
                     vega: 'vega'
                 }
             }
