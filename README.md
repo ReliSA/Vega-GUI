@@ -22,8 +22,8 @@ Refer to this README or [GUI 4 Vega Documentation](https://relisa.github.io/Vega
 ## Requirements
 
 - Node.js >= 18.x
-- React >= 18.2.0
-- React DOM >= 18.2.0
+- React >= 18.2.0, 19.0.0
+- React DOM >= 18.2.0, 19.0.0
 
 ## Installation
 These steps will guide you through the installation of the GUI 4 Vega package in order to include it in your React project.
@@ -38,16 +38,24 @@ npm install
 npm run build
 ```
 
-After that you can link the package to your React project:
+After that you can install the package to your React project:
 
 ```bash
 cd path/to/your/project
-npm link path/to/gui4vega
+npm install /path/to/gui4vega
+```
+
+You should notice in the `package.json` of your project that the dependency is added as a local file path:
+
+```json
+"dependencies": {
+  "@relisa/gui4vega": "file:../path/to/gui4vega"
+}
 ```
 
 ---
 
-This process can be simplified with Vite. You can refer to the [Vite documentation](https://vite.dev/config/shared-options#resolve-alias) for more details or implementation of `vite.config.ts` of both demo applications in the repository.
+For local development purposes, this process can be simplified with Vite using `alias`. You can refer to the [Vite documentation](https://vite.dev/config/shared-options#resolve-alias) for more details or implementation of `vite.config.ts` of both demo applications in the repository.
 
 ### GitHub Packages
 To install the package, you need access to the GitHub Packages registry.
