@@ -54,8 +54,9 @@ You should notice in the `package.json` of your project that the dependency is a
 ```
 
 ---
+You can also consider using `npm link` to link the package globally and then link it to your project, but this approach can be more complex and may lead to issues with dependencies and versioning. For more details refer to the [npm documentation](https://docs.npmjs.com/cli/v9/commands/npm-link).
 
-For local development purposes, this process can be simplified with Vite using `alias`. You can refer to the [Vite documentation](https://vite.dev/config/shared-options#resolve-alias) for more details or implementation of `vite.config.ts` of both demo applications in the repository.
+For local development purposes, consider using Vite and its `alias`. You can refer to the [Vite documentation](https://vite.dev/config/shared-options#resolve-alias) for more details or see the implementation of `vite.config.ts` of both demo applications in the repository.
 
 ### GitHub Packages
 To install the package, you need access to the GitHub Packages registry.
