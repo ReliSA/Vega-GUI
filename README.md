@@ -120,4 +120,4 @@ export default App;
 
 ---
 
-If you would like to access exported data from the editor in your code, consider using the `ExternalSelectionExporter` component. For its usage, refer to the [GUI 4 Vega Documentation](https://relisa.github.io/Vega-GUI/) or [implementation of demo_antd](https://relisa.github.io/Vega-GUI/), which includes an example of how to use it.
+If you would like to access exported data from the editor in your code, consider using the `ExternalSelectionExporter` component. For its usage, refer to the [GUI 4 Vega Documentation](https://relisa.github.io/Vega-GUI/) or implementation of [demo_antd](https://github.com/ReliSA/Vega-GUI/blob/master/demo_antd/src/pages/EditorPage.tsx), which includes an example of how to use it.
