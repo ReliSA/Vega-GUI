@@ -10,7 +10,7 @@ Refer either to this README or [GUI 4 Vega Documentation](https://relisa.github.
 - **React Component**: Easy integration into any React project via `@relisa/gui4vega` package hosted on GitHub Packages registry.
 - **UI Frameworks Integration**: Examples provided for [Ant Design](https://ant.design/) (`demo_antd`) and [Bootstrap](https://react-bootstrap.netlify.app/) (`demo_bootstrap`).
 - **Embedded Text Editor**: Interactive JSON editor powered by [CodeMirror](https://codemirror.net/).
-- **Wizard Tab**: Step-by-step interface to easily generate sample visualizations and configure simple graphs.
+- **Wizard Tab**: Form interface to easily generate sample visualizations.
 - **Data and Signals Editors**: Panels to visually manage, inspect, and tweak Vega data sources and signals without writing JSON manually.
 - **Spec Import and Export**: Load existing Vega JSON specifications or export your creations for use in other projects.
 - **Data Import**: Built-in support for CSV and JSON data import via [Papa Parse](https://www.papaparse.com/).
@@ -80,7 +80,7 @@ For local development purposes, consider using Vite and its `alias`. You can ref
 ### GitHub Packages
 To install the package, you need access to the GitHub Packages registry.
 
-1. You must request permission from the owner or contributor of the ReliSA GitHub repository hosting GUI 4 Vega package.
+1. You must request permission from the owner or contributor of the ReliSA GitHub repository hosting the `@relisa/gui4vega` package.
 2. Create a GitHub Personal Access Token (classic) with the `read:package` scope (no other privileges are required).
 3. Create a `.npmrc` file in your project root with the following content (replace the placeholder with your actual token):
    - The `.npmrc` file is also present in the repository.
@@ -120,4 +120,23 @@ export default App;
 
 ---
 
-If you would like to access exported data from the editor in your code, consider using the `ExternalSelectionExporter` component. For its usage, refer to the [GUI 4 Vega Documentation](https://relisa.github.io/Vega-GUI/) or implementation of [demo_antd](https://github.com/ReliSA/Vega-GUI/blob/master/demo_antd/src/pages/EditorPage.tsx), which includes an example of how to use it.
+If you would like to access exported data from the `VegaEditor` in your code, consider using the `ExternalSelectionExporter` component. For its usage, refer to the [GUI 4 Vega Documentation](https://relisa.github.io/Vega-GUI/) or implementation of [demo_antd](https://github.com/ReliSA/Vega-GUI/blob/master/demo_antd/src/pages/EditorPage.tsx), which includes an example of how to use it.
+
+## Useful Commands
+When a new version of the library is released, a GitHub Actions workflow is triggered to run unit tests automatically. However, if you want to run the tests locally, you can use the following commands:
+
+```bash
+# from root of the repository
+cd gui4vega
+npm run test         # Run all unit tests
+npm run test:cov     # Run all unit tests with coverage
+```
+
+Similarly, a TypeDoc workflow is triggered with every release to generate the documentation for the library. To generate the documentation locally to the `gui4vega/doc` directory, you can use the following commands:
+
+```bash
+# from root of the repository
+cd gui4vega
+npm run doc         # Generate documentation
+npm run doc:watch   # Generate documentation and watch for changes
+```
