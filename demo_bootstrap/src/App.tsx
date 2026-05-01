@@ -1,4 +1,4 @@
-import { Container, Navbar, Nav, Row, Col, ListGroup, Form } from 'react-bootstrap'
+import { Container, Navbar, Row, Col, Form } from 'react-bootstrap'
 import { VegaEditor } from '@relisa/gui4vega'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useState, useEffect } from 'react'
@@ -16,14 +16,10 @@ function App() {
         <>
             <Navbar bg="dark" variant="dark" expand="lg">
                     <Container>
-                          <Navbar.Brand href="#home">React Bootstrap App</Navbar.Brand>
+                          <Navbar.Brand href="#home">GUI 4 Vega Bootstrap Demo</Navbar.Brand>
                           <Navbar.Toggle aria-controls="basic-navbar-nav" />
                           <Navbar.Collapse id="basic-navbar-nav">
-                                <Nav className="me-auto">
-                                      <Nav.Link href="#home">Home</Nav.Link>
-                                      <Nav.Link href="#about">About</Nav.Link>
-                                </Nav>
-                                <Form className="d-flex">
+                                <Form className="d-flex ms-auto">
                                     <Form.Check
                                         type="switch"
                                         id="theme-switch"
@@ -40,32 +36,19 @@ function App() {
               <Container fluid className="px-4">
                   <Row>
                       <Col md={3} className="border-end vh-100 p-3">
-                            <h5 className="mb-3">Examples</h5>
-                            <ListGroup>
-                                  <ListGroup.Item action href="#simple">
-                                        Simple Vega spec
-                                  </ListGroup.Item>
-                                  <ListGroup.Item action href="#bar">
-                                        Bar chart
-                                  </ListGroup.Item>
-                                  <ListGroup.Item action href="#scatter">
-                                        Scatter plot
-                                  </ListGroup.Item>
-                                  <ListGroup.Item action href="#load">
-                                        Load spec
-                                  </ListGroup.Item>
-                            </ListGroup>
+                            <h5 className="mb-3">Example inconvenient sidebar</h5>
 
                             <div className="mt-4 small text-muted">
-                                This sidebar shows how to import and use the VegaEditor from your library.
+                                Purpose of this sidebar is to show that the <code>VegaEditor</code> component can be used in a layout with other components, even if the layout is taking up some space.
                             </div>
                       </Col>
 
                       <Col md={7} className="p-3">
                           <h2>Vega Editor Integration</h2>
-                          <p className="text-muted">A minimal example showing the VegaEditor component from <code>@relisa/gui4vega</code>.</p>
+                          <p className="text-muted">A minimal example showing the <code>VegaEditor</code> component from <code>@relisa/gui4vega</code>.</p>
 
                           <div className="border rounded p-2" style={{ height: '75vh', width: '70vw' }}>
+                              { /* VegaEditor component here from @relisa/gui4vega */ }
                               <VegaEditor height="100%" theme={isDark ? 'dark' : 'light'} />
                           </div>
                       </Col>

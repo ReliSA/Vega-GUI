@@ -5,7 +5,6 @@ import { Layout, Typography, theme, Flex, Button } from 'antd'
 import AppHeader from '../components/AppHeader'
 import AppFooter from '../components/AppFooter'
 
-// import spec from '../../json/invalid.json'
 import schema from '../../../json/anti/02_too_long_sprint.json'
 import { datasets, signals } from '../assets/import'
 
@@ -47,24 +46,26 @@ export default function EditorPage() {
         <Layout>
             <AppHeader />
             <Flex vertical align="center" gap="small" style={{ padding: '24px 32px 16px', borderBottom: `1px solid ${token.colorBorderSecondary}` }}>
-                <Title level={3}>Visual Specification Editor</Title>
+                <Title level={3}>Vega Editor Integration</Title>
                 <Paragraph type="secondary" style={{ maxWidth: 600, textAlign: 'center' }}>
-                    Below this paragraph is the imported VegaEditor component from the <code>@relisa/gui4vega</code> library.
-                    Edit the JSON specification on the left and see the rendered visualization on the right.
+                    Below this paragraph is the imported <code>VegaEditor</code> component from the <code>@relisa/gui4vega</code> library.
+                    Edit the Vega specification on the left and see the rendered visualization on the right.
                 </Paragraph>
             </Flex>
 
             <Content style={{ padding: "0 32px" }}>
+                { /* VegaEditor component here from @relisa/gui4vega */ }
                 <VegaEditor
                     ref={editorRef}
                     height="700px"
+                    // Uncomment this to load intial schema to the VegaEditor
                     // importedData={{schema: schema, datasets: datasets, signals: signals}}
                 />
 
                 <Flex vertical align="center" gap="small" style={{ padding: '24px 0px 16px', borderBottom: `1px solid ${token.colorBorderSecondary}` }}>
                     <Paragraph type="secondary" style={{ maxWidth: 600, textAlign: 'center' }}>
-                        This is no longer content of the VegaEditor, but part of this demo page.
-                        Below this paragraph are the results of exporting the JSON specification and selected datasets using the export functionality of the VegaEditor.
+                        This is no longer content of the <code>VegaEditor</code>, but part of this demo page.
+                        Below this paragraph are the results of exporting the JSON specification and selected datasets using the export functionality of the <code>VegaEditor</code>.
                     </Paragraph>
                 </Flex>
 
@@ -72,6 +73,7 @@ export default function EditorPage() {
                     Export via ExternalSelectionExporter
                 </Button>
 
+                { /* ExternalSelectionExporter component here from @relisa/gui4vega */ }
                 <ExternalSelectionExporter
                     code={currentCode}
                     isOpen={isExternalExporterOpen}
@@ -79,6 +81,7 @@ export default function EditorPage() {
                     onExport={handleExternalExport}
                 />
 
+                { /* ExportedContent component here from @relisa/gui4vega */ }
                 <ExportedContent data={exported} />
             </Content>
             <AppFooter />
