@@ -35,6 +35,8 @@ export function validateWizardAdapter(AdapterClass: new () => WizardAdapter, exp
         it('should return valid Vega spec', () => {
             const fullSpecStr = generateSpec(JSON.stringify(defaultSpec), mockConfig);
 
+            // This throws warnings for getContext() method, which is not supported in the test environment
+            // The test however should pass as long as the Vega specification is valid
             expect(() => {
                 parse(JSON.parse(fullSpecStr));
             }).not.toThrow();

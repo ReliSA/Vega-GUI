@@ -9,10 +9,12 @@ describe('PieAdapter specifics', () => {
         datasetName: 'simple',
         fields: {
             category: 'category',
-            value: 'value'
+            value: 'value',
+            sort: 'ascending'
         }
     };
 
+    // Run without any sorting
     validateWizardAdapter(
         PieAdapter,
         'template',
